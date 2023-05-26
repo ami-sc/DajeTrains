@@ -52,40 +52,40 @@ type AppDatabase interface {
 	GetPaymentHistory(userID string) ([]PaymentResponse, error)
 }
 
-// JSON database implementation todo json names
+// JSON database implementation
 type appdbimpl struct {
-	filename        string
-	stations        []Station
-	trains          []Train
-	userStates      map[string]*UserState
+	filename       string
+	stations       []Station
+	trains         []Train
+	userStates     map[string]*UserState
 	paymentHistory map[string][]PaymentResponse
 }
 
 type Location struct {
-	Latitutde float64
-	Longitude float64
+	Latitutde float64 `json:"latitude"`
+	Longitude float64 `json:"longitude"`
 }
 
 type Station struct {
-	Name     string
-	BeaconID string
-	Location Location
+	Name     string   `json:"name"`
+	BeaconID string   `json:"beacon_id"`
+	Location Location `json:"location"`
 }
 
 type TrainTripItem struct {
-	Station                *Station
-	ScheduledArrivalTime   string
-	ScheduledDepartureTime string
-	ArrivalTime            string
-	DepartureTime          string
-	Platform               int
-	Cost                   float64
+	Station                *Station `json:"station"`
+	ScheduledArrivalTime   string   `json:"scheduled_arrival_time"`
+	ScheduledDepartureTime string   `json:"scheduled_departure_time"`
+	ArrivalTime            string   `json:"arrival_time"`
+	DepartureTime          string   `json:"departure_time"`
+	Platform               int      `json:"platform"`
+	Cost                   float64  `json:"cost"`
 }
 
 type Train struct {
-	ID           string
-	BeaconID     string
-	Trip         *[]TrainTripItem
+	ID       string           `json:"id"`
+	BeaconID string           `json:"beacon_id"`
+	Trip     *[]TrainTripItem `json:"trip"`
 }
 
 const (
@@ -95,22 +95,22 @@ const (
 )
 
 type UserState struct {
-	Status  string
-	Train   *Train
-	Station *Station
+	Status  string   `json:"status"`
+	Train   *Train   `json:"train"`
+	Station *Station `json:"station"`
 }
 
 type PaymentResponse struct {
-	Cost        float64
-	TrainID     string
-	FromStation *Station
-	ToStation   *Station
+	Cost        float64  `json:"cost"`
+	TrainID     string   `json:"train_id"`
+	FromStation *Station `json:"from_station"`
+	ToStation   *Station `json:"to_station"`
 }
 
 type UpdateUserPositionResponse struct {
-	Status          string
-	ID              string
-	PaymentResponse *PaymentResponse
+	Status          string           `json:"status"`
+	ID              string           `json:"id"`
+	PaymentResponse *PaymentResponse `json:"payment_response"`
 }
 
 // Load loads a database from a file
@@ -180,27 +180,27 @@ func NewDatabase(file string) *appdbimpl {
 		stations: stations,
 		trains: []Train{
 			{
-				ID:           "Train 1",
-				BeaconID:     "1234567892",
+				ID:       "Train 1",
+				BeaconID: "1234567892",
 				Trip: &[]TrainTripItem{
 					{
-						Station:       &stations[0],
+						Station:                &stations[0],
 						ScheduledArrivalTime:   "11:00",
 						ScheduledDepartureTime: "11:05",
-						Platform:      1,
-						Cost:          0.0,
+						Platform:               1,
+						Cost:                   0.0,
 					},
 					{
-						Station:       &stations[1],
+						Station:                &stations[1],
 						ScheduledArrivalTime:   "12:00",
 						ScheduledDepartureTime: "12:05",
-						Platform:      2,
-						Cost:          5.0,
+						Platform:               2,
+						Cost:                   5.0,
 					},
 				},
 			},
 		},
-		userStates:      make(map[string]*UserState),
+		userStates:     make(map[string]*UserState),
 		paymentHistory: make(map[string][]PaymentResponse),
 	}
 }
