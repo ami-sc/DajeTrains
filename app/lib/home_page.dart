@@ -1,3 +1,4 @@
+import "package:DajeTrains/side_menu.dart";
 import 'package:flutter/material.dart';
 
 import "top_bar.dart";
@@ -29,6 +30,7 @@ class _HomePageState extends State<HomePage>
         return Scaffold
         (
             appBar: TopBar(),
+            drawer: SideMenu(),
 
             // Needed for the round corners of the bottom bar.
             extendBody: true,

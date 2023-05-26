@@ -21,8 +21,9 @@ class _TopBarState extends State<TopBar>
             title: Text("DajeTrains"),
             centerTitle: true,
 
-            leading: Icon(Icons.menu),
-
+            leading: IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () { Scaffold.of(context).openDrawer(); }),
             actions:
             [
                 Padding
