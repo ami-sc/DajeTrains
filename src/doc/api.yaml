@@ -1,0 +1,395 @@
+openapi: 3.0.2
+info:
+  title: DajeTrains API
+  description: |-
+    DajeTrains app API Specification
+  version: "1.0"
+tags:
+  - name: general_info
+    description: Information about trains and stations
+  - name: user_position
+    description: Operations related to the position of the user
+  - name: payments
+    description: Operations related to payments
+  - name: train_data
+    description: Update the position of a train
+
+paths:
+  /stations/{station}:
+    get:
+      tags: ["general_info"]
+      summary: Search for a station
+      description: Get a list of stations that matches the given name
+      operationId: getStationInfo
+      parameters:
+        - name: station
+          in: path
+          schema:
+            $ref: "#/components/schemas/station_name"
+          required: true
+          description: The name of the station to search for (or part of it)
+      responses:
+        '200':
+          description: Returns the station list
+          content:
+            application/json:
+              schema:
+                type: array
+                description: The list stations
+                items:
+                  $ref: "#/components/schemas/station"
+
+  /trains/{train}:
+    get:
+      tags: ["general_info"]
+      summary: Search for a train
+      description: Search for trains that matches the given identifier
+      operationId: getTrainInfo
+      parameters:
+        - name: train
+          in: path
+          schema:
+            $ref: "#/components/schemas/train_id"
+          required: true
+          description: The identifier of the train to search for (or part of it)
+      responses:
+        '200':
+          description: Returns the train list
+          content:
+            application/json:
+              schema:
+                type: array
+                description: The list of trains
+                items:
+                  $ref: "#/components/schemas/train"
+      
+    put:
+      tags: ["train_data"]
+      summary: Update the position of a train
+      description: Update the position of a train with the given ID
+      operationId: updateTrainPosition
+      parameters:
+        - name: train
+          in: path
+          schema:
+            $ref: "#/components/schemas/train_id"
+          required: true
+          description: The identifier of the train to update the position of
+        - name: station_id
+          in: query
+          schema:
+            $ref: "#/components/schemas/station_name"
+          required: true
+          description: The identifier of the station the train has arrived to or departed from
+        - name: status
+          in: query
+          schema:
+            $ref: "#/components/schemas/update_status"
+          required: true
+          description: The status of the train (arrived or departed)
+      responses:
+        '200':
+          description: Returns a successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/generic_response"
+              example:
+                status: "OK"
+        '400':
+          description: Illegal update
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/generic_response"
+              example:
+                status: "Illegal train position update: train is not arrived to and departed from all the previous stations"
+    
+    delete:
+      tags: ["train_data"]
+      summary: Resets the position of a train
+      description: Resets the position of a train with the given ID
+      operationId: resetTrainPosition
+      parameters:
+        - name: train
+          in: path
+          schema:
+            $ref: "#/components/schemas/train_id"
+          required: true
+          description: The identifier of the train to reset
+      responses:
+        '200':
+          description: Returns a successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/generic_response"
+              example:
+                status: "OK"
+        '404':
+          description: The train does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/generic_response"
+              example:
+                status: "Train not found"
+
+
+
+  /positions/{user_id}:
+    get:
+      tags: ["user_position"]
+      summary: Get the position of the user
+      description: Get the position of the user with the given ID
+      operationId: getUserPosition
+      parameters:
+        - name: user_id
+          in: path
+          schema:
+            $ref: "#/components/schemas/username"
+          required: true
+          description: The user ID of the user to get the position of
+      responses:
+        '200':
+          description:
+            Returns the position of the user.
+            The status of the user. It can be "in_station", "in_train" or "away". If the user is in a station, the station field will be populated and the train field will be null. If the user is in a train, the train field will be populated and the station field will be the station where the user got on the train. If the user is away, both the station and the train fields will be null.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user_position"
+        '404':
+          description: The user does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/generic_response"
+              example:
+                status: "User not found"
+    
+    put:
+      tags: ["user_position"]
+      summary: Update the position of the user
+      description: Update the position of the user with the given ID
+      operationId: updateUserPosition
+      parameters:
+        - name: user_id
+          in: path
+          schema:
+            $ref: "#/components/schemas/username"
+          required: true
+          description: The user ID of the user to update the position of
+        - name: beacon_id
+          in: query
+          schema:
+            $ref: "#/components/schemas/beacon_id"
+          required: true
+          description: The beacon ID of the beacon the user is near to
+
+      responses:
+        '200':
+          description: Returns the position of the user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user_position"
+
+  /payment_history/{user_id}:
+    get:
+      tags: ["payments"]
+      summary: Get the payment history of the user
+      description: Get the payment history of the user with the given ID
+      operationId: getPaymentHistory
+      parameters:
+        - name: user_id
+          in: path
+          schema:
+            $ref: "#/components/schemas/username"
+          required: true
+          description: The user ID of the user to get the payment history of
+      responses:
+        '200':
+          description: Returns the payment history of the user
+          content:
+            application/json:
+              schema:
+                type: array
+                description: The list of payments
+                items:
+                  $ref: "#/components/schemas/payment_history"
+        '404':
+          description: The user does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/generic_response"
+              example:
+                status: "User not found"
+
+
+components:
+  schemas:
+    station_name:
+      type: string
+      minLength: 3
+      maxLength: 255
+      description: The name of the station
+      example: "Roma Termini"
+    username:
+      type: string
+      minLength: 3
+      maxLength: 20
+      description: The name of the user
+      example: "Marco"
+    train_id:
+      type: string
+      minLength: 3
+      maxLength: 20
+      description: The identifier of the train
+      example: "FR9400"
+    beacon_id:
+      type: string
+      description: The identifier of the beacon
+      format: uuid
+
+
+    station:
+      type: object
+      properties:
+        name:
+          $ref: "#/components/schemas/station_name"
+        beacon_id:
+          $ref: "#/components/schemas/beacon_id"
+        location:
+          $ref: "#/components/schemas/location"
+
+    train:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/train_id"
+        beacon_id:
+          $ref: "#/components/schemas/beacon_id"
+        trip:
+          $ref: "#/components/schemas/trip"
+
+    trip:
+      type: array
+      description: The trip of the train (all the stations it stops at)
+      items:
+        $ref: "#/components/schemas/trip_item"
+
+    trip_item:
+      type: object
+      properties:
+        station:
+          $ref: "#/components/schemas/station"
+        scheduled_arrival_time:
+          type: string
+          format: date-time
+          description: The scheduled arrival time of the train
+          example: "10:30"
+        scheduled_departure_time:
+          type: string
+          format: date-time
+          description: The scheduled departure time of the train
+          example: "10:30"
+        departure_time:
+          type: string
+          format: date-time
+          description: The actual departure time of the train
+          example: "10:30"
+        arrival_time:
+          type: string
+          format: date-time
+          description: The actual arrival time of the train
+          example: "10:30"
+        platform:
+          type: integer
+          description: The platform of the train
+          example: "1"
+        cost:
+          type: number
+          format: float
+          description: The cost of of the trip from the previous station
+          example: "2.50"
+  
+    user_position:
+      type: object
+      properties:
+        status:
+          type: string
+          description: The status of the user. It can be "in_station", "in_train" or "away". If the user is in a station, the station field will be populated and the train field will be null. If the user is in a train, the train field will be populated and the station field will be the station where the user got on the train. If the user is away, both the station and the train fields will be null.
+          example: "in_train"
+          enum:
+            - in_station
+            - in_train
+            - away
+        station:
+          $ref: "#/components/schemas/station_name"
+        train:
+          $ref: "#/components/schemas/train_id"
+
+    generic_response:
+      type: object
+      properties:
+        status:
+          type: string
+          description: The status of the response
+          example: "User does not exist"
+
+    payment_response:
+      type: object
+      properties:
+        cost: 
+          type: number
+          format: float
+          description: The cost of the trip
+          example: "2.50"
+        train_id:
+          $ref: "#/components/schemas/train_id"
+          description: The identifier of the train the user paid for
+        from_station:
+          $ref: "#/components/schemas/station"
+          description: The station where the user got on the train
+        to_station:
+          $ref: "#/components/schemas/station"
+          description: The station where the user got off the train
+    
+    payment_history:
+      type: array
+      description: The list of payments
+      items:
+        $ref: "#/components/schemas/payment_response"
+
+    location:
+      type: object
+      properties:
+        latitude:
+          $ref: "#/components/schemas/latitude"
+        longitude:
+          $ref: "#/components/schemas/longitude"
+    
+    latitude:
+      type: number
+      format: float
+      minimum: -90
+      maximum: 90
+      description: The latitude of the location
+      example: 41.902782
+    longitude:
+      type: number
+      format: float
+      minimum: -180
+      maximum: 180
+      description: The longitude of the location
+      example: 12.496366
+    
+    update_status:
+      type: string
+      description: Whether the train is arrived to or departed from a station
+      example: "arrved"
+      enum:
+        - arrived
+        - departed
