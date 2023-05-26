@@ -30,6 +30,9 @@ class _HomePageState extends State<HomePage>
         (
             appBar: TopBar(),
 
+            // Needed for the round corners of the bottom bar.
+            extendBody: true,
+
             body: <Widget>
             [
                 Container
