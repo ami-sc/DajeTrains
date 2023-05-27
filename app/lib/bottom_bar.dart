@@ -31,6 +31,7 @@ class _BottomBarState extends State<BottomBar> {
       ),
       child: NavigationBar(
         backgroundColor: Color(0xFFA5E6FB),
+        indicatorColor: Color(0xFFDAF2FF),
         onDestinationSelected: _onButtonTap,
         selectedIndex: currentIdx,
         destinations: const <Widget>[
