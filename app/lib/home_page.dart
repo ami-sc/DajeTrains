@@ -4,6 +4,8 @@ import "top_bar.dart";
 import "bottom_bar.dart";
 import 'nav_drawer.dart';
 
+import "current_trip_page.dart";
+
 class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
@@ -46,9 +48,8 @@ class _HomePageState extends State<HomePage> {
 
       body: <Widget>[
         Container(
-          color: Colors.red,
           alignment: Alignment.center,
-          child: const Text('Example Page 1'),
+          child: CurrentTrip(),
         ),
         Container(
           color: Colors.green,
