@@ -158,19 +158,75 @@ func NewDatabase(file string) *appdbimpl {
 
 	stations := []Station{
 		{
-			Name:     "Station 1",
+			Name:     "Napoli Centrale",
 			BeaconID: "1234567890",
 			Location: Location{
-				Latitutde: 0,
-				Longitude: 0,
+				Latitutde: 40.852,
+				Longitude: 14.270,
 			},
 		},
 		{
-			Name:     "Station 2",
+			Name:     "Roma Termini",
 			BeaconID: "1234567891",
 			Location: Location{
-				Latitutde: 0,
-				Longitude: 0,
+				Latitutde: 41.901,
+				Longitude: 12.499,
+			},
+		},
+		{
+			Name:     "Roma Tiburtina",
+			BeaconID: "1234567892",
+			Location: Location{
+				Latitutde: 41.910,
+				Longitude: 12.528,
+			},
+		},
+		{
+			Name:     "Firenze S.M.N.",
+			BeaconID: "1234567893",
+			Location: Location{
+				Latitutde: 43.792,
+				Longitude: 11.210,
+			},
+		},
+		{
+			Name:     "Bologna Centrale",
+			BeaconID: "1234567894",
+			Location: Location{
+				Latitutde: 44.505,
+				Longitude: 11.340,
+			},
+		},
+		{
+			Name:     "Ferrara",
+			BeaconID: "1234567891",
+			Location: Location{
+				Latitutde: 44.842,
+				Longitude: 11.601,
+			},
+		},
+		{
+			Name:     "Padova",
+			BeaconID: "1234567895",
+			Location: Location{
+				Latitutde: 45.417,
+				Longitude: 11.877,
+			},
+		},
+		{
+			Name:     "Venezia Mestre",
+			BeaconID: "1234567896",
+			Location: Location{
+				Latitutde: 45.482,
+				Longitude: 12.229,
+			},
+		},
+		{
+			Name:     "Venezia Santa Lucia",
+			BeaconID: "1234567897",
+			Location: Location{
+				Latitutde: 45.441,
+				Longitude: 12.318,
 			},
 		},
 	}
@@ -180,22 +236,111 @@ func NewDatabase(file string) *appdbimpl {
 		stations: stations,
 		trains: []Train{
 			{
-				ID:       "Train 1",
-				BeaconID: "1234567892",
+				ID:       "FR9422",
+				BeaconID: "1234567898",
 				Trip: &[]TrainTripItem{
 					{
 						Station:                &stations[0],
 						ScheduledArrivalTime:   "11:00",
-						ScheduledDepartureTime: "11:05",
-						Platform:               1,
+						ScheduledDepartureTime: "12:09",
+						Platform:               16,
 						Cost:                   0.0,
 					},
 					{
 						Station:                &stations[1],
-						ScheduledArrivalTime:   "12:00",
-						ScheduledDepartureTime: "12:05",
-						Platform:               2,
-						Cost:                   5.0,
+						ScheduledArrivalTime:   "13:20",
+						ScheduledDepartureTime: "13:55",
+						Platform:               6,
+						Cost:                   5.5,
+					},
+					{
+						Station:                &stations[2],
+						ScheduledArrivalTime:   "13:42",
+						ScheduledDepartureTime: "13:45",
+						Platform:               12,
+						Cost:                   5.5,
+					},
+					{
+						Station:                &stations[3],
+						ScheduledArrivalTime:   "15:11",
+						ScheduledDepartureTime: "15:20",
+						Platform:               8,
+						Cost:                   5.5,
+					},
+					{
+						Station:                &stations[4],
+						ScheduledArrivalTime:   "15:58",
+						ScheduledDepartureTime: "16:01",
+						Platform:               17,
+						Cost:                   5.5,
+					},
+				},
+			},
+			{
+				ID:       "FR9210",
+				BeaconID: "1234567899",
+				Trip: &[]TrainTripItem{
+					{
+						Station:                &stations[5],
+						ScheduledArrivalTime:   "11:00",
+						ScheduledDepartureTime: "12:09",
+						Platform:               16,
+						Cost:                   0.0,
+					},
+					{
+						Station:                &stations[6],
+						ScheduledArrivalTime:   "13:20",
+						ScheduledDepartureTime: "13:55",
+						Platform:               6,
+						Cost:                   5.5,
+					},
+					{
+						Station:                &stations[7],
+						ScheduledArrivalTime:   "13:42",
+						ScheduledDepartureTime: "13:45",
+						Platform:               12,
+						Cost:                   5.5,
+					},
+					{
+						Station:                &stations[8],
+						ScheduledArrivalTime:   "15:11",
+						ScheduledDepartureTime: "15:20",
+						Platform:               8,
+						Cost:                   5.5,
+					},
+				},
+			},
+			{
+				ID:       "R18271",
+				BeaconID: "1234567820",
+				Trip: &[]TrainTripItem{
+					{
+						Station:                &stations[8],
+						ScheduledArrivalTime:   "11:00",
+						ScheduledDepartureTime: "12:09",
+						Platform:               16,
+						Cost:                   0.0,
+					},
+					{
+						Station:                &stations[7],
+						ScheduledArrivalTime:   "13:20",
+						ScheduledDepartureTime: "13:55",
+						Platform:               6,
+						Cost:                   5.5,
+					},
+					{
+						Station:                &stations[6],
+						ScheduledArrivalTime:   "13:42",
+						ScheduledDepartureTime: "13:45",
+						Platform:               12,
+						Cost:                   5.5,
+					},
+					{
+						Station:                &stations[5],
+						ScheduledArrivalTime:   "15:11",
+						ScheduledDepartureTime: "15:20",
+						Platform:               8,
+						Cost:                   5.5,
 					},
 				},
 			},
