@@ -1,0 +1,16 @@
+version: '3.0'
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    hostname: dajetrains-be
+    domainname: pve-docker.net.mrlc.cc
+    ports:
+      - "3000:3000"
+    networks:
+      proxynet:
+
+# to run the backend on marco's server
+networks:
+  proxynet:
+    external: true
