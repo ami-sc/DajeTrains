@@ -49,6 +49,12 @@ func (db *appdbimpl) UpdateTrainPosition(trainID string, stationID string, statu
 		(*train.Trip)[station_idx].DepartureTime = time.Now().Format("15:04")
 	}
 
+	err = db.Write()
+
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -63,6 +69,12 @@ func (db *appdbimpl) ResetTrainPosition(trainID string) error {
 	for i := 0; i < len(*train.Trip); i++ {
 		(*train.Trip)[i].ArrivalTime = ""
 		(*train.Trip)[i].DepartureTime = ""
+	}
+
+	err = db.Write()
+
+	if err != nil {
+		return err
 	}
 
 	return nil

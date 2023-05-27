@@ -15,7 +15,7 @@ func (db *appdbimpl) UpdateUserPosition(userID string, beaconID string) (*Update
 		// User is in a station
 
 		// update the database
-		db.userStates[userID] = &UserState{
+		db.UserStates[userID] = &UserState{
 			Station: station,
 			Train:   nil,
 			Status:  InStation,
@@ -62,7 +62,7 @@ func (db *appdbimpl) UpdateUserPosition(userID string, beaconID string) (*Update
 		}
 
 		// update the database
-		db.userStates[userID] = &UserState{
+		db.UserStates[userID] = &UserState{
 			Station: last_train_station,
 			Train:   train,
 			Status:  InTrain,
@@ -112,7 +112,7 @@ func (db *appdbimpl) UpdateUserPosition(userID string, beaconID string) (*Update
 		// User is away from any beacon
 
 		// update the database
-		db.userStates[userID] = &UserState{
+		db.UserStates[userID] = &UserState{
 			Station: nil,
 			Train:   nil,
 			Status:  Away,
@@ -164,5 +164,5 @@ func (db *appdbimpl) UpdateUserPosition(userID string, beaconID string) (*Update
 
 // Get user position
 func (db *appdbimpl) GetUserPosition(userID string) *UserState {
-	return db.userStates[userID]
+	return db.UserStates[userID]
 }

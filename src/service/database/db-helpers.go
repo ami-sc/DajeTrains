@@ -28,10 +28,10 @@ func (db *appdbimpl) processPayment(userID string, train Train, from_station Sta
 	}
 
 	if total_cost > 0.0 {
-		if db.paymentHistory[userID] == nil {
-			db.paymentHistory[userID] = make([]PaymentResponse, 0)
+		if db.PaymentHistory[userID] == nil {
+			db.PaymentHistory[userID] = make([]PaymentResponse, 0)
 		}
-		db.paymentHistory[userID] = append(db.paymentHistory[userID], payment)
+		db.PaymentHistory[userID] = append(db.PaymentHistory[userID], payment)
 	}
 
 	return &payment, nil

@@ -55,10 +55,10 @@ type AppDatabase interface {
 // JSON database implementation
 type appdbimpl struct {
 	filename       string
-	stations       []Station
-	trains         []Train
-	userStates     map[string]*UserState
-	paymentHistory map[string][]PaymentResponse
+	Stations       []Station
+	Trains         []Train
+	UserStates     map[string]*UserState
+	PaymentHistory map[string][]PaymentResponse
 }
 
 type Location struct {
@@ -149,7 +149,21 @@ func Load(file string) (AppDatabase, error) {
 
 // Write changes to the database file
 func (db *appdbimpl) Write() error {
-	// todo: write to file
+
+	// encode json
+	byteValue, err := json.MarshalIndent(db, "", "  ")
+
+	if err != nil {
+		return fmt.Errorf("Error marshalling json: %w", err)
+	}
+
+	// write to file
+	err = ioutil.WriteFile(db.filename, byteValue, 0644)
+
+	if err != nil {
+		return fmt.Errorf("Error writing file: %w", err)
+	}
+
 	return nil
 }
 
@@ -159,7 +173,7 @@ func NewDatabase(file string) *appdbimpl {
 	stations := []Station{
 		{
 			Name:     "Napoli Centrale",
-			BeaconID: "1234567890",
+			BeaconID: "c7ed8863-f368-4810-bb06-998ec4316987",
 			Location: Location{
 				Latitutde: 40.852,
 				Longitude: 14.270,
@@ -167,7 +181,7 @@ func NewDatabase(file string) *appdbimpl {
 		},
 		{
 			Name:     "Roma Termini",
-			BeaconID: "1234567891",
+			BeaconID: "61d09100-f9a2-43aa-b727-9d1a6f7a2bc2",
 			Location: Location{
 				Latitutde: 41.901,
 				Longitude: 12.499,
@@ -183,7 +197,7 @@ func NewDatabase(file string) *appdbimpl {
 		},
 		{
 			Name:     "Firenze S.M.N.",
-			BeaconID: "1234567893",
+			BeaconID: "6617c867-403e-4be6-a3b5-8573e2a80d75",
 			Location: Location{
 				Latitutde: 43.792,
 				Longitude: 11.210,
@@ -191,7 +205,7 @@ func NewDatabase(file string) *appdbimpl {
 		},
 		{
 			Name:     "Bologna Centrale",
-			BeaconID: "1234567894",
+			BeaconID: "f3803edc-2736-4265-8554-7fccfe3b4fd4",
 			Location: Location{
 				Latitutde: 44.505,
 				Longitude: 11.340,
@@ -199,7 +213,7 @@ func NewDatabase(file string) *appdbimpl {
 		},
 		{
 			Name:     "Ferrara",
-			BeaconID: "1234567891",
+			BeaconID: "3a780118-6815-4188-b84f-2cfcf004949d",
 			Location: Location{
 				Latitutde: 44.842,
 				Longitude: 11.601,
@@ -207,7 +221,7 @@ func NewDatabase(file string) *appdbimpl {
 		},
 		{
 			Name:     "Padova",
-			BeaconID: "1234567895",
+			BeaconID: "aae16383-257d-4a16-8eab-734c28084801",
 			Location: Location{
 				Latitutde: 45.417,
 				Longitude: 11.877,
@@ -215,7 +229,7 @@ func NewDatabase(file string) *appdbimpl {
 		},
 		{
 			Name:     "Venezia Mestre",
-			BeaconID: "1234567896",
+			BeaconID: "114ab5a1-470e-4d47-83d1-66fef1e12817",
 			Location: Location{
 				Latitutde: 45.482,
 				Longitude: 12.229,
@@ -223,7 +237,7 @@ func NewDatabase(file string) *appdbimpl {
 		},
 		{
 			Name:     "Venezia Santa Lucia",
-			BeaconID: "1234567897",
+			BeaconID: "f498fea7-a81b-460e-bc37-4e20af3bdcfc",
 			Location: Location{
 				Latitutde: 45.441,
 				Longitude: 12.318,
@@ -233,11 +247,11 @@ func NewDatabase(file string) *appdbimpl {
 
 	return &appdbimpl{
 		filename: file,
-		stations: stations,
-		trains: []Train{
+		Stations: stations,
+		Trains: []Train{
 			{
 				ID:       "FR9422",
-				BeaconID: "1234567898",
+				BeaconID: "c29ce823-e67a-4e71-bff2-abaa32e77a98",
 				Trip: &[]TrainTripItem{
 					{
 						Station:                &stations[0],
@@ -312,7 +326,7 @@ func NewDatabase(file string) *appdbimpl {
 			},
 			{
 				ID:       "R18271",
-				BeaconID: "1234567820",
+				BeaconID: "a50f90e0-1b9b-47bd-a89b-c6e5f0bd07d7",
 				Trip: &[]TrainTripItem{
 					{
 						Station:                &stations[8],
@@ -345,7 +359,7 @@ func NewDatabase(file string) *appdbimpl {
 				},
 			},
 		},
-		userStates:     make(map[string]*UserState),
-		paymentHistory: make(map[string][]PaymentResponse),
+		UserStates:     make(map[string]*UserState),
+		PaymentHistory: make(map[string][]PaymentResponse),
 	}
 }

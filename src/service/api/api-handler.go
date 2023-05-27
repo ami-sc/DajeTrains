@@ -16,8 +16,8 @@ func (rt *_router) Handler() http.Handler {
 
 	rt.router.GET("/payment_history/:user_id", rt.wrap(rt.getPaymentHistory))
 
-	rt.router.PUT("/train/:train_id", rt.wrap(rt.updateTrainPosition))
-	rt.router.DELETE("/train/:train_id", rt.wrap(rt.resetTrainPosition))
+	rt.router.PUT("/trains/:train_id", rt.wrap(rt.updateTrainPosition))
+	rt.router.DELETE("/trains/:train_id", rt.wrap(rt.resetTrainPosition))
 
 	return rt.router
 }
