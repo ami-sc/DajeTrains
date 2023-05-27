@@ -19,15 +19,27 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void _onLabelTap(int newIdx) {
+    setState(() {
+      barIdx = newIdx;
+      print("SideMenu value:");
+      print(barIdx);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var bottomBar = BottomBar(
       idxCallback: _onButtonTap,
     );
 
+    var navBar = NavDrawer(
+      indexCallback: _onLabelTap,
+    );
+
     return Scaffold(
       appBar: TopBar(),
-      drawer: NavDrawer(),
+      drawer: navBar,
 
       // Needed for the round corners of the bottom bar.
       extendBody: true,
