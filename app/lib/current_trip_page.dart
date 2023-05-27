@@ -13,10 +13,32 @@ class _CurrentTripState extends State<CurrentTrip> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        MainText(),
-        FindButton(),
+        Padding(
+          padding: EdgeInsets.only(bottom: 10.0),
+          child: MainImage(),
+        ),
+        Padding(
+          padding: EdgeInsets.only(bottom: 100.0),
+          child: MainText(),
+        ),
+        Padding(
+          padding: EdgeInsets.only(bottom: 10.0),
+          child: FindButton(),
+        ),
         HistoryButton(),
       ]
+    );
+  }
+}
+
+class MainImage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 325,
+      child: Image(
+        image: AssetImage('assets/train.png'),
+      ),
     );
   }
 }
@@ -24,13 +46,17 @@ class _CurrentTripState extends State<CurrentTrip> {
 class MainText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Text(
-      "You are not currently riding a train!",
-      textAlign: TextAlign.center,
-      style: TextStyle(
-        fontSize: 32,
-        // Medium font weight.
-        fontWeight: FontWeight.w500,
+    return SizedBox(
+      width: 350,
+      child: Text(
+        "You are not currently riding a train!",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 32,
+          // Medium font weight.
+          fontWeight: FontWeight.w500,
+          height: 1.2,
+        ),
       ),
     );
   }
@@ -72,6 +98,9 @@ class HistoryButton extends StatelessWidget {
       onPressed: () {
         print("CurrentTrip::HistoryButton::onPressed");
       },
+      style: ButtonStyle(
+        overlayColor: MaterialStateProperty.all(Color(0xFFB5D7FF)),
+      ),
       child: Text("View History",
         style: TextStyle(
           fontSize: 18,

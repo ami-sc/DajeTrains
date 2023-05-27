@@ -49,7 +49,11 @@ class _HomePageState extends State<HomePage> {
       body: <Widget>[
         Container(
           alignment: Alignment.center,
-          child: CurrentTrip(),
+          child: Padding(
+            // This padding is to compensate for the bottom bar.
+            padding: EdgeInsets.only(bottom: 60.0),
+            child: CurrentTrip(),
+          ),
         ),
         Container(
           color: Colors.green,
