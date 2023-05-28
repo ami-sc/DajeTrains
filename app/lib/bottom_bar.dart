@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class BottomBar extends StatefulWidget {
-  final Function(int) idxCallback;
+  final Function(int) pageCallback;
+  final int targetIdx;
 
   const BottomBar({
-    required this.idxCallback,
+    required this.pageCallback,
+    required this.targetIdx,
     super.key,
   });
 
@@ -13,27 +15,35 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
-  int currentIdx = 0;
+  int _activeIdx = 0;
 
   void _onButtonTap(int idx) {
     setState(() {
-      currentIdx = idx;
-      widget.idxCallback(idx);
+      _activeIdx = idx;
+      widget.pageCallback(idx);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    // We need this in case we need to update the bottom bar when an external
+    // button is pressed. For example, if a "back button" is pressed, we must
+    // update the index of the sidebar as well.
+    _activeIdx = widget.targetIdx;
+
     return ClipRRect(
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(28),
         topRight: Radius.circular(28),
       ),
+
       child: NavigationBar(
         backgroundColor: Color(0xFFA5E6FB),
         indicatorColor: Color(0xFFDAF2FF),
+
         onDestinationSelected: _onButtonTap,
-        selectedIndex: currentIdx,
+        selectedIndex: _activeIdx,
+
         destinations: const <Widget>[
           NavigationDestination(
             icon: Icon(Icons.business_center),
