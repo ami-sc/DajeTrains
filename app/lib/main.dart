@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import "home_page.dart";
+import "page_manager.dart";
 
 void main() {
   runApp(DajeTrains());
 }
 
-class DajeTrains extends StatelessWidget {
+class DajeTrains extends StatefulWidget {
   const DajeTrains({super.key});
 
+  @override
+  State<DajeTrains> createState() => _DajeTrainsState();
+}
+
+class _DajeTrainsState extends State<DajeTrains> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -19,7 +24,7 @@ class DajeTrains extends StatelessWidget {
         theme: ThemeData(
           useMaterial3: true,
         ),
-        home: HomePage(),
+        home: Home(),
       ),
     );
   }
