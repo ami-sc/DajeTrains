@@ -3,14 +3,16 @@ import 'drawer_header.dart';
 
 class NavDrawer extends StatefulWidget {
   final Function(int) indexCallback;
-
-  @override
-  State<NavDrawer> createState() => _NavDrawerState();
+  final int targetIdx;
 
   const NavDrawer({
     required this.indexCallback,
+    required this.targetIdx,
     super.key,
   });
+
+  @override
+  State<NavDrawer> createState() => _NavDrawerState();
 }
 
 class _NavDrawerState extends State<NavDrawer> {
@@ -21,6 +23,11 @@ class _NavDrawerState extends State<NavDrawer> {
       currentIdx = idx;
       widget.indexCallback(idx);
     });
+  }
+
+  bool _isSelected(int value) {
+    if (currentIdx == value) return true;
+    return false;
   }
 
   @override
@@ -38,15 +45,16 @@ class _NavDrawerState extends State<NavDrawer> {
   }
 
   Widget MyDrawerList() {
+    currentIdx = widget.targetIdx;
     return Container(
       padding: EdgeInsets.only(top: 15.0, right: 30, left: 30),
       child: Column(children: [
         // Show the list of menu drawer
-        menuItem(1, "Homepage", true),
-        menuItem(2, "History", false),
-        menuItem(3, "Scan ticket/pass", false),
-        menuItem(4, "Settings", false),
-        menuItem(5, "Need help?", false),
+        menuItem(0, "Homepage", _isSelected(0)),
+        menuItem(1, "History", _isSelected(1)),
+        menuItem(2, "Scan ticket/pass", _isSelected(2)),
+        menuItem(3, "Settings", _isSelected(3)),
+        menuItem(4, "Need help?", _isSelected(4)),
       ]),
     );
   }

@@ -42,7 +42,7 @@ class _HomeState extends State<Home> {
   // Jump directly to a target page.
   void _changePage(int newIdx) {
     // Avoid overwritting previousIdx if the user clicks the same page.
-    if(newIdx != currentIdx) {
+    if (newIdx != currentIdx) {
       setState(() {
         previousIdx = currentIdx;
         currentIdx = newIdx;
@@ -66,13 +66,13 @@ class _HomeState extends State<Home> {
     });
   }
 
-  int barIdx = 0; // Homepage index
+  int drawerIdx = 0; // Homepage index
 
   void _onLabelTap(int newIdx) {
     setState(() {
-      barIdx = newIdx;
+      drawerIdx = newIdx;
       print("SideMenu value:");
-      print(barIdx);
+      print(drawerIdx);
     });
   }
 
@@ -80,48 +80,75 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: <PreferredSizeWidget>[
-        /*** Current Trip App Bar ***/
+        <PreferredSizeWidget>[
+          /*** Current Trip App Bar ***/
+          CurrentTripTopBar(),
+
+          /*** Stations App Bar ***/
+          StationsTopBar(
+            backButtonCallback: _previousPage,
+            searchCallback: _searchStation,
+          ),
+
+          /*** Trains App Bar ***/
+          CurrentTripTopBar(),
+        ][currentIdx],
+
+        /*** History App Bar ***/
         CurrentTripTopBar(),
 
-        /*** Stations App Bar ***/
-        StationsTopBar(
-          backButtonCallback: _previousPage,
-          searchCallback: _searchStation,
-        ),
-
-        /*** Trains App Bar ***/
+        /*** QR Code App Bar ***/
         CurrentTripTopBar(),
-      ][currentIdx],
+      ][drawerIdx],
 
       drawer: NavDrawer(
         indexCallback: _onLabelTap,
+        targetIdx: drawerIdx,
       ),
 
       // Needed for the round corners of the bottom bar.
       extendBody: true,
 
       body: <Widget>[
-        /*** Current Trip Page ***/
-        Container(
-          alignment: Alignment.center,
-          child: CurrentTripPage(),
-        ),
+        <Widget>[
+          /*** Current Trip Page ***/
+          Container(
+            alignment: Alignment.center,
+            child: CurrentTripPage(),
+          ),
 
-        /*** Stations Page ***/
+          /*** Stations Page ***/
+          Container(
+            alignment: Alignment.center,
+            child: StationsPage(
+              stationList: stationList,
+            ),
+          ),
+
+          /*** Trains Page ***/
+          Container(
+            color: Colors.blue,
+            alignment: Alignment.center,
+            child: const Text('Trains Page'),
+          ),
+        ][currentIdx],
+
+        /*** History Page ***/
         Container(
           alignment: Alignment.center,
-          child: StationsPage (
+          child: StationsPage(
             stationList: stationList,
           ),
         ),
 
-        /*** Trains Page ***/
+        /*** QR Code Scan Page ***/
         Container(
-          color: Colors.blue,
           alignment: Alignment.center,
-          child: const Text('Trains Page'),
+          child: StationsPage(
+            stationList: stationList,
+          ),
         ),
-      ][currentIdx],
+      ][drawerIdx],
 
       bottomNavigationBar: BottomBar(
         pageCallback: _changePage,
