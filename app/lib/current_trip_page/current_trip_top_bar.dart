@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class TopBar extends StatefulWidget implements PreferredSizeWidget {
+class CurrentTripTopBar extends StatefulWidget implements PreferredSizeWidget {
   @override
-  State<TopBar> createState() => _TopBarState();
+  State<CurrentTripTopBar> createState() => _CurrentTripTopBarState();
 
   @override
   Size get preferredSize => Size.fromHeight(60);
 }
 
-class _TopBarState extends State<TopBar> {
+class _CurrentTripTopBarState extends State<CurrentTripTopBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(

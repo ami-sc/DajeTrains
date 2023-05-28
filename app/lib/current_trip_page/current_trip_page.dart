@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 
-class CurrentTrip extends StatefulWidget {
+class CurrentTripPage extends StatefulWidget {
   @override
-  State<CurrentTrip> createState() => _CurrentTripState();
+  State<CurrentTripPage> createState() => _CurrentTripPageState();
 }
 
-class _CurrentTripState extends State<CurrentTrip> {
+class _CurrentTripPageState extends State<CurrentTripPage> {
   @override
   Widget build(BuildContext context) {
     return Column(
-        // Center widgets.
       mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: EdgeInsets.only(bottom: 10.0),
@@ -25,8 +23,11 @@ class _CurrentTripState extends State<CurrentTrip> {
           padding: EdgeInsets.only(bottom: 10.0),
           child: FindButton(),
         ),
-        HistoryButton(),
-      ]
+        Padding(
+          padding: EdgeInsets.only(bottom: 50.0),
+          child: HistoryButton(),
+        ),
+      ],
     );
   }
 }
