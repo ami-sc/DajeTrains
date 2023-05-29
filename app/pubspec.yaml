@@ -16,6 +16,8 @@ dependencies:
   provider: ^6.0.0
   http: ^1.0.0
   mobile_scanner: ^3.2.0
+  get: ^4.6.5
+  flutter_beacon: ^0.5.1
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:get/get.dart';
 import "page_manager.dart";
+
+import 'beacons/controller/requirement_state_controller.dart';
 
 void main() {
   runApp(DajeTrains());
@@ -17,6 +19,7 @@ class DajeTrains extends StatefulWidget {
 class _DajeTrainsState extends State<DajeTrains> {
   @override
   Widget build(BuildContext context) {
+    //Get.put(RequirementStateController());
     return ChangeNotifierProvider(
       create: (context) => AppState(),
       child: MaterialApp(
