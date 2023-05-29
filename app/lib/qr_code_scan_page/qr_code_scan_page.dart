@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+import 'barcode_scanner.dart';
 
 class QRCodeWidget extends StatefulWidget {
   @override
@@ -7,10 +7,14 @@ class QRCodeWidget extends StatefulWidget {
 }
 
 class _QRCodeWidgetState extends State<QRCodeWidget> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: "QR");
-
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        BarcodeScannerWithoutController(),
+      ],
+    );
+    ;
   }
 }

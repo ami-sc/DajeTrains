@@ -13,6 +13,8 @@ import 'stations_page/stations_top_bar.dart';
 import "../api.dart";
 import "../structures/station.dart";
 
+import 'qr_code_scan_page/qr_code_scan_page.dart';
+
 class Home extends StatefulWidget {
   @override
   State<Home> createState() => _HomeState();
@@ -155,7 +157,7 @@ class _HomeState extends State<Home> {
           /*** QR Code Scan Page ***/
           Container(
             alignment: Alignment.center,
-            child: Text("Pinco pallino"),
+            child: QRCodeWidget(),
           ),
 
           /*** Settings Page ***/
