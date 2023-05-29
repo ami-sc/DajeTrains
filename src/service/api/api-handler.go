@@ -19,5 +19,7 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.PUT("/trains/:train_id", rt.wrap(rt.updateTrainPosition))
 	rt.router.DELETE("/trains/:train_id", rt.wrap(rt.resetTrainPosition))
 
+	rt.router.GET("/tickets/:ticket_code", rt.wrap(rt.validateTicket))
+
 	return rt.router
 }

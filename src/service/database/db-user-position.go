@@ -20,7 +20,14 @@ func (db *appdbimpl) UpdateUserPosition(userID string, beaconID string) (*Update
 			Train:   nil,
 			Status:  InStation,
 		}
-		db.Write() // todo: write to the database
+
+		// update the database
+		err := db.Write()
+
+		if err != nil {
+			// error writing to the database
+			return nil, err
+		}
 
 		// check if the user was on a train
 		if previousPosition == InTrain {
@@ -48,7 +55,7 @@ func (db *appdbimpl) UpdateUserPosition(userID string, beaconID string) (*Update
 		}, nil
 
 	} else if train := db.GetTrainByBeaconID(beaconID); train != nil {
-		// User is in a train
+		// User is on a train
 
 		// Check if the user was in a different train before
 		// this means that the user has changed train (very quickly)
@@ -61,13 +68,30 @@ func (db *appdbimpl) UpdateUserPosition(userID string, beaconID string) (*Update
 			last_train_station = (*train.Trip)[0].Station
 		}
 
+		ticket := ""
+		if previousPosition != InTrain || previousUserPosition.Train.BeaconID != beaconID {
+			ticket, err = db.generateTicket(train.ID)
+
+			if err != nil {
+				// error generating ticket
+				return nil, err
+			}
+		}
+
 		// update the database
 		db.UserStates[userID] = &UserState{
 			Station: last_train_station,
 			Train:   train,
 			Status:  InTrain,
 		}
-		db.Write() // todo: check for errors
+
+		// update the database
+		err = db.Write()
+
+		if err != nil {
+			// error writing to the database
+			return nil, err
+		}
 
 		if previousPosition == InTrain && previousUserPosition.Train.BeaconID != beaconID {
 
@@ -90,6 +114,7 @@ func (db *appdbimpl) UpdateUserPosition(userID string, beaconID string) (*Update
 					Status:          InTrain,
 					ID:              train.ID,
 					PaymentResponse: nil,
+					TicketCode:      ticket,
 				}, err
 			}
 
@@ -97,6 +122,7 @@ func (db *appdbimpl) UpdateUserPosition(userID string, beaconID string) (*Update
 				Status:          InTrain,
 				ID:              train.ID,
 				PaymentResponse: payment,
+				TicketCode:      ticket,
 			}, nil
 		}
 
@@ -106,6 +132,7 @@ func (db *appdbimpl) UpdateUserPosition(userID string, beaconID string) (*Update
 			Status:          InTrain,
 			ID:              train.ID,
 			PaymentResponse: nil,
+			TicketCode:      ticket,
 		}, nil
 
 	} else {
@@ -117,7 +144,14 @@ func (db *appdbimpl) UpdateUserPosition(userID string, beaconID string) (*Update
 			Train:   nil,
 			Status:  Away,
 		}
-		db.Write() // todo: check for errors
+
+		// update the database
+		err := db.Write()
+
+		if err != nil {
+			// error writing to the database
+			return nil, err
+		}
 
 		if previousPosition == InTrain {
 			// User was on a train and it ended its trip
@@ -141,6 +175,7 @@ func (db *appdbimpl) UpdateUserPosition(userID string, beaconID string) (*Update
 					Status:          Away,
 					ID:              "",
 					PaymentResponse: nil,
+					TicketCode:      "",
 				}, err
 			}
 
@@ -149,6 +184,7 @@ func (db *appdbimpl) UpdateUserPosition(userID string, beaconID string) (*Update
 				Status:          Away,
 				ID:              "",
 				PaymentResponse: payment,
+				TicketCode:      "",
 			}, nil
 		}
 
@@ -158,6 +194,7 @@ func (db *appdbimpl) UpdateUserPosition(userID string, beaconID string) (*Update
 			Status:          Away,
 			ID:              "",
 			PaymentResponse: nil,
+			TicketCode:      "",
 		}, nil
 	}
 }

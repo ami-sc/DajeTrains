@@ -50,6 +50,8 @@ type AppDatabase interface {
 	UpdateTrainPosition(trainID string, stationID string, status string) error
 	ResetTrainPosition(trainID string) error
 	GetPaymentHistory(userID string) ([]PaymentResponse, error)
+
+	ValidateTicket(ticketID string) (string, error)
 }
 
 // JSON database implementation
@@ -59,6 +61,7 @@ type appdbimpl struct {
 	Trains         []Train
 	UserStates     map[string]*UserState
 	PaymentHistory map[string][]PaymentResponse
+	ValidTickets   map[string]string
 }
 
 type Location struct {
@@ -111,6 +114,7 @@ type UpdateUserPositionResponse struct {
 	Status          string           `json:"status"`
 	ID              string           `json:"id"`
 	PaymentResponse *PaymentResponse `json:"payment_response"`
+	TicketCode      string           `json:"ticket_code"`
 }
 
 // Load loads a database from a file
@@ -361,5 +365,6 @@ func NewDatabase(file string) *appdbimpl {
 		},
 		UserStates:     make(map[string]*UserState),
 		PaymentHistory: make(map[string][]PaymentResponse),
+		ValidTickets:  make(map[string]string),
 	}
 }

@@ -71,6 +71,13 @@ func (db *appdbimpl) ResetTrainPosition(trainID string) error {
 		(*train.Trip)[i].DepartureTime = ""
 	}
 
+	// delete all the tickets for this train
+	for ticket, train := range db.ValidTickets {
+		if train == trainID {
+			delete(db.ValidTickets, ticket)
+		}
+	}
+
 	err = db.Write()
 
 	if err != nil {

@@ -13,6 +13,8 @@ tags:
     description: Operations related to payments
   - name: train_data
     description: Update the position of a train
+  - name: ticket_validation
+    description: Operations related to ticket validation
 
 paths:
   /stations/{station}:
@@ -226,6 +228,37 @@ paths:
                 $ref: "#/components/schemas/generic_response"
               example:
                 status: "User not found"
+  
+  /tickets/{ticket_code}:
+    get:
+      tags: ["ticket_validation"]
+      summary: Validate a ticket
+      description: Validate a ticket with the given code
+      operationId: validateTicket
+      parameters:
+        - name: ticket_code
+          in: path
+          schema:
+            $ref: "#/components/schemas/ticket_code"
+          required: true
+          description: The code of the ticket to validate
+      responses:
+        '200':
+          description: The ticket is valid
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ticket_validation_response"
+              example:
+                train_id: "FR9400"
+        '400':
+          description: The ticket is not valid
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ticket_validation_response"
+              example:
+                train_id: "TICKET_INVALID"
 
 
 components:
@@ -314,6 +347,19 @@ components:
           format: float
           description: The cost of of the trip from the previous station
           example: "2.50"
+
+    ticket_code:
+      type: string
+      description: A ticket code that can be used to check if the user is paying for the trip
+      format: uuid
+
+    ticket_validation_response:
+      type: object
+      description: The response of the ticket validation query
+      properties:
+        train_id:
+          $ref: "#/components/schemas/train_id"
+          description: The train the ticket is valid for. If the ticket is not valid, this field will be TICKET_INVALID.
   
     user_position:
       type: object
@@ -330,6 +376,12 @@ components:
           $ref: "#/components/schemas/station_name"
         train:
           $ref: "#/components/schemas/train_id"
+        payment_response:
+          $ref: "#/components/schemas/payment_response"
+          description: The payment response of the user. It will be populated only if the user has paid for a trip.
+        ticket_code:
+          $ref: "#/components/schemas/ticket_code"
+          description: The ticket code of the user. It will be populated only if the user is on a new train. Otherwise it will be an empty string.
 
     generic_response:
       type: object
