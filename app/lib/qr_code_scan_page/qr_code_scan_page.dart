@@ -25,6 +25,5 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
         BarcodeScannerWithoutController(),
       ],
     );
-    ;
   }
 }
