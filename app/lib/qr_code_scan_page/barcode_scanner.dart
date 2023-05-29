@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'scanner_error_widget.dart';
+import '../api/tickets_api.dart';
 
 class BarcodeScannerWithoutController extends StatefulWidget {
   const BarcodeScannerWithoutController({Key? key}) : super(key: key);
@@ -17,61 +18,37 @@ class _BarcodeScannerWithoutControllerState
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 400,
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        body: Builder(
-          builder: (context) {
-            return Stack(
-              children: [
-                MobileScanner(
-                  fit: BoxFit.contain,
-                  errorBuilder: (context, error, child) {
-                    return ScannerErrorWidget(error: error);
-                  },
-                  onDetect: (capture) {
-                    setState(() {
-                      this.capture = capture;
-                      print("Something was scanned: ");
-                      print(capture.barcodes.first.rawValue);
-                      // API call needs to be done here
-                    });
-                  },
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    alignment: Alignment.bottomCenter,
-                    height: 100,
-                    color: Colors.black.withOpacity(0.4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Center(
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width - 120,
-                            height: 50,
-                            child: FittedBox(
-                              child: Text(
-                                capture?.barcodes.first.rawValue ??
-                                    'Scan something!',
-                                overflow: TextOverflow.fade,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineMedium!
-                                    .copyWith(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(50),
+      child: SizedBox(
+        height: 450,
+        width: 300,
+        child: Scaffold(
+          backgroundColor: Colors.black,
+          body: Builder(
+            builder: (context) {
+              return Stack(
+                children: [
+                  MobileScanner(
+                    fit: BoxFit.fill,
+                    errorBuilder: (context, error, child) {
+                      return ScannerErrorWidget(error: error);
+                    },
+                    onDetect: (capture) {
+                      setState(() {
+                        this.capture = capture;
+                        print("Something was scanned: ");
+                        print(capture.barcodes.first.rawValue);
+                        // API call needs to be done here
+                        TicketsApi api = TicketsApi();
+                        print(api.isValid(capture.barcodes.first.rawValue));
+                      });
+                    },
                   ),
-                ),
-              ],
-            );
-          },
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

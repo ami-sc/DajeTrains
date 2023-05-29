@@ -10,7 +10,7 @@ import 'current_trip_page/current_trip_page.dart';
 import "stations_page/stations_page.dart";
 import 'stations_page/stations_top_bar.dart';
 
-import "../api.dart";
+import 'api/stations_api.dart';
 import "../structures/station.dart";
 
 import 'qr_code_scan_page/qr_code_scan_page.dart';
@@ -90,6 +90,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        drawerEdgeDragWidth: 200, // Swipe left to right to open the drawer
         appBar: <PreferredSizeWidget>[
           <PreferredSizeWidget>[
             /*** Current Trip App Bar ***/

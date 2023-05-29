@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import "structures/station.dart";
+import '../structures/station.dart';
 
 class StationsApi {
   // The URL of the API.
@@ -18,9 +18,10 @@ class StationsApi {
     if (response.statusCode == 200) {
       print("StationsAPI - Succesful response from API.");
       List<dynamic> stationListJson = jsonDecode(response.body);
-      return stationListJson.map(
-        (stationObj) => Station.fromJson(stationObj)).toList();
-    // If the server does not return a 200 (OK) reponse, return an empty list.
+      return stationListJson
+          .map((stationObj) => Station.fromJson(stationObj))
+          .toList();
+      // If the server does not return a 200 (OK) reponse, return an empty list.
     } else {
       print("StationsAPI - Invalid response from API.");
       return [];

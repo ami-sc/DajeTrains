@@ -12,6 +12,16 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        Text(
+          "Please scan a ticket/pass \n",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 28,
+            // Medium font weight.
+            fontWeight: FontWeight.w500,
+            height: 1.2,
+          ),
+        ),
         BarcodeScannerWithoutController(),
       ],
     );
