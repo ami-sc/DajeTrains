@@ -22,6 +22,7 @@ class _NavDrawerState extends State<NavDrawer> {
     setState(() {
       currentIdx = idx;
       widget.indexCallback(idx);
+      Navigator.pop(context);
     });
   }
 
