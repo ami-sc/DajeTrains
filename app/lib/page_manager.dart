@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'current_trip_page/current_trip_top_bar.dart';
+import 'qr_code_scan_page/qr_code_top_bar.dart';
 import "bottom_bar.dart";
 import 'nav_drawer.dart';
 
@@ -66,94 +67,115 @@ class _HomeState extends State<Home> {
     });
   }
 
-  int drawerIdx = 0; // Homepage index
+  // Homepage index
+  int drawerIdx = 0;
+  // This value is used to decide if we need to show the bottom bar
+  int drawerPages = 0;
 
   void _onLabelTap(int newIdx) {
     setState(() {
       drawerIdx = newIdx;
       print("SideMenu value:");
       print(drawerIdx);
+      if (drawerIdx != 0) {
+        drawerPages = 1;
+      } else {
+        drawerPages = 0;
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: <PreferredSizeWidget>[
-        <PreferredSizeWidget>[
-          /*** Current Trip App Bar ***/
-          CurrentTripTopBar(),
+        appBar: <PreferredSizeWidget>[
+          <PreferredSizeWidget>[
+            /*** Current Trip App Bar ***/
+            CurrentTripTopBar(),
 
-          /*** Stations App Bar ***/
-          StationsTopBar(
-            backButtonCallback: _previousPage,
-            searchCallback: _searchStation,
-          ),
-
-          /*** Trains App Bar ***/
-          CurrentTripTopBar(),
-        ][currentIdx],
-
-        /*** History App Bar ***/
-        CurrentTripTopBar(),
-
-        /*** QR Code App Bar ***/
-        CurrentTripTopBar(),
-      ][drawerIdx],
-
-      drawer: NavDrawer(
-        indexCallback: _onLabelTap,
-        targetIdx: drawerIdx,
-      ),
-
-      // Needed for the round corners of the bottom bar.
-      extendBody: true,
-
-      body: <Widget>[
-        <Widget>[
-          /*** Current Trip Page ***/
-          Container(
-            alignment: Alignment.center,
-            child: CurrentTripPage(),
-          ),
-
-          /*** Stations Page ***/
-          Container(
-            alignment: Alignment.center,
-            child: StationsPage(
-              stationList: stationList,
+            /*** Stations App Bar ***/
+            StationsTopBar(
+              backButtonCallback: _previousPage,
+              searchCallback: _searchStation,
             ),
-          ),
 
-          /*** Trains Page ***/
+            /*** Trains App Bar ***/
+            CurrentTripTopBar(),
+          ][currentIdx],
+
+          /*** History App Bar ***/
+          CurrentTripTopBar(),
+
+          /*** QR Code App Bar ***/
+          QRCodeTopBar(),
+
+          /*** Settings App Bar ***/
+          QRCodeTopBar(),
+
+          /*** Help App Bar ***/
+          QRCodeTopBar(),
+        ][drawerIdx],
+        drawer: NavDrawer(
+          indexCallback: _onLabelTap,
+          targetIdx: drawerIdx,
+        ),
+
+        // Needed for the round corners of the bottom bar.
+        extendBody: true,
+        body: <Widget>[
+          <Widget>[
+            /*** Current Trip Page ***/
+            Container(
+              alignment: Alignment.center,
+              child: CurrentTripPage(),
+            ),
+
+            /*** Stations Page ***/
+            Container(
+              alignment: Alignment.center,
+              child: StationsPage(
+                stationList: stationList,
+              ),
+            ),
+
+            /*** Trains Page ***/
+            Container(
+              color: Colors.blue,
+              alignment: Alignment.center,
+              child: const Text('Trains Page'),
+            ),
+          ][currentIdx],
+
+          /*** History Page ***/
           Container(
-            color: Colors.blue,
             alignment: Alignment.center,
-            child: const Text('Trains Page'),
+            child: Text("History page needs to be completed"),
           ),
-        ][currentIdx],
 
-        /*** History Page ***/
-        Container(
-          alignment: Alignment.center,
-          child: StationsPage(
-            stationList: stationList,
+          /*** QR Code Scan Page ***/
+          Container(
+            alignment: Alignment.center,
+            child: Text("Pinco pallino"),
           ),
-        ),
 
-        /*** QR Code Scan Page ***/
-        Container(
-          alignment: Alignment.center,
-          child: StationsPage(
-            stationList: stationList,
+          /*** Settings Page ***/
+          Container(
+            alignment: Alignment.center,
+            child: Text("Settings need to be completed"),
           ),
-        ),
-      ][drawerIdx],
 
-      bottomNavigationBar: BottomBar(
-        pageCallback: _changePage,
-        targetIdx: currentIdx,
-      ),
-    );
+          /*** Help Page ***/
+          Container(
+            alignment: Alignment.center,
+            child: Text("Help page needs to be completed"),
+          ),
+        ][drawerIdx],
+        bottomNavigationBar: <Widget>[
+          BottomBar(
+            pageCallback: _changePage,
+            targetIdx: currentIdx,
+          ),
+          Container(), // Empty space at the bottom
+        ][drawerPages]);
   }
 }
