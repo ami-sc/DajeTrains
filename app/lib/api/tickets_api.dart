@@ -12,7 +12,7 @@ class TicketsApi {
     }
 
     // Send query to the API and get HTTP response.
-    var response = await http.get(Uri.parse("$apiUrl/$code"));
+    var response = await http.get(Uri.parse("$apiUrl$code"));
 
     // If the server returns a 200 (OK) response, then the ticket is valid
     if (response.statusCode == 200) {

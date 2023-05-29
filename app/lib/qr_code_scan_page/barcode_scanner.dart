@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'scanner_error_widget.dart';
@@ -16,6 +18,19 @@ class _BarcodeScannerWithoutControllerState
     with SingleTickerProviderStateMixin {
   BarcodeCapture? capture;
 
+  // API call needs to be done here
+  TicketsApi api = TicketsApi();
+
+  void _checkValidity(String? code) async {
+    // Wait 500 milliseconds before sending a search request.
+    // This is so we do not overload the API.
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    String trainCode = await api.isValid(code);
+
+    print(trainCode);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -30,18 +45,22 @@ class _BarcodeScannerWithoutControllerState
               return Stack(
                 children: [
                   MobileScanner(
+                    controller: MobileScannerController(
+                      facing: CameraFacing.back,
+                      detectionTimeoutMs: 4000,
+                    ),
                     fit: BoxFit.fill,
                     errorBuilder: (context, error, child) {
                       return ScannerErrorWidget(error: error);
                     },
                     onDetect: (capture) {
+                      print("Something was scanned: ");
+                      print(capture.barcodes.first.rawValue);
+
+                      _checkValidity(capture.barcodes.first.rawValue);
+
                       setState(() {
                         this.capture = capture;
-                        print("Something was scanned: ");
-                        print(capture.barcodes.first.rawValue);
-                        // API call needs to be done here
-                        TicketsApi api = TicketsApi();
-                        print(api.isValid(capture.barcodes.first.rawValue));
                       });
                     },
                   ),
