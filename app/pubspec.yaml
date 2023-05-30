@@ -18,6 +18,10 @@ dependencies:
   mobile_scanner: ^3.2.0
   get: ^4.6.5
   flutter_beacon: ^0.5.1
+  beacons_plugin: ^2.0.8
+  intl: ^0.18.1
+  flutter_local_notifications: ^14.1.0
+  permission_handler: ^10.2.0
 
 dev_dependencies:
   flutter_test:
