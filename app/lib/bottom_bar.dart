@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class BottomBar extends StatefulWidget {
   final Function(int) pageCallback;
-  final int targetIdx;
+  final int activeIdx;
 
   const BottomBar({
     required this.pageCallback,
-    required this.targetIdx,
+    required this.activeIdx,
     super.key,
   });
 
@@ -29,7 +29,7 @@ class _BottomBarState extends State<BottomBar> {
     // We need this in case we need to update the bottom bar when an external
     // button is pressed. For example, if a "back button" is pressed, we must
     // update the index of the sidebar as well.
-    _activeIdx = widget.targetIdx;
+    _activeIdx = widget.activeIdx;
 
     return ClipRRect(
       borderRadius: BorderRadius.only(
