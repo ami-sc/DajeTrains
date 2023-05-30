@@ -3,6 +3,7 @@ import com.umair.beacons_plugin.BeaconsPlugin
 import io.flutter.embedding.android.FlutterActivity
 
 class MainActivity: FlutterActivity() {
+
     override fun onPause() {
         super.onPause()
 

@@ -109,7 +109,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           "m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24");
 
       BeaconsPlugin.setForegroundScanPeriodForAndroid(
-          foregroundScanPeriod: 2200, foregroundBetweenScanPeriod: 10);
+          foregroundScanPeriod: 1100, foregroundBetweenScanPeriod: 2200);
 
       BeaconsPlugin.setBackgroundScanPeriodForAndroid(
           backgroundScanPeriod: 2200, backgroundBetweenScanPeriod: 10);
