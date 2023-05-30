@@ -40,6 +40,48 @@ paths:
                 description: The list stations
                 items:
                   $ref: "#/components/schemas/station"
+  
+  /stations/{station}/departures:
+    get:
+      tags: ["general_info"]
+      summary: Get the departures from a station
+      description: Get the departures from a station with the given name
+      operationId: getDepartures
+      parameters:
+        - name: station
+          in: path
+          schema:
+            $ref: "#/components/schemas/station_name"
+          required: true
+          description: The name of the station to get the departures from
+      responses:
+        '200':
+          description: Returns the departures list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/station_timetable"
+
+  /stations/{station}/arrivals:
+    get:
+      tags: ["general_info"]
+      summary: Get the departures from a station
+      description: Get the departures from a station with the given name
+      operationId: getDepartures
+      parameters:
+        - name: station
+          in: path
+          schema:
+            $ref: "#/components/schemas/station_name"
+          required: true
+          description: The name of the station to get the departures from
+      responses:
+        '200':
+          description: Returns the departures list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/station_timetable"
 
   /trains/{train}:
     get:
@@ -136,8 +178,6 @@ paths:
                 $ref: "#/components/schemas/generic_response"
               example:
                 status: "Train not found"
-
-
 
   /positions/{user_id}:
     get:
@@ -347,6 +387,44 @@ components:
           format: float
           description: The cost of of the trip from the previous station
           example: "2.50"
+
+    station_timetable:
+      type: array
+      description: The timetable of the station (trains that arrives/departs)
+      items:
+        $ref: "#/components/schemas/station_timetable_item"
+      
+    station_timetable_item:
+      type: object
+      properties:
+        train_id:
+          $ref: "#/components/schemas/train_id"
+        first_station:
+          type: string
+          description: The first station of the trip
+          example: "Roma Termini"
+        last_station:
+          type: string
+          description: The first station of the trip
+          example: "Roma Tuscolana"
+        scheduled_arrival_time:
+          type: string
+          format: date-time
+          description: The scheduled arrival time of the train
+          example: "10:30"
+        scheduled_departure_time:
+          type: string
+          format: date-time
+          description: The scheduled departure time of the train
+          example: "10:30"
+        platform:
+          type: integer
+          description: The platform of the train
+          example: "1"
+        last_delay:
+          type: integer
+          description: The delay of the train at the last station (in minutes)
+          example: "0"
 
     ticket_code:
       type: string

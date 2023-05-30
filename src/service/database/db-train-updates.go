@@ -49,6 +49,14 @@ func (db *appdbimpl) UpdateTrainPosition(trainID string, stationID string, statu
 		(*train.Trip)[station_idx].DepartureTime = time.Now().Format("15:04")
 	}
 
+	delay, err := getTrainDelay(*train)
+
+	if err != nil {
+		return err
+	}
+
+	train.LastDelay = delay
+
 	err = db.Write()
 
 	if err != nil {
@@ -70,6 +78,7 @@ func (db *appdbimpl) ResetTrainPosition(trainID string) error {
 		(*train.Trip)[i].ArrivalTime = ""
 		(*train.Trip)[i].DepartureTime = ""
 	}
+	train.LastDelay = 0
 
 	// delete all the tickets for this train
 	for ticket, train := range db.ValidTickets {

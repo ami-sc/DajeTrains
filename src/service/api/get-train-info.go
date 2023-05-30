@@ -24,3 +24,30 @@ func (rt *_router) getTrains(w http.ResponseWriter, r *http.Request, ps httprout
 	_ = json.NewEncoder(w).Encode(trains)
 }
 
+func (rt *_router) getStationDepartures(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+
+	data, err := rt.db.GetStationDepartures(ps.ByName("name"))
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("content-type", "application/json")
+
+	_ = json.NewEncoder(w).Encode(data)
+}
+
+func (rt *_router) getStationArrivals(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+
+	data, err := rt.db.GetStationArrivals(ps.ByName("name"))
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("content-type", "application/json")
+
+	_ = json.NewEncoder(w).Encode(data)
+}

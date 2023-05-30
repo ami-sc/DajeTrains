@@ -52,6 +52,9 @@ type AppDatabase interface {
 	GetPaymentHistory(userID string) ([]PaymentResponse, error)
 
 	ValidateTicket(ticketID string) (string, error)
+
+	GetStationDepartures(stationID string) (*[]StationTimetableItem, error)
+	GetStationArrivals(stationID string) (*[]StationTimetableItem, error)
 }
 
 // JSON database implementation
@@ -88,6 +91,7 @@ type TrainTripItem struct {
 type Train struct {
 	ID       string           `json:"id"`
 	BeaconID string           `json:"beacon_id"`
+	LastDelay int             `json:"last_delay"`
 	Trip     *[]TrainTripItem `json:"trip"`
 }
 
@@ -115,6 +119,16 @@ type UpdateUserPositionResponse struct {
 	ID              string           `json:"id"`
 	PaymentResponse *PaymentResponse `json:"payment_response"`
 	TicketCode      string           `json:"ticket_code"`
+}
+
+type StationTimetableItem struct {
+	TrainID                string `json:"train_id"`
+	ScheduledArrivalTime   string `json:"scheduled_arrival_time"`
+	ScheduledDepartureTime string `json:"scheduled_departure_time"`
+	FirstStation           string `json:"first_station"`
+	LastStation            string `json:"last_station"`
+	LastDelay              int    `json:"last_delay"`
+	Platform               int    `json:"platform"`
 }
 
 // Load loads a database from a file
@@ -256,6 +270,7 @@ func NewDatabase(file string) *appdbimpl {
 			{
 				ID:       "FR9422",
 				BeaconID: "c29ce823-e67a-4e71-bff2-abaa32e77a98",
+				LastDelay: 0,
 				Trip: &[]TrainTripItem{
 					{
 						Station:                &stations[0],
@@ -365,6 +380,6 @@ func NewDatabase(file string) *appdbimpl {
 		},
 		UserStates:     make(map[string]*UserState),
 		PaymentHistory: make(map[string][]PaymentResponse),
-		ValidTickets:  make(map[string]string),
+		ValidTickets:   make(map[string]string),
 	}
 }
