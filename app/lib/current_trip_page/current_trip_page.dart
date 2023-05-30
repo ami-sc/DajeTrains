@@ -8,26 +8,30 @@ class CurrentTripPage extends StatefulWidget {
 class _CurrentTripPageState extends State<CurrentTripPage> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(bottom: 10.0),
-          child: MainImage(),
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(bottom: 10.0),
+              child: MainImage(),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 100.0),
+              child: MainText(),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 10.0),
+              child: FindButton(),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 50.0),
+              child: HistoryButton(),
+            ),
+          ],
         ),
-        Padding(
-          padding: EdgeInsets.only(bottom: 100.0),
-          child: MainText(),
-        ),
-        Padding(
-          padding: EdgeInsets.only(bottom: 10.0),
-          child: FindButton(),
-        ),
-        Padding(
-          padding: EdgeInsets.only(bottom: 50.0),
-          child: HistoryButton(),
-        ),
-      ],
+      )
     );
   }
 }

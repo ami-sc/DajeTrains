@@ -52,10 +52,10 @@ class _NavDrawerState extends State<NavDrawer> {
       child: Column(children: [
         // Show the list of menu drawer
         menuItem(0, "Homepage", _isSelected(0)),
-        menuItem(1, "History", _isSelected(1)),
-        menuItem(2, "Scan ticket/pass", _isSelected(2)),
-        menuItem(3, "Settings", _isSelected(3)),
-        menuItem(4, "Need help?", _isSelected(4)),
+        menuItem(3, "History", _isSelected(1)),
+        menuItem(4, "Scan ticket/pass", _isSelected(2)),
+        menuItem(5, "Settings", _isSelected(3)),
+        menuItem(6, "Need help?", _isSelected(4)),
       ]),
     );
   }

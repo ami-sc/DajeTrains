@@ -1,19 +1,19 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'current_trip_page/current_trip_top_bar.dart';
-import 'qr_code_scan_page/qr_code_top_bar.dart';
+import "top_bar.dart";
 import "bottom_bar.dart";
-import 'nav_drawer.dart';
+import "nav_drawer.dart";
 
-import 'current_trip_page/current_trip_page.dart';
-
+/*** Bottom Bar Pages ***/
+import "current_trip_page/current_trip_page.dart";
 import "stations_page/stations_page.dart";
-import 'stations_page/stations_top_bar.dart';
+import "trains_page/trains_page.dart";
 
-import 'api/stations_api.dart';
-import "../structures/station.dart";
-
-import 'qr_code_scan_page/qr_code_scan_page.dart';
+/*** Drawer Pages ***/
+import "history_page/history_page.dart";
+import "qr_code_scan_page/qr_code_scan_page.dart";
+import "settings_page/settings_page.dart";
+import "help_page/help_page.dart";
 
 class Home extends StatefulWidget {
   @override
@@ -21,164 +21,147 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  // The index of the currently displayed page, as defined by the bottom bar.
-  int currentIdx = 0;
-  // The index of the page that was previously active.
-  int previousIdx = 0;
+  int _drawerIdx = 0;
+  int _activePageIdx = 0;
+  int _previousPageIdx = 0;
+  bool _topBarState = true;
+  bool _bottomBarState = true;
+  PageController _pageControl = PageController(initialPage: 0);
 
-  // Create an instance of the Stations API.
-  StationsApi api = StationsApi();
+  void _hideTopBar() {
+    setState(() {
+      _topBarState = false;
+    });
+  }
 
-  List<Station> stationList = [];
+  void _showTopBar() {
+    setState(() {
+      _topBarState = true;
+    });
+  }
 
-  // Return to the previous visited page.
+  void _hideBottomBar() {
+    setState(() {
+      _bottomBarState = false;
+    });
+  }
+
+  void _showBottomBar() {
+    setState(() {
+      _bottomBarState = true;
+    });
+  }
+
   void _previousPage() {
-    setState(() {
-      currentIdx = previousIdx;
-      previousIdx = currentIdx;
+    // Hide the keyboard, if active.
+    FocusManager.instance.primaryFocus?.unfocus();
 
-      // Reset the StationList.
-      stationList = [];
-    });
-  }
+    _pageControl.jumpToPage(_previousPageIdx);
 
-  // Jump directly to a target page.
-  void _changePage(int newIdx) {
-    // Avoid overwritting previousIdx if the user clicks the same page.
-    if (newIdx != currentIdx) {
-      setState(() {
-        previousIdx = currentIdx;
-        currentIdx = newIdx;
-
-        // Reset the StationList.
-        stationList = [];
-      });
+    if (_previousPageIdx != 0) {
+          _hideTopBar();
+    } else {
+      _showTopBar();
     }
-  }
 
-  void _searchStation(String query) async {
-    // Wait 500 milliseconds before sending a search request.
-    // This is so we do not overload the API.
-    await Future.delayed(const Duration(milliseconds: 500));
-
-    List<Station> apiList = await api.getStationsFromApi(query);
-
-    // Trigger update of the station list.
     setState(() {
-      stationList = apiList;
+      _activePageIdx = _previousPageIdx;
     });
   }
 
-  // Homepage index
-  int drawerIdx = 0;
-  // This value is used to decide if we need to show the bottom bar
-  int drawerPages = 0;
+  void _changePage(int targetIdx) {
+    // Hide the keyboard, if active.
+    FocusManager.instance.primaryFocus?.unfocus();
 
-  void _onLabelTap(int newIdx) {
-    setState(() {
-      drawerIdx = newIdx;
-      print("SideMenu value:");
-      print(drawerIdx);
-      if (drawerIdx != 0) {
-        drawerPages = 1;
-      } else {
-        drawerPages = 0;
+    // Only the "Current Trip" page should have the main top bar.
+    if (targetIdx != 0) {
+      _hideTopBar();
+    } else {
+      _showTopBar();
+    }
+
+    // If the target index < 3, we want a page from the bottom bar.
+    if (targetIdx < 3) {
+      // All bottom bar pages need the bottom bar.
+      _showBottomBar();
+
+      // Avoid overwritting previousIdx if the user clicks the same page.
+      if (targetIdx != _activePageIdx) {
+        setState(() {
+          _previousPageIdx = _activePageIdx;
+          _activePageIdx = targetIdx;
+        });
       }
-    });
+
+      // Update the highlighted button in the drawer.
+      _drawerIdx = 0;
+    }
+    // If the target index >= 3, we want a page from the drawer.
+    else {
+      // No drawer page needs the bottom bar.
+      _hideBottomBar();
+
+      // Update the highlighted button in the drawer.
+      _drawerIdx = targetIdx - 2;
+    }
+
+    // Change page.
+    _pageControl.jumpToPage(targetIdx);
   }
 
   @override
   Widget build(BuildContext context) {
+    NavDrawer drawer = NavDrawer(
+      indexCallback: _changePage,
+      targetIdx: _drawerIdx,
+    );
+
     return Scaffold(
-        drawerEdgeDragWidth: 200, // Swipe left to right to open the drawer
-        appBar: <PreferredSizeWidget>[
-          <PreferredSizeWidget>[
-            /*** Current Trip App Bar ***/
-            CurrentTripTopBar(),
+      appBar: _topBarState ? CurrentTripTopBar() : null,
 
-            /*** Stations App Bar ***/
-            StationsTopBar(
-              backButtonCallback: _previousPage,
-              searchCallback: _searchStation,
-            ),
+      // Needed for the round corners of the bottom bar.
+      extendBody: true,
 
-            /*** Trains App Bar ***/
-            CurrentTripTopBar(),
-          ][currentIdx],
+      drawer: drawer,
+      // Swipe left to right to open the drawer
+      drawerEdgeDragWidth: 200,
 
-          /*** History App Bar ***/
-          CurrentTripTopBar(),
+      body: PageView(
+        controller: _pageControl,
 
-          /*** QR Code App Bar ***/
-          QRCodeTopBar(),
+        // Disable scrolling between pages.
+        physics: NeverScrollableScrollPhysics(),
 
-          /*** Settings App Bar ***/
-          QRCodeTopBar(),
+        children: <Widget>[
+          /*** 0: Current Trip Page ***/
+          CurrentTripPage(),
 
-          /*** Help App Bar ***/
-          QRCodeTopBar(),
-        ][drawerIdx],
-        drawer: NavDrawer(
-          indexCallback: _onLabelTap,
-          targetIdx: drawerIdx,
-        ),
-
-        // Needed for the round corners of the bottom bar.
-        extendBody: true,
-        body: <Widget>[
-          <Widget>[
-            /*** Current Trip Page ***/
-            Container(
-              alignment: Alignment.center,
-              child: CurrentTripPage(),
-            ),
-
-            /*** Stations Page ***/
-            Container(
-              alignment: Alignment.center,
-              child: StationsPage(
-                stationList: stationList,
-              ),
-            ),
-
-            /*** Trains Page ***/
-            Container(
-              color: Colors.blue,
-              alignment: Alignment.center,
-              child: const Text('Trains Page'),
-            ),
-          ][currentIdx],
-
-          /*** History Page ***/
-          Container(
-            alignment: Alignment.center,
-            child: Text("History page needs to be completed"),
+          /*** 1: Stations Page ***/
+          StationsPage(
+            backButtonCallback: _previousPage,
           ),
 
-          /*** QR Code Scan Page ***/
-          Container(
-            alignment: Alignment.center,
-            child: QRCodeWidget(),
-          ),
+          /*** 2: Trains Page ***/
+          TrainsPage(),
 
-          /*** Settings Page ***/
-          Container(
-            alignment: Alignment.center,
-            child: Text("Settings need to be completed"),
-          ),
+          /*** 3: History Page ***/
+          HistoryPage(appDrawer: drawer),
 
-          /*** Help Page ***/
-          Container(
-            alignment: Alignment.center,
-            child: Text("Help page needs to be completed"),
-          ),
-        ][drawerIdx],
-        bottomNavigationBar: <Widget>[
-          BottomBar(
-            pageCallback: _changePage,
-            targetIdx: currentIdx,
-          ),
-          Container(), // Empty space at the bottom
-        ][drawerPages]);
+          /*** 4: QR Code Page ***/
+          QRCodePage(appDrawer: drawer),
+
+          /*** 5: Settings Page ***/
+          SettingsPage(appDrawer: drawer),
+
+          /*** 6: Help Page ***/
+          HelpPage(appDrawer: drawer),
+        ],
+      ),
+
+      bottomNavigationBar: _bottomBarState ? BottomBar(
+        pageCallback: _changePage,
+        activeIdx: _activePageIdx,
+      ) : null,
+    );
   }
 }
