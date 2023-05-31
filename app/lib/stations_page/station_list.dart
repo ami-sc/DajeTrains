@@ -23,13 +23,7 @@ class _StationListState extends State<StationList> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      separatorBuilder: (context, index) {
-        return Divider(
-          endIndent: 40,
-          indent: 40,
-        );
-      },
+    return ListView.builder(
       itemCount: widget.stationList.length,
       // Build a StationButton per station on the list.
       itemBuilder: (BuildContext context, int index) {
@@ -58,32 +52,37 @@ class StationButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 70,
-        child: TextButton.icon(
-          style: ButtonStyle(
-            overlayColor: MaterialStateProperty.all(Color(0xFFB5D7FF)),
-            // Make the highlight shape a square.
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-            ),
+      height: 60,
+      child: TextButton.icon(
+        style: ButtonStyle(
+          padding: MaterialStateProperty.all<EdgeInsets>(
+            EdgeInsets.fromLTRB(30, 10, 0, 0),
           ),
-          onPressed: () {
-            print("StationList::Station::onPressed");
-            // Return the index (according to the StationList) of the Station.
-            buttonCallback(listIdx);
-          },
-          icon: Icon(
-            Icons.subway_outlined,
-            color: Color(0xFF0557B7),
-            size: 28,
+          alignment: Alignment.centerLeft,
+          overlayColor: MaterialStateProperty.all(Color(0xFFB5D7FF)),
+          // Make the highlight shape a square.
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(borderRadius: BorderRadius.zero),
           ),
-          label: Text(
-            stationName,
-            style: TextStyle(
-              color: Color(0xFF0557B7),
-              fontSize: 18,
-            ),
+        ),
+        onPressed: () {
+          print("StationList::Station::onPressed");
+          // Return the index (according to the StationList) of the Station.
+          buttonCallback(listIdx);
+        },
+        icon: Icon(
+          Icons.subway_outlined,
+          color: Color.fromARGB(255, 55, 62, 71),
+          size: 28,
+        ),
+        label: Text(
+          stationName,
+          style: TextStyle(
+            color: Color.fromARGB(255, 55, 62, 71),
+            fontSize: 18,
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
