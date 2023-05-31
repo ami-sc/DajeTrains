@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import "page_manager.dart";
 import 'package:beacons_plugin/beacons_plugin.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:async';
 import 'dart:io' show Platform;
@@ -30,6 +31,7 @@ class _DajeTrainsState extends State<DajeTrains> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    permissions();
     initPlatformState();
     BeaconsPlugin.startMonitoring();
   }
@@ -53,9 +55,10 @@ class _DajeTrainsState extends State<DajeTrains> with WidgetsBindingObserver {
         await Permission.location.isDenied) {
       Map<Permission, PermissionStatus> statuses = await [
         Permission.bluetoothScan,
+        Permission.bluetoothConnect,
         Permission.location,
-        Permission.bluetoothConnect
       ].request();
+      // Restart.restartApp(); //Restart after permission granted (Android)
     }
   }
 
