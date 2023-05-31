@@ -95,6 +95,7 @@ func (db *appdbimpl) getStationTimetable(station string, arrivals bool) (*[]Stat
 					ScheduledArrivalTime:   tripItem.ScheduledArrivalTime,
 					ScheduledDepartureTime: tripItem.ScheduledDepartureTime,
 					LastDelay:              train.LastDelay,
+					Platform:               tripItem.Platform,
 				})
 			}
 		}
