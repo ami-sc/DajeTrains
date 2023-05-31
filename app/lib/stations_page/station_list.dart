@@ -17,13 +17,19 @@ class StationList extends StatefulWidget {
 }
 
 class _StationListState extends State<StationList> {
-  void _stationButtonPress (int stationIdx) {
+  void _stationButtonPress(int stationIdx) {
     widget.stationCallback(widget.stationList[stationIdx]);
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return ListView.separated(
+      separatorBuilder: (context, index) {
+        return Divider(
+          endIndent: 40,
+          indent: 40,
+        );
+      },
       itemCount: widget.stationList.length,
       // Build a StationButton per station on the list.
       itemBuilder: (BuildContext context, int index) {
@@ -51,31 +57,33 @@ class StationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton.icon(
-      style: ButtonStyle(
-        overlayColor: MaterialStateProperty.all(Color(0xFFB5D7FF)),
-        // Make the highlight shape a square.
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-        ),
-      ),
-      onPressed: () {
-        print("StationList::Station::onPressed");
-        // Return the index (according to the StationList) of the Station.
-        buttonCallback(listIdx);
-      },
-      icon: Icon(
-        Icons.subway,
-        color: Color(0xFF0557B7),
-        size: 25,
-      ),
-      label: Text(
-        stationName,
-        style: TextStyle(
-          color: Color(0xFF0557B7),
-          fontSize: 16,
-        ),
-      ),
-    );
+    return SizedBox(
+        height: 70,
+        child: TextButton.icon(
+          style: ButtonStyle(
+            overlayColor: MaterialStateProperty.all(Color(0xFFB5D7FF)),
+            // Make the highlight shape a square.
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+            ),
+          ),
+          onPressed: () {
+            print("StationList::Station::onPressed");
+            // Return the index (according to the StationList) of the Station.
+            buttonCallback(listIdx);
+          },
+          icon: Icon(
+            Icons.subway_outlined,
+            color: Color(0xFF0557B7),
+            size: 28,
+          ),
+          label: Text(
+            stationName,
+            style: TextStyle(
+              color: Color(0xFF0557B7),
+              fontSize: 18,
+            ),
+          ),
+        ));
   }
 }
