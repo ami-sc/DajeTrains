@@ -5,6 +5,7 @@ import "../structures/train.dart";
 import "../api/timetable_api.dart";
 
 import "single_station_top_bar.dart";
+import '../single_train_info/single_train_page.dart';
 
 class SingleStationPage extends StatefulWidget {
   final Station station;
@@ -18,7 +19,8 @@ class SingleStationPage extends StatefulWidget {
   State<SingleStationPage> createState() => _SingleStationPageState();
 }
 
-class _SingleStationPageState extends State<SingleStationPage> with TickerProviderStateMixin{
+class _SingleStationPageState extends State<SingleStationPage>
+    with TickerProviderStateMixin {
   late TabController _tabController;
 
   List<Train> arrivalsList = [];
@@ -27,8 +29,10 @@ class _SingleStationPageState extends State<SingleStationPage> with TickerProvid
   TimetableApi timetableApi = TimetableApi();
 
   void _getTimetable(String stationName) async {
-    List<Train> arrivalsApi = await timetableApi.getArrivalsFromApi(stationName);
-    List<Train> departuresApi = await timetableApi.getDeparturesFromApi(stationName);
+    List<Train> arrivalsApi =
+        await timetableApi.getArrivalsFromApi(stationName);
+    List<Train> departuresApi =
+        await timetableApi.getDeparturesFromApi(stationName);
 
     setState(() {
       arrivalsList = arrivalsApi;
@@ -53,44 +57,49 @@ class _SingleStationPageState extends State<SingleStationPage> with TickerProvid
         stationName: widget.station.name,
         tabController: _tabController,
       ),
-
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          ListView.separated(
+      body: TabBarView(controller: _tabController, children: [
+        ListView.separated(
             // Needed to have a line dividing each result.
             separatorBuilder: (context, index) => Divider(
-              color: Color.fromARGB(255, 179, 179, 179),
-              height: 1,
-            ),
+                  color: Color.fromARGB(255, 179, 179, 179),
+                  height: 1,
+                ),
             itemCount: departuresList.length,
             itemBuilder: (BuildContext context, int index) {
               return TrainButton(
-                destination: departuresList[index].lastStation,
-                id: departuresList[index].id,
-                platform: departuresList[index].platform,
-                time: departuresList[index].scheduledArrivalTime
-              );
-            }
-          ),
-
-          ListView.separated(
+                  destination: departuresList[index].lastStation,
+                  id: departuresList[index].id,
+                  platform: departuresList[index].platform,
+                  time: departuresList[index].scheduledArrivalTime,
+                  buttonCallback: _toggleStationPage);
+            }),
+        ListView.separated(
             separatorBuilder: (context, index) => Divider(
-              color: Color.fromARGB(255, 201, 201, 201),
-              height: 1,
-            ),
+                  color: Color.fromARGB(255, 201, 201, 201),
+                  height: 1,
+                ),
             itemCount: arrivalsList.length,
             itemBuilder: (BuildContext context, int index) {
               return TrainButton(
-                destination: arrivalsList[index].lastStation,
-                id: arrivalsList[index].id,
-                platform: arrivalsList[index].platform,
-                time: arrivalsList[index].scheduledArrivalTime
-              );
-            }
-          ),
-        ]
-      ),
+                  destination: arrivalsList[index].lastStation,
+                  id: arrivalsList[index].id,
+                  platform: arrivalsList[index].platform,
+                  time: arrivalsList[index].scheduledArrivalTime,
+                  buttonCallback: _toggleStationPage);
+            }),
+      ]),
+    );
+  }
+
+  void _toggleStationPage(String trainID) {
+    // Hide the keyboard, if active.
+    FocusManager.instance.primaryFocus?.unfocus();
+
+    // Open the page.
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => SingleTrainPage(trainID: trainID)),
     );
   }
 }
@@ -100,12 +109,14 @@ class TrainButton extends StatelessWidget {
   final String id;
   final int platform;
   final String time;
+  final Function(String) buttonCallback;
 
   const TrainButton({
     required this.destination,
     required this.id,
     required this.platform,
     required this.time,
+    required this.buttonCallback,
     super.key,
   });
 
@@ -121,6 +132,7 @@ class TrainButton extends StatelessWidget {
       ),
       onPressed: () {
         print("SingleStationPage::Train::onPressed");
+        buttonCallback(id);
       },
       icon: Padding(
         padding: EdgeInsets.all(10.0),
@@ -161,7 +173,6 @@ class TrainButton extends StatelessWidget {
               ),
             ],
           ),
-
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Text(
@@ -178,4 +189,3 @@ class TrainButton extends StatelessWidget {
     );
   }
 }
-
