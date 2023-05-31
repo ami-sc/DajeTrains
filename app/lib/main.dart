@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import "page_manager.dart";
 import 'package:beacons_plugin/beacons_plugin.dart';
+import 'structures/beacon.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:async';
@@ -98,11 +99,11 @@ class _DajeTrainsState extends State<DajeTrains> with WidgetsBindingObserver {
       BeaconsPlugin.listenToBeacons(beaconEventsController);
 
       await BeaconsPlugin.addRegion(
-          "BeaconType1", "909c3cf9-fc5c-4841-b695-380958a51a5a");
+          "Termini", "61d09100-f9a2-43aa-b727-9d1a6f7a2bc2");
       await BeaconsPlugin.addRegion(
-          "BeaconType2", "6a84c716-0f2a-1ce9-f210-6a63bd873dd9");
+          "Padova", "aae16383-257d-4a16-8eab-734c28084801");
       await BeaconsPlugin.addRegion(
-          "BeaconType3", "c29ce823-e67a-4e71-bff2-abaa32e77a98");
+          "FR9422", "c29ce823-e67a-4e71-bff2-abaa32e77a98");
 
       BeaconsPlugin.addBeaconLayoutForAndroid(
           "m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
@@ -118,12 +119,16 @@ class _DajeTrainsState extends State<DajeTrains> with WidgetsBindingObserver {
       beaconEventsController.stream.listen(
           (data) {
             if (data.isNotEmpty && isRunning) {
+              // We hypothesize that there is only one beacon in the area at a time (for now) so we can just take the first one
               setState(() {
                 _beaconResult = data;
-                _results.add(_beaconResult);
+                Beacon beacon = Beacon.fromString(data);
+                print(beacon.uuid);
+                // Check if the beacon belongs to one of the stations or to a train and then do the appropriate action
               });
 
               if (!_isInForeground) {
+                // print("Print in background");
                 print("Beacons DataReceived: " + data);
               }
 
