@@ -20,7 +20,7 @@ class ValidityDialog extends StatelessWidget {
               style: TextStyle(color: Colors.black, fontSize: 20),
               children: <TextSpan>[
                 TextSpan(
-                    text: '$trainCode',
+                    text: trainCode,
                     style: TextStyle(
                         color: Color.fromARGB(255, 0, 30, 255), fontSize: 24)),
               ],
