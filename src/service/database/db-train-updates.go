@@ -37,7 +37,7 @@ func (db *appdbimpl) UpdateTrainPosition(trainID string, stationID string, statu
 	// check if the train is arrived before departing
 	if status == "departed" {
 		// check if the train is already arrived
-		if station_idx > 0 && (*train.Trip)[station_idx - 1].ArrivalTime != "" {
+		if station_idx > 0 && (*train.Trip)[station_idx].ArrivalTime == "" {
 			return errors.New("Illegal train position update: train has never arrived to the station")
 		}
 	}
