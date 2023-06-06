@@ -19,7 +19,7 @@ dependencies:
   get: ^4.6.5
   beacons_plugin: ^2.0.8
   intl: ^0.18.1
-  flutter_local_notifications: ^14.1.0
+  flutter_local_notifications: ^14.1.1
   permission_handler: ^10.2.0
   restart_app: ^1.2.1
 

@@ -21,6 +21,13 @@ import "help_page/help_page.dart";
 import 'package:beacons_plugin/beacons_plugin.dart';
 import 'structures/beacon.dart';
 
+/*** Notifications ***/
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'notifications/noti.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
 class Home extends StatefulWidget {
   @override
   State<Home> createState() => _HomeState();
@@ -34,9 +41,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   bool _bottomBarState = true;
   PageController _pageControl = PageController(initialPage: 0);
 
-  String _beaconResult = 'Not Scanned Yet.';
+  /*** Beacon monitoring***/
   var isRunning = false;
-  List<String> _results = [];
   bool _isInForeground = true;
 
   final StreamController<String> beaconEventsController =
@@ -48,6 +54,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     initPlatformState();
     BeaconsPlugin.startMonitoring();
+    Noti.initialize(flutterLocalNotificationsPlugin);
   }
 
   @override
@@ -107,7 +114,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         "m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24");
 
     BeaconsPlugin.setForegroundScanPeriodForAndroid(
-        foregroundScanPeriod: 1100, foregroundBetweenScanPeriod: 2200);
+        foregroundScanPeriod: 1100, foregroundBetweenScanPeriod: 10);
 
     BeaconsPlugin.setBackgroundScanPeriodForAndroid(
         backgroundScanPeriod: 2200, backgroundBetweenScanPeriod: 10);
@@ -117,11 +124,16 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           if (data.isNotEmpty && isRunning) {
             // We hypothesize that there is only one beacon in the area at a time (for now) so we can just take the first one
             setState(() {
-              _beaconResult = data;
               Beacon beacon = Beacon.fromString(data);
               print(beacon.uuid);
               // Check if the beacon belongs to one of the stations or to a train and then do the appropriate action
             });
+
+            Noti.showBigTextNotification(
+                id: 0,
+                title: "Train detected",
+                body: "Train detected",
+                fln: flutterLocalNotificationsPlugin);
 
             if (!_isInForeground) {
               // print("Print in background");

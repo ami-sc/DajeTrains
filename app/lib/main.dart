@@ -26,22 +26,27 @@ class _DajeTrainsState extends State<DajeTrains> with WidgetsBindingObserver {
 
   void permissionsDenied() async {
     if ((await Permission.bluetoothScan.isDenied ||
-        await Permission.location.isDenied)) {
+        await Permission.location.isDenied ||
+        await Permission.notification.isDenied)) {
       Map<Permission, PermissionStatus> statuses = await [
         Permission.bluetoothScan,
         Permission.bluetoothConnect,
         Permission.location,
+        Permission.notification,
       ].request();
     }
     var status = await Permission.bluetoothScan.status;
     var status2 = await Permission.location.status;
+    var status3 = await Permission.notification.status;
     if (status != PermissionStatus.granted ||
-        status2 != PermissionStatus.granted) {
+        status2 != PermissionStatus.granted ||
+        status3 != PermissionStatus.granted) {
       // Open settings if permissions are denied
       openAppSettings();
     }
     if (await Permission.bluetoothScan.isGranted &&
-        await Permission.location.isGranted) {
+        await Permission.location.isGranted &&
+        await Permission.notification.isGranted) {
       setState(() {
         _isReady = true;
       });
@@ -51,15 +56,18 @@ class _DajeTrainsState extends State<DajeTrains> with WidgetsBindingObserver {
   void permissions() async {
     // Check permissions
     if ((await Permission.bluetoothScan.isDenied ||
-        await Permission.location.isDenied)) {
+        await Permission.location.isDenied ||
+        await Permission.notification.isDenied)) {
       Map<Permission, PermissionStatus> statuses = await [
         Permission.bluetoothScan,
         Permission.bluetoothConnect,
         Permission.location,
+        Permission.notification,
       ].request();
     }
     if (await Permission.bluetoothScan.isGranted &&
-        await Permission.location.isGranted) {
+        await Permission.location.isGranted &&
+        await Permission.notification.isGranted) {
       setState(() {
         _isReady = true;
       });
@@ -92,7 +100,7 @@ class _DajeTrainsState extends State<DajeTrains> with WidgetsBindingObserver {
                       child: Align(
                         alignment: Alignment.center,
                         child: Text(
-                            "Please give location and bluetooth permissions to use this app"),
+                            "Please give location, notification and bluetooth permissions to use this app"),
                       ),
                     ),
                   ),
