@@ -25,5 +25,7 @@ func (rt *_router) Handler() http.Handler {
 
 	rt.router.GET("/tickets/:ticket_code", rt.wrap(rt.validateTicket))
 
+	rt.router.GET("/beacons", rt.wrap(rt.getBeacons))
+
 	return rt.router
 }

@@ -55,6 +55,8 @@ type AppDatabase interface {
 
 	GetStationDepartures(stationID string) (*[]StationTimetableItem, error)
 	GetStationArrivals(stationID string) (*[]StationTimetableItem, error)
+
+	GetBeaconList() *[]string
 }
 
 // JSON database implementation
@@ -207,7 +209,7 @@ func NewDatabase(file string) *appdbimpl {
 		},
 		{
 			Name:     "Roma Tiburtina",
-			BeaconID: "1234567892",
+			BeaconID: "331845ed-11c6-4028-8271-5cb1214de809",
 			Location: Location{
 				Latitutde: 41.910,
 				Longitude: 12.528,
@@ -311,7 +313,7 @@ func NewDatabase(file string) *appdbimpl {
 			},
 			{
 				ID:       "FR9210",
-				BeaconID: "1234567899",
+				BeaconID: "d2d1fc1d-ec6e-4be2-bb0b-9f55956efac0",
 				Trip: &[]TrainTripItem{
 					{
 						Station:                &stations[5],
