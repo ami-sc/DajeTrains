@@ -2,27 +2,38 @@ import 'station.dart';
 
 class Position {
   String status;
-  String station;
-  String train;
-  Payment payment;
+  String id;
+  Payment? payment;
   String ticket;
 
   Position({
     required this.status,
-    required this.station,
-    required this.train,
+    required this.id,
     required this.payment,
     required this.ticket,
   });
 
   factory Position.fromJson(Map<String, dynamic> data) {
-    return Position(
-      status: data["status"],
-      station: data["station"],
-      train: data['train'],
-      payment: Payment.fromJson(data['payment_response']),
-      ticket: data['ticket_code'],
-    );
+    if (data['payment_response'] != null) {
+      return Position(
+        status: data["status"],
+        id: data['id'],
+        payment: Payment.fromJson(data['payment_response']),
+        ticket: data['ticket_code'],
+      );
+    } else {
+      return Position(
+        status: data["status"],
+        id: data['id'],
+        payment: null,
+        ticket: data['ticket_code'],
+      );
+    }
+  }
+
+  @override
+  String toString() {
+    return "$id,$status,$payment,$ticket";
   }
 }
 

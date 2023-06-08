@@ -25,6 +25,17 @@ import 'structures/beacon.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'notifications/noti.dart';
 
+/*** User location ***/
+import 'api/user_location.dart';
+import 'structures/position.dart';
+
+/*** Single train page ***/
+import 'single_train_info/single_train_page.dart';
+
+/*** Station  ***/
+import 'structures/station.dart';
+import 'stations_page/single_station_page.dart';
+
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
@@ -40,6 +51,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   bool _topBarState = true;
   bool _bottomBarState = true;
   PageController _pageControl = PageController(initialPage: 0);
+  String _lastBeaconID = "";
 
   /*** Beacon monitoring***/
   var isRunning = false;
@@ -48,13 +60,53 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   final StreamController<String> beaconEventsController =
       StreamController<String>.broadcast();
 
+  /* Notifications */
+  late final Noti noti;
+
+  void listenToNotification() =>
+      noti.onNotificationClick.stream.listen(onNotificaionListener);
+
+  void onNotificaionListener(String? payload) {
+    if (payload != null && payload.isNotEmpty) {
+      print('payload $payload');
+      // Split the payload to get the train ID
+      List<String> payloadList = payload.split(',');
+      print(payloadList);
+      if (payloadList[1] == "in_train") {
+        // If the user is in a train, send him to the single train page
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: ((context) =>
+                    SingleTrainPage(trainID: payloadList[0]))));
+      } else if (payloadList[1] == "in_station") {
+        // Build a station object from the payload
+        Station station = Station(
+          name: payloadList[0],
+          beaconId: "",
+          location: Location(
+            latitude: 0,
+            longitude: 0,
+          ),
+        );
+        // If the user is in a station, send him to the single station page
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: ((context) => SingleStationPage(station: station))));
+      }
+    }
+  }
+
   @override
   void initState() {
-    super.initState();
     WidgetsBinding.instance.addObserver(this);
     initPlatformState();
     BeaconsPlugin.startMonitoring();
-    Noti.initialize(flutterLocalNotificationsPlugin);
+    noti = Noti();
+    noti.initialize();
+    listenToNotification();
+    super.initState();
   }
 
   @override
@@ -125,15 +177,38 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
             // We hypothesize that there is only one beacon in the area at a time (for now) so we can just take the first one
             setState(() {
               Beacon beacon = Beacon.fromString(data);
-              print(beacon.uuid);
               // Check if the beacon belongs to one of the stations or to a train and then do the appropriate action
             });
+            Beacon beacon = Beacon.fromString(data);
+            if (_lastBeaconID != beacon.uuid) {
+              _lastBeaconID = beacon.uuid;
 
-            Noti.showBigTextNotification(
-                id: 0,
-                title: "Train detected",
-                body: "Train detected",
-                fln: flutterLocalNotificationsPlugin);
+              PositionApi userPosition = PositionApi(beaconID: beacon.uuid);
+              Future<Position> posizione = userPosition.updatePosition();
+              posizione.then(
+                (value) => {
+                  print(value.status),
+                  if (value.status == "in_train")
+                    {
+                      noti.showNotificationWithPayload(
+                          id: 0,
+                          title: "Test notification",
+                          body: "Your are on train xxx",
+                          payload: value.toString())
+                    }
+                  else
+                    {
+                      noti.showNotificationWithPayload(
+                        id: 0,
+                        title: "Station detected",
+                        body:
+                            "You are in station ${value.id} click here to see the schedule",
+                        payload: value.toString(),
+                      )
+                    }
+                },
+              );
+            }
 
             if (!_isInForeground) {
               // print("Print in background");
