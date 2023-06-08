@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "package:get/utils.dart";
 
 import "../structures/station.dart";
 import "../structures/train.dart";
@@ -120,9 +121,22 @@ class TrainButton extends StatelessWidget {
     super.key,
   });
 
+  String trainType(String id) {
+    switch (id.substring(0, 2)) {
+      case "FR":
+        return "Frecciarossa";
+      case "IC":
+        return "InterCity";
+      default:
+        return "Regionale";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return TextButton.icon(
+    var trainType = this.trainType(id);
+
+    return TextButton(
       style: ButtonStyle(
         overlayColor: MaterialStateProperty.all(Color(0xFFDAF2FF)),
         // Make the highlight shape a square.
@@ -134,20 +148,26 @@ class TrainButton extends StatelessWidget {
         print("SingleStationPage::Train::onPressed");
         buttonCallback(id);
       },
-      icon: Padding(
-        padding: EdgeInsets.all(10.0),
-        child: Icon(
-          Icons.train,
-          size: 35,
-          color: Color(0xFF000000),
-        ),
-      ),
-      label: Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
+            children: [
+              Padding(
+                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                  child: Text(
+                    time,
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      color: Color(0xFF0A7D23),
+                      fontSize: 22,
+                    ),
+                  )),
+            ],
+          ),
+          Column(
             // Left align all text.
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 destination,
@@ -157,31 +177,34 @@ class TrainButton extends StatelessWidget {
                 ),
               ),
               Text(
-                id,
+                "$trainType - $id",
                 style: TextStyle(
                   color: Color(0xFF49454F),
                   fontSize: 14,
-                ),
-              ),
-              Text(
-                "Platform $platform",
-                style: TextStyle(
-                  color: Color(0xFF49454F),
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],
           ),
           Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Text(
-              time,
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                color: Color(0xFF0A7D23),
-                fontSize: 22,
-              ),
+            padding: const EdgeInsets.all(15.0),
+            child: Container(
+              height: 50.0,
+              width: 50.0,
+              color: Colors.transparent,
+              child: Container(
+                  decoration: BoxDecoration(
+                      color: Color(0xFFA5E6FB),
+                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                  child: Center(
+                    child: Text(
+                      "$platform",
+                      style: TextStyle(
+                          fontSize: 24,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                  )),
             ),
           ),
         ],
