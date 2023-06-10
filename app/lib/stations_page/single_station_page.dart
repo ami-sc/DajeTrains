@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import "package:get/utils.dart";
 
 import "../structures/station.dart";
 import "../structures/train.dart";
@@ -71,7 +70,8 @@ class _SingleStationPageState extends State<SingleStationPage>
                   destination: departuresList[index].lastStation,
                   id: departuresList[index].id,
                   platform: departuresList[index].platform,
-                  time: departuresList[index].scheduledArrivalTime,
+                  time: departuresList[index].scheduledDepartureTime,
+                  delay: departuresList[index].lastDelay,
                   buttonCallback: _toggleStationPage);
             }),
         ListView.separated(
@@ -86,6 +86,7 @@ class _SingleStationPageState extends State<SingleStationPage>
                   id: arrivalsList[index].id,
                   platform: arrivalsList[index].platform,
                   time: arrivalsList[index].scheduledArrivalTime,
+                  delay: arrivalsList[index].lastDelay,
                   buttonCallback: _toggleStationPage);
             }),
       ]),
@@ -110,6 +111,7 @@ class TrainButton extends StatelessWidget {
   final String id;
   final int platform;
   final String time;
+  final int delay;
   final Function(String) buttonCallback;
 
   const TrainButton({
@@ -117,6 +119,7 @@ class TrainButton extends StatelessWidget {
     required this.id,
     required this.platform,
     required this.time,
+    required this.delay,
     required this.buttonCallback,
     super.key,
   });
@@ -130,6 +133,10 @@ class TrainButton extends StatelessWidget {
       default:
         return "Regionale";
     }
+  }
+
+  bool isDelayed(int delay) {
+    return delay > 0;
   }
 
   @override
@@ -155,14 +162,58 @@ class TrainButton extends StatelessWidget {
             children: [
               Padding(
                   padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                  child: Text(
-                    time,
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      color: Color(0xFF0A7D23),
-                      fontSize: 22,
-                    ),
-                  )),
+                  child: isDelayed(delay)
+                      ?
+                      // If the train is delayed, show the delay.
+                      Column(
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  DateTime(
+                                          DateTime.now().year,
+                                          0,
+                                          0,
+                                          int.parse(time.split(':')[0]),
+                                          int.parse(time.split(':')[1]),
+                                          0,
+                                          0,
+                                          0)
+                                      .add(Duration(minutes: delay))
+                                      .toString()
+                                      .substring(11, 16),
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 201, 41, 41),
+                                    fontSize: 22,
+                                  ),
+                                )
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "+$delay'",
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 201, 41, 41),
+                                    fontSize: 15,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        )
+                      :
+                      // Otherwise, show the scheduled time.
+                      Text(
+                          time,
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            color: Color(0xFF0A7D23),
+                            fontSize: 22,
+                          ),
+                        )),
             ],
           ),
           Column(
