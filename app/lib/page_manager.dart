@@ -36,6 +36,12 @@ import 'single_train_info/single_train_page.dart';
 import 'structures/station.dart';
 import 'stations_page/single_station_page.dart';
 
+/*** Global variables ***/
+import 'globals.dart' as globals;
+
+/*** Payments ***/
+import 'api/payments_api.dart';
+
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
@@ -53,7 +59,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   PageController _pageControl = PageController(initialPage: 0);
   String _lastBeaconID = "";
 
-  /*** Beacon monitoring***/
+  /* Beacon monitoring */
   var isRunning = false;
   bool _isInForeground = true;
 
@@ -101,6 +107,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
+    /*var lista = PaymentsApi.getPaymentsHistory();
+    lista.then((value) => {print("Test"), print(value), print(value[0].cost)});*/
     initPlatformState();
     BeaconsPlugin.startMonitoring();
     noti = Noti();
@@ -159,6 +167,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         "Padova", "aae16383-257d-4a16-8eab-734c28084801");
     await BeaconsPlugin.addRegion(
         "FR9422", "c29ce823-e67a-4e71-bff2-abaa32e77a98");
+    await BeaconsPlugin.addRegion(
+        "Napoli Centrale", "c7ed8863-f368-4810-bb06-998ec4316987");
 
     BeaconsPlugin.addBeaconLayoutForAndroid(
         "m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
@@ -190,19 +200,33 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                   print(value.status),
                   if (value.status == "in_train")
                     {
+                      // User is in a train, send him to the trip page
+                      globals.ticketValue = value.ticket,
                       noti.showNotificationWithPayload(
                           id: 0,
                           title: "Test notification",
-                          body: "Your are on train xxx",
+                          body: "Your are on train ${value.id}",
                           payload: value.toString())
                     }
-                  else
+                  else if (value.payment != null)
                     {
+                      // User got off the train, send him to the payment info
                       noti.showNotificationWithPayload(
                         id: 0,
                         title: "Station detected",
                         body:
-                            "You are in station ${value.id} click here to see the schedule",
+                            "You got of at ${value.id} station click here to see the payment details",
+                        payload: value.toString(),
+                      )
+                    }
+                  else
+                    {
+                      // User arrived at the station, send him the schedule of the station
+                      noti.showNotificationWithPayload(
+                        id: 0,
+                        title: "Station detected",
+                        body:
+                            "You are in ${value.id} station click here to see the schedule",
                         payload: value.toString(),
                       )
                     }
