@@ -16,8 +16,16 @@ class _CurrentTripPageOnBoardState extends State<CurrentTripPageOnBoard> {
 
   @override
   Widget build(BuildContext context) {
+    bool showFab = true;
+
     return Scaffold(
       body: SlidingUpPanel(
+        onPanelOpened: () => {
+          showFab = false,
+        },
+        onPanelClosed: () => {
+          showFab = true,
+        },
         minHeight: 180,
         maxHeight: 765,
         color: Color(0xFFDAF2FF),
@@ -64,31 +72,33 @@ class _CurrentTripPageOnBoardState extends State<CurrentTripPageOnBoard> {
           )),
         ),
       ),
-      floatingActionButton: Padding(
-        padding: EdgeInsets.only(bottom: 185),
-        child: SizedBox(
-          height: 65.0,
-          width: 65.0,
-          child: FittedBox(
-            child: FloatingActionButton(
-              onPressed: () {
-                print("Floating action button pressed");
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return QRDialog("12345");
-                  },
-                );
-              },
-              backgroundColor: Color(0xFFB5D7FF),
-              child: Icon(
-                Icons.qr_code_2,
-                size: 44,
+      floatingActionButton: showFab
+          ? Padding(
+              padding: EdgeInsets.only(bottom: 185),
+              child: SizedBox(
+                height: 65.0,
+                width: 65.0,
+                child: FittedBox(
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      print("Floating action button pressed");
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return QRDialog("12345");
+                        },
+                      );
+                    },
+                    backgroundColor: Color(0xFFB5D7FF),
+                    child: Icon(
+                      Icons.qr_code_2,
+                      size: 44,
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-        ),
-      ),
+            )
+          : null,
     );
   }
 }
