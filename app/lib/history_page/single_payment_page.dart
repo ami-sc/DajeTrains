@@ -200,7 +200,7 @@ class _SinglePaymentPageState extends State<SinglePaymentPage>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text("€ $cost", // TODO Change to real cost
+                      Text("€ ${cost.toStringAsFixed(2)}", // TODO Change to real cost
                           style: TextStyle(
                               fontSize: 28, fontWeight: FontWeight.bold)),
                     ],

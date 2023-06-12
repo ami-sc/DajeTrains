@@ -12,12 +12,7 @@ class SingleTrainTopBar extends StatefulWidget implements PreferredSizeWidget {
   @override
   State<SingleTrainTopBar> createState() => _SingleTrainTopBarState();
 
-  @override
-  Size get preferredSize => Size.fromHeight(165);
-}
-
-class _SingleTrainTopBarState extends State<SingleTrainTopBar> {
-  String trainType(String id) {
+  static String trainType(String id) {
     switch (id.substring(0, 2)) {
       case "FR":
         return "Frecciarossa";
@@ -28,7 +23,7 @@ class _SingleTrainTopBarState extends State<SingleTrainTopBar> {
     }
   }
 
-  Color logoColor(String id) {
+  static Color logoColor(String id) {
     switch (id.substring(0, 2)) {
       case "FR":
         return Color(0xFFB71C1C);
@@ -39,7 +34,7 @@ class _SingleTrainTopBarState extends State<SingleTrainTopBar> {
     }
   }
 
-  String trainAbbrev(String id) {
+  static String trainAbbrev(String id) {
     switch (id.substring(0, 2)) {
       case "FR":
         return "FR";
@@ -51,9 +46,18 @@ class _SingleTrainTopBarState extends State<SingleTrainTopBar> {
   }
 
   @override
+  Size get preferredSize => Size.fromHeight(165);
+}
+
+class _SingleTrainTopBarState extends State<SingleTrainTopBar> {
+  
+
+  
+
+  @override
   Widget build(BuildContext context) {
     String $info =
-        trainType(widget.payment.trainID) + " - " + widget.payment.trainID;
+        "${SingleTrainTopBar.trainType(widget.payment.trainID)} - ${widget.payment.trainID}";
     return AppBar(
       backgroundColor: Color(0xFFA5E6FB),
       title: Text("Ticket information"),
@@ -80,13 +84,13 @@ class _SingleTrainTopBarState extends State<SingleTrainTopBar> {
                       color: Colors.transparent,
                       child: Container(
                           decoration: BoxDecoration(
-                              color: logoColor(widget.payment
+                              color: SingleTrainTopBar.logoColor(widget.payment
                                   .trainID), //TODO Change color based on train type
                               borderRadius:
                                   BorderRadius.all(Radius.circular(50.0))),
                           child: Center(
                             child: Text(
-                              trainAbbrev(widget.payment
+                              SingleTrainTopBar.trainAbbrev(widget.payment
                                   .trainID), // TODO Change to train type
                               style: TextStyle(
                                   fontSize: 16,

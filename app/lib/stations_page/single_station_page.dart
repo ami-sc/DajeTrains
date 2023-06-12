@@ -156,7 +156,7 @@ class TrainButton extends StatelessWidget {
         buttonCallback(id);
       },
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Column(
             children: [
@@ -216,9 +216,10 @@ class TrainButton extends StatelessWidget {
                         )),
             ],
           ),
+          SizedBox(width: 20),
           Column(
             // Left align all text.
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 destination,
@@ -236,6 +237,7 @@ class TrainButton extends StatelessWidget {
               ),
             ],
           ),
+          Spacer(),
           Padding(
             padding: const EdgeInsets.all(15.0),
             child: Container(

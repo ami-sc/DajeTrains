@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../structures/payment.dart';
+import 'single_payment_top_bar.dart';
 
 class PaymentList extends StatefulWidget {
   final List<Payment> paymentList;
@@ -23,12 +24,21 @@ class _PaymentListState extends State<PaymentList> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return ListView.separated(
+      separatorBuilder: (context, index) => Divider(
+                  color: Color.fromARGB(255, 179, 179, 179),
+                  height: 1,
+                ),
       itemCount: widget.paymentList.length,
       // Build a PaymentButton per payment on the list.
       itemBuilder: (BuildContext context, int index) {
         return PaymentButton(
-          paymentName: widget.paymentList[index].arrivalTime,
+          trainId: widget.paymentList[index].trainID,
+          trainType: SingleTrainTopBar.trainType(widget.paymentList[index].trainID),
+          date: widget.paymentList[index].date,
+          from: widget.paymentList[index].from.name,
+          to: widget.paymentList[index].to.name,
+          cost: widget.paymentList[index].cost,
           listIdx: index,
           buttonCallback: _paymentButtonPress,
         );
@@ -38,12 +48,22 @@ class _PaymentListState extends State<PaymentList> {
 }
 
 class PaymentButton extends StatelessWidget {
-  final String paymentName;
+  final String trainId;
+  final String trainType;
+  final String date;
+  final String from;
+  final String to;
+  final double cost;
   final int listIdx;
   final Function(int) buttonCallback;
 
   const PaymentButton({
-    required this.paymentName,
+    required this.trainId,
+    required this.trainType,
+    required this.date,
+    required this.from,
+    required this.to,
+    required this.cost,
     required this.listIdx,
     required this.buttonCallback,
     super.key,
@@ -51,38 +71,117 @@ class PaymentButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 60,
-      child: TextButton.icon(
-        style: ButtonStyle(
-          padding: MaterialStateProperty.all<EdgeInsets>(
-            EdgeInsets.fromLTRB(30, 10, 0, 0),
-          ),
-          alignment: Alignment.centerLeft,
-          overlayColor: MaterialStateProperty.all(Color(0xFFB5D7FF)),
-          // Make the highlight shape a square.
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-          ),
+    return TextButton(
+      style: ButtonStyle(
+        overlayColor: MaterialStateProperty.all(Color(0xFFDAF2FF)),
+        // Make the highlight shape a square.
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(borderRadius: BorderRadius.zero),
         ),
-        onPressed: () {
+      ),
+      onPressed: () {
           print("PaymentList::Payment::onPressed");
           // Return the index (according to the PaymentList) of the Payment.
           buttonCallback(listIdx);
         },
-        icon: Icon(
-          Icons.subway_outlined,
-          color: Color.fromARGB(255, 55, 62, 71),
-          size: 28,
-        ),
-        label: Text(
-          paymentName,
-          style: TextStyle(
-            color: Color.fromARGB(255, 55, 62, 71),
-            fontSize: 18,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Column(
+            children: [
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Container(
+                      height: 40.0,
+                      width: 40.0,
+                      color: Colors.transparent,
+                      child: Container(
+                          decoration: BoxDecoration(
+                              color: SingleTrainTopBar.logoColor(trainId), //TODO Change color based on train type
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(50.0))),
+                          child: Center(
+                            child: Text(
+                              SingleTrainTopBar.trainAbbrev(trainId), // TODO Change to train type
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600),
+                              textAlign: TextAlign.center,
+                            ),
+                          )),
+                    ),
+                  ),
+                ]
           ),
-        ),
-      ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    date,
+                    style: TextStyle(
+                      color: Color(0xFF49454F),
+                      fontSize: 14,
+                    ),
+                  )
+                ]
+              ),
+              Row(
+                children: [
+                  Text("From: ", style: TextStyle(fontSize: 16 ,color: Color(0xFF1D1B20)),),
+                  Text(
+                    from,
+                    style: TextStyle(
+                      color: Color(0xFF1D1B20),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text("To: ", style: TextStyle(fontSize: 16 ,color: Color(0xFF1D1B20)),),
+                  Text(
+                    to,
+                    style: TextStyle(
+                      color: Color(0xFF1D1B20),
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text(
+                    "$trainType - $trainId",
+                    style: TextStyle(
+                      color: Color(0xFF49454F),
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              )
+              
+            ],
+          ),
+          Spacer(),
+          Column(
+            children: [
+              Text(
+                '€ ${cost.toStringAsFixed(2)}',
+                textAlign: TextAlign.right,
+                style: TextStyle(
+                  fontSize: 22,
+                  color: Colors.black
+                ),
+              )
+            ],
+          )
+        ],
+      )
     );
   }
 }

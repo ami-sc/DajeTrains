@@ -61,16 +61,10 @@ class _HistoryPageState extends State<HistoryPage> {
     }
   }
 
-  void searchPayment(String query) async {
-    // TODO
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: HistoryTopBar(
-          searchCallback: searchPayment,
-        ),
+        appBar: HistoryTopBar(),
         drawer: widget.appDrawer,
         body: _defaultMessage
             ? Center(
@@ -101,21 +95,3 @@ class _HistoryPageState extends State<HistoryPage> {
               ));
   }
 }
-
-/* old build
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: HistoryTopBar(
-        searchCallback: searchTrip,
-      ),
-      drawer: widget.appDrawer,
-      body: Center(
-          child: ElevatedButton(
-        onPressed: _togglePaymentPage,
-        child: Text('Show single payment page'),
-      )),
-    );
-  }
-}
-*/
