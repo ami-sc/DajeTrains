@@ -1,6 +1,9 @@
 package database
 
-import "errors"
+import (
+	"errors"
+	"time"
+)
 
 func (db *appdbimpl) processPayment(userID string, train Train, from_station Station, to_station Station) (*PaymentResponse, error) {
 
@@ -21,14 +24,15 @@ func (db *appdbimpl) processPayment(userID string, train Train, from_station Sta
 	}
 
 	payment := PaymentResponse{
-		Cost:        total_cost,
-		TrainID:     train.ID,
-		FromStation: &from_station,
-		ToStation:   &to_station,
-		DepartureTime: (*train.Trip)[start_index].DepartureTime,
-		ArrivalTime: (*train.Trip)[end_index].ArrivalTime,
+		Cost:                   total_cost,
+		TrainID:                train.ID,
+		FromStation:            &from_station,
+		ToStation:              &to_station,
+		DepartureTime:          (*train.Trip)[start_index].DepartureTime,
+		ArrivalTime:            (*train.Trip)[end_index].ArrivalTime,
 		ScheduledDepartureTime: (*train.Trip)[start_index].ScheduledDepartureTime,
-		ScheduledArrivalTime: (*train.Trip)[end_index].ScheduledArrivalTime,
+		ScheduledArrivalTime:   (*train.Trip)[end_index].ScheduledArrivalTime,
+		Date:                   time.Now().Format("01/02/2006"),
 	}
 
 	if total_cost > 0.0 {

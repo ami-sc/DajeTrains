@@ -91,10 +91,10 @@ type TrainTripItem struct {
 }
 
 type Train struct {
-	ID       string           `json:"id"`
-	BeaconID string           `json:"beacon_id"`
-	LastDelay int             `json:"last_delay"`
-	Trip     *[]TrainTripItem `json:"trip"`
+	ID        string           `json:"id"`
+	BeaconID  string           `json:"beacon_id"`
+	LastDelay int              `json:"last_delay"`
+	Trip      *[]TrainTripItem `json:"trip"`
 }
 
 const (
@@ -110,14 +110,15 @@ type UserState struct {
 }
 
 type PaymentResponse struct {
-	Cost        float64  `json:"cost"`
-	TrainID     string   `json:"train_id"`
-	FromStation *Station `json:"from_station"`
-	ToStation   *Station `json:"to_station"`
-	DepartureTime string `json:"departure_time"`
-	ArrivalTime string `json:"arrival_time"`
-	ScheduledDepartureTime string `json:"scheduled_departure_time"`
-	ScheduledArrivalTime string `json:"scheduled_arrival_time"`
+	Cost                   float64  `json:"cost"`
+	TrainID                string   `json:"train_id"`
+	FromStation            *Station `json:"from_station"`
+	ToStation              *Station `json:"to_station"`
+	DepartureTime          string   `json:"departure_time"`
+	ArrivalTime            string   `json:"arrival_time"`
+	ScheduledDepartureTime string   `json:"scheduled_departure_time"`
+	ScheduledArrivalTime   string   `json:"scheduled_arrival_time"`
+	Date                   string   `json:"date"`
 }
 
 type UpdateUserPositionResponse struct {
@@ -274,8 +275,8 @@ func NewDatabase(file string) *appdbimpl {
 		Stations: stations,
 		Trains: []Train{
 			{
-				ID:       "FR9422",
-				BeaconID: "c29ce823-e67a-4e71-bff2-abaa32e77a98",
+				ID:        "FR9422",
+				BeaconID:  "c29ce823-e67a-4e71-bff2-abaa32e77a98",
 				LastDelay: 0,
 				Trip: &[]TrainTripItem{
 					{

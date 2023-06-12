@@ -459,7 +459,7 @@ components:
     ticket_validation_response:
       type: object
       description: The response of the ticket validation query
-      properties:
+    properties:
         train_id:
           $ref: "#/components/schemas/train_id"
           description: The train the ticket is valid for. If the ticket is not valid, this field will be TICKET_INVALID.
@@ -531,6 +531,11 @@ components:
           format: date-time
           description: The scheduled arrival time of the train
           example: "10:30"
+        date:
+          type: string
+          format: date
+          description: The date of the trip
+          example: "01/01/2020"
     
     payment_history:
       type: array
