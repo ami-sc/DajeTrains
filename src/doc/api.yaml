@@ -131,6 +131,14 @@ paths:
             $ref: "#/components/schemas/update_status"
           required: true
           description: The status of the train (arrived or departed)
+        - name: time
+          in: query
+          schema:
+            type: string
+            format: date-time
+          example: "10:30"
+          required: false
+          description: (Optional) The time of the arrival or departure. If not specified, the current time is used.
       responses:
         '200':
           description: Returns a successful response
