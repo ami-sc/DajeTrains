@@ -9,7 +9,7 @@ class SingleTrainTopBar extends StatefulWidget implements PreferredSizeWidget {
   State<SingleTrainTopBar> createState() => _SingleTrainTopBarState();
 
   @override
-  Size get preferredSize => Size.fromHeight(170);
+  Size get preferredSize => Size.fromHeight(165);
 }
 
 class _SingleTrainTopBarState extends State<SingleTrainTopBar> {
