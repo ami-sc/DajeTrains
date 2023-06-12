@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class CurrentTripPageOnBoard extends StatefulWidget {
@@ -7,14 +8,27 @@ class CurrentTripPageOnBoard extends StatefulWidget {
 }
 
 class _CurrentTripPageOnBoardState extends State<CurrentTripPageOnBoard> {
+  final controller = MapController.withUserPosition(
+      trackUserLocation: UserTrackingOption(
+    enableTracking: true,
+    unFollowUser: true,
+  ));
+
   @override
   Widget build(BuildContext context) {
+    bool showFab = true;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text("SlidingUpPanelExample"),
-      ),
       body: SlidingUpPanel(
-        minHeight: 150,
+        onPanelOpened: () => {
+          showFab = false,
+        },
+        onPanelClosed: () => {
+          showFab = true,
+        },
+        minHeight: 180,
+        maxHeight: 765,
+        color: Color(0xFFDAF2FF),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(28.0),
           topRight: Radius.circular(28.0),
@@ -22,90 +36,124 @@ class _CurrentTripPageOnBoardState extends State<CurrentTripPageOnBoard> {
         panel: Center(
           child: Text("This is the sliding Widget"),
         ),
-        body: Center(
-          child: Text("This is the Widget behind the sliding panel"),
+        body: OSMFlutter(
+          mapIsLoading: Center(child: CircularProgressIndicator()),
+          controller: controller,
+          initZoom: 12,
+          minZoomLevel: 7,
+          maxZoomLevel: 16,
+          stepZoom: 0.5,
+          userLocationMarker: UserLocationMaker(
+            personMarker: MarkerIcon(
+              icon: Icon(
+                Icons.my_location,
+                color: Colors.blue,
+                size: 80,
+                weight: 700,
+              ),
+            ),
+            directionArrowMarker: MarkerIcon(
+              icon: Icon(
+                Icons.double_arrow,
+                size: 48,
+              ),
+            ),
+          ),
+          roadConfiguration: RoadOption(
+            roadColor: Colors.yellowAccent,
+          ),
+          markerOption: MarkerOption(
+              defaultMarker: MarkerIcon(
+            icon: Icon(
+              Icons.person_pin_circle,
+              color: Colors.blue,
+              size: 56,
+            ),
+          )),
         ),
       ),
+      floatingActionButton: showFab
+          ? Padding(
+              padding: EdgeInsets.only(bottom: 185),
+              child: SizedBox(
+                height: 65.0,
+                width: 65.0,
+                child: FittedBox(
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      print("Floating action button pressed");
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return QRDialog("12345");
+                        },
+                      );
+                    },
+                    backgroundColor: Color(0xFFB5D7FF),
+                    child: Icon(
+                      Icons.qr_code_2,
+                      size: 44,
+                    ),
+                  ),
+                ),
+              ),
+            )
+          : null,
     );
   }
 }
 
-class MainImage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 325,
-      child: Image(
-        image: AssetImage('assets/train.png'),
-      ),
-    );
-  }
-}
+class QRDialog extends StatelessWidget {
+  final String qrCode;
 
-class MainText extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 350,
-      child: Text(
-        "You are not currently riding a train!",
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 32,
-          // Medium font weight.
-          fontWeight: FontWeight.w500,
-          height: 1.2,
-        ),
-      ),
-    );
-  }
-}
+  QRDialog(this.qrCode);
 
-class FindButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 300,
-      height: 57,
-      child: ElevatedButton.icon(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Color(0xFFB5D7FF),
-          foregroundColor: Color(0xFF000000),
-          elevation: 4,
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(28.0),
+      ),
+      titlePadding: const EdgeInsets.all(0),
+      backgroundColor: Color(0xFFE1F8FF),
+      title: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(28.0),
+            topRight: Radius.circular(28.0),
+          ),
+          color: Color(0xFFA5E6FB),
         ),
-        icon: Icon(Icons.train),
-        label: Text(
-          "Find a Train",
-          style: TextStyle(
-            fontSize: 20,
-            // Medium font weight.
-            fontWeight: FontWeight.w500,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+          child: RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              children: [
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Icon(Icons.confirmation_num),
+                ),
+                TextSpan(
+                  text: " Your ticket",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-        onPressed: () {
-          print("CurrentTrip::FindButton::onPressed");
-        },
       ),
-    );
-  }
-}
-
-class HistoryButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () {
-        print("CurrentTrip::HistoryButton::onPressed");
-      },
-      style: ButtonStyle(
-        overlayColor: MaterialStateProperty.all(Color(0xFFB5D7FF)),
-      ),
-      child: Text("View History",
-          style: TextStyle(
-            fontSize: 18,
-            color: Color(0xFF0557B7),
-            // Medium font weight.
-            fontWeight: FontWeight.w500,
+      content: Container(
+          padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+          child: RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              text: "Add image here",
+              style: TextStyle(color: Colors.black, fontSize: 20),
+            ),
           )),
     );
   }

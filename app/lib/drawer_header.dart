@@ -16,7 +16,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
         child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'EasyTrain',
+              'DajeTrains',
               textAlign: TextAlign.center,
               style: TextStyle(color: Color(0xFF49454F), fontSize: 25),
             )));

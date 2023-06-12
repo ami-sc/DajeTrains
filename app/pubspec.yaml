@@ -25,6 +25,7 @@ dependencies:
   rxdart: ^0.27.7
   url_launcher: ^6.1.11
   sliding_up_panel: ^2.0.0+1
+  flutter_osm_plugin: ^0.55.1+1
 
 dev_dependencies:
   flutter_test:
