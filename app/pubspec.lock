@@ -57,6 +57,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.1"
+  crypto:
+    dependency: transitive
+    description:
+      name: crypto
+      sha256: ff625774173754681d66daaf4a448684fb04b78f902da9cb3d308c19cc5e8bab
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.3"
   dbus:
     dependency: transitive
     description:
@@ -65,6 +73,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.8"
+  dio:
+    dependency: transitive
+    description:
+      name: dio
+      sha256: dfda195cbf351d538054297bbd509d8046d336194ea218655f2c326c65711d1e
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.2.1"
   english_words:
     dependency: "direct main"
     description:
@@ -134,6 +150,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0+1"
+  flutter_osm_interface:
+    dependency: transitive
+    description:
+      name: flutter_osm_interface
+      sha256: "5f52d3fa38b05913a29f775633ab8af3c2d20f08de762c10ffe9699bb168bb48"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.1"
+  flutter_osm_plugin:
+    dependency: "direct main"
+    description:
+      name: flutter_osm_plugin
+      sha256: "32746e3aae3861e3d122f4876850509df928a9be29a680bf7c36caf3f7e9fa81"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.55.1+1"
+  flutter_osm_web:
+    dependency: transitive
+    description:
+      name: flutter_osm_web
+      sha256: "892357ac9d5e6b35ed5b462fdb976101cb0e51a34fd122c23e57be12f3401ae7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.1"
+  flutter_plugin_android_lifecycle:
+    dependency: transitive
+    description:
+      name: flutter_plugin_android_lifecycle
+      sha256: "950e77c2bbe1692bc0874fc7fb491b96a4dc340457f4ea1641443d0a6c1ea360"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.15"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -152,6 +200,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.6.5"
+  google_polyline_algorithm:
+    dependency: transitive
+    description:
+      name: google_polyline_algorithm
+      sha256: "357874f00d3f93c3ba1bf4b4d9a154aa9ee87147c068238c1e8392012b686a03"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
   http:
     dependency: "direct main"
     description:
@@ -328,6 +384,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.1"
+  routing_client_dart:
+    dependency: transitive
+    description:
+      name: routing_client_dart
+      sha256: "00089e5009dd00b137d6c47c398ce29ce1b53dd3bba5a721499ce185c9301de9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.3"
   rxdart:
     dependency: "direct main"
     description:
@@ -373,6 +437,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  stream_transform:
+    dependency: transitive
+    description:
+      name: stream_transform
+      sha256: "14a00e794c7c11aa145a170587321aedce29769c08d7f58b1d141da75e3b1c6f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   string_scanner:
     dependency: transitive
     description:
@@ -477,6 +549,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.6"
+  uuid:
+    dependency: transitive
+    description:
+      name: uuid
+      sha256: "648e103079f7c64a36dc7d39369cabb358d377078a051d6ae2ad3aa539519313"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.7"
   vector_math:
     dependency: transitive
     description:

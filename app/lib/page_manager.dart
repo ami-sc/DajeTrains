@@ -40,9 +40,6 @@ import 'stations_page/single_station_page.dart';
 /*** Global variables ***/
 import 'globals.dart' as globals;
 
-/*** Payments ***/
-import 'api/payments_api.dart';
-
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
@@ -57,6 +54,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   int _previousPageIdx = 0;
   bool _topBarState = true;
   bool _bottomBarState = true;
+  bool _isOnboard = false;
   PageController _pageControl = PageController(initialPage: 0);
   String _lastBeaconID = "";
 
@@ -205,9 +203,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                       globals.ticketValue = value.ticket,
                       noti.showNotificationWithPayload(
                           id: 0,
-                          title: "Test notification",
+                          title: "Train detected",
                           body: "Your are on train ${value.id}",
-                          payload: value.toString())
+                          payload: value.toString()),
+                      _isOnboard = true,
                     }
                   else if (value.payment != null)
                     {
@@ -349,8 +348,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       extendBody: true,
 
       drawer: drawer,
-      // Swipe left to right to open the drawer
-      drawerEdgeDragWidth: 200,
 
       body: PageView(
         controller: _pageControl,
@@ -360,7 +357,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
         children: <Widget>[
           /*** 0: Current Trip Page ***/
-          CurrentTripPage(),
+          _isOnboard ? CurrentTripPageOnBoard() : CurrentTripPage(),
 
           /*** 1: Stations Page ***/
           StationsPage(
