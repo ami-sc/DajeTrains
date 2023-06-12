@@ -25,6 +25,10 @@ func (db *appdbimpl) processPayment(userID string, train Train, from_station Sta
 		TrainID:     train.ID,
 		FromStation: &from_station,
 		ToStation:   &to_station,
+		DepartureTime: (*train.Trip)[start_index].DepartureTime,
+		ArrivalTime: (*train.Trip)[end_index].ArrivalTime,
+		ScheduledDepartureTime: (*train.Trip)[start_index].ScheduledDepartureTime,
+		ScheduledArrivalTime: (*train.Trip)[end_index].ScheduledArrivalTime,
 	}
 
 	if total_cost > 0.0 {

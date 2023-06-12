@@ -6,7 +6,7 @@ import (
 )
 
 // Update train position
-func (db *appdbimpl) UpdateTrainPosition(trainID string, stationID string, status string) error {
+func (db *appdbimpl) UpdateTrainPosition(trainID string, stationID string, status string, time_string string) error {
 
 	train, err := db.getTrainByID(trainID)
 
@@ -43,10 +43,18 @@ func (db *appdbimpl) UpdateTrainPosition(trainID string, stationID string, statu
 	}
 
 	if status == "arrived" {
-		(*train.Trip)[station_idx].ArrivalTime = time.Now().Format("15:04")
+		if time_string == "" {
+			(*train.Trip)[station_idx].ArrivalTime = time.Now().Format("15:04")
+		} else {
+			(*train.Trip)[station_idx].ArrivalTime = time_string
+		}
 	}
 	if status == "departed" {
-		(*train.Trip)[station_idx].DepartureTime = time.Now().Format("15:04")
+		if time_string == "" {
+			(*train.Trip)[station_idx].DepartureTime = time.Now().Format("15:04")
+		} else {
+			(*train.Trip)[station_idx].DepartureTime = time_string
+		}
 	}
 
 	delay, err := getTrainDelay(*train)

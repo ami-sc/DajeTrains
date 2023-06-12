@@ -503,6 +503,26 @@ components:
         to_station:
           $ref: "#/components/schemas/station"
           description: The station where the user got off the train
+        departure_time:
+          type: string
+          format: date-time
+          description: The departure time of the train
+          example: "10:30"
+        arrival_time:
+          type: string
+          format: date-time
+          description: The arrival time of the train
+          example: "10:30"
+        scheduled_departure_time:
+          type: string
+          format: date-time
+          description: The scheduled departure time of the train
+          example: "10:30"
+        scheduled_arrival_time:
+          type: string
+          format: date-time
+          description: The scheduled arrival time of the train
+          example: "10:30"
     
     payment_history:
       type: array

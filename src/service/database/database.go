@@ -47,7 +47,7 @@ type AppDatabase interface {
 	UpdateUserPosition(userID string, beaconID string) (*UpdateUserPositionResponse, error)
 	GetUserPosition(userID string) *UserState
 
-	UpdateTrainPosition(trainID string, stationID string, status string) error
+	UpdateTrainPosition(trainID string, stationID string, status string, time_string string) error
 	ResetTrainPosition(trainID string) error
 	GetPaymentHistory(userID string) ([]PaymentResponse, error)
 
@@ -114,6 +114,10 @@ type PaymentResponse struct {
 	TrainID     string   `json:"train_id"`
 	FromStation *Station `json:"from_station"`
 	ToStation   *Station `json:"to_station"`
+	DepartureTime string `json:"departure_time"`
+	ArrivalTime string `json:"arrival_time"`
+	ScheduledDepartureTime string `json:"scheduled_departure_time"`
+	ScheduledArrivalTime string `json:"scheduled_arrival_time"`
 }
 
 type UpdateUserPositionResponse struct {

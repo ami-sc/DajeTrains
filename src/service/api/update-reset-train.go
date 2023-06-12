@@ -15,8 +15,9 @@ func (rt *_router) updateTrainPosition(w http.ResponseWriter, r *http.Request, p
 	train_id := ps.ByName("train_id")
 	station_id := r.URL.Query().Get("station_id")
 	status := r.URL.Query().Get("status")
+	time_string := r.URL.Query().Get("time")
 
-	err := rt.db.UpdateTrainPosition(train_id, station_id, status)
+	err := rt.db.UpdateTrainPosition(train_id, station_id, status, time_string)
 
 	if err != nil {
 		// set status code to 400
