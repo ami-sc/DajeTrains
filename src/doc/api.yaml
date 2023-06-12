@@ -475,10 +475,10 @@ components:
             - in_station
             - in_train
             - away
-        station:
-          $ref: "#/components/schemas/station_name"
-        train:
-          $ref: "#/components/schemas/train_id"
+        id:
+          type: string
+          description: It can be a station name or a train ID, depending on the position of the user.
+          example: FR9400
         payment_response:
           $ref: "#/components/schemas/payment_response"
           description: The payment response of the user. It will be populated only if the user has paid for a trip.
