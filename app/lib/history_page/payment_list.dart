@@ -28,7 +28,7 @@ class _PaymentListState extends State<PaymentList> {
       // Build a PaymentButton per payment on the list.
       itemBuilder: (BuildContext context, int index) {
         return PaymentButton(
-          paymentName: widget.paymentList[index].trainID,
+          paymentName: widget.paymentList[index].arrivalTime,
           listIdx: index,
           buttonCallback: _paymentButtonPress,
         );

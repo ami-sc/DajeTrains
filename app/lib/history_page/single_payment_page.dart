@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'single_payment_top_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../structures/payment.dart';
 
 class SinglePaymentPage extends StatefulWidget {
+  final Payment payment;
+
   const SinglePaymentPage({
+    required this.payment,
     super.key,
   });
 
@@ -20,8 +25,21 @@ class _SinglePaymentPageState extends State<SinglePaymentPage>
 
   @override
   Widget build(BuildContext context) {
+    var scheduleDepartureTime = widget.payment.scheduleDepartureTime;
+    var scheduleArrivalTime = widget.payment.scheduleArrivalTime;
+    var cost = widget.payment.cost;
+    // Calculate delay
+    DateTime startDate = DateFormat("hh:mm").parse(widget.payment.arrivalTime);
+    DateTime endDate = DateFormat("hh:mm").parse(scheduleArrivalTime);
+
+    // Get the Duration using the diferrence method
+    Duration diff = startDate.difference(endDate);
+
+    var dif = diff.inMinutes.toString();
+    print(dif);
+
     return Scaffold(
-      appBar: SingleTrainTopBar(),
+      appBar: SingleTrainTopBar(payment: widget.payment),
       body: Padding(
         padding: EdgeInsets.only(top: 100, left: 30),
         child: Column(
@@ -41,7 +59,7 @@ class _SinglePaymentPageState extends State<SinglePaymentPage>
                 Row(
                   children: [
                     Text("Station: ", style: TextStyle(fontSize: 16)),
-                    Text("Napoli Afragola", // TODO Change to train name
+                    Text(widget.payment.from.name, // TODO Change to train name
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold)),
                   ],
@@ -49,15 +67,21 @@ class _SinglePaymentPageState extends State<SinglePaymentPage>
                 Row(
                   children: [
                     Text("Date: ", style: TextStyle(fontSize: 16)),
-                    Text("25/05/2023", // TODO Change to real date
+                    Text(widget.payment.date, // TODO Change to real date
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold)),
                     Text(" at ", style: TextStyle(fontSize: 16)),
-                    Text("14:45", // TODO Change to real date
+                    Text(
+                        widget
+                            .payment.departureTime, // TODO Change to real date
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold)),
                   ],
                 ),
+                Row(children: [
+                  Text("Scheduled at $scheduleDepartureTime",
+                      style: TextStyle(fontSize: 16)),
+                ])
               ],
             ),
             Padding(
@@ -77,7 +101,7 @@ class _SinglePaymentPageState extends State<SinglePaymentPage>
                   Row(
                     children: [
                       Text("Station: ", style: TextStyle(fontSize: 16)),
-                      Text("Roma Termini", // TODO Change to train name
+                      Text(widget.payment.to.name, // TODO Change to train name
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
                     ],
@@ -85,17 +109,20 @@ class _SinglePaymentPageState extends State<SinglePaymentPage>
                   Row(
                     children: [
                       Text("Date: ", style: TextStyle(fontSize: 16)),
-                      Text("25/05/2023", // TODO Change to real date
+                      Text(widget.payment.date, // TODO Change to real date
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
                       Text(" at ", style: TextStyle(fontSize: 16)),
-                      Text("16:05", // TODO Change to real date
+                      Text(
+                          widget
+                              .payment.arrivalTime, // TODO Change to real date
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
                     ],
                   ),
                   Row(children: [
-                    Text("Scheduled at 15:22", style: TextStyle(fontSize: 16)),
+                    Text("Scheduled at $scheduleArrivalTime",
+                        style: TextStyle(fontSize: 16)),
                   ])
                 ],
               ),
@@ -109,31 +136,41 @@ class _SinglePaymentPageState extends State<SinglePaymentPage>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        "Delay: 43 minutes",
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: Color(0xFFB71C1C),
-                            fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.right,
-                      ),
+                      int.parse(dif) > 0
+                          ? Text(
+                              "Delay: $dif minutes",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: Color(0xFFB71C1C),
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.right,
+                            )
+                          : Text(
+                              "On time",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: Color.fromARGB(255, 53, 187, 51),
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.right,
+                            )
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        onTap: _launchURL,
-                        child: Text("Request refund",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Color(0xFF3366BB),
-                              decoration: TextDecoration.underline,
-                              decorationColor: Color(0xFF3366BB),
-                            )),
-                      )
-                    ],
-                  ),
+                  if (int.parse(dif) > 10)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: _launchURL,
+                          child: Text("Request refund",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Color(0xFF3366BB),
+                                decoration: TextDecoration.underline,
+                                decorationColor: Color(0xFF3366BB),
+                              )),
+                        )
+                      ],
+                    ),
                 ],
               ),
             ),
@@ -163,7 +200,7 @@ class _SinglePaymentPageState extends State<SinglePaymentPage>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text("€ 18.00", // TODO Change to real cost
+                      Text("€ $cost", // TODO Change to real cost
                           style: TextStyle(
                               fontSize: 28, fontWeight: FontWeight.bold)),
                     ],
