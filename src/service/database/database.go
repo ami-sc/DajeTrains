@@ -317,7 +317,7 @@ func NewDatabase(file string) *appdbimpl {
 				},
 			},
 			{
-				ID:       "FR9210",
+				ID:       "IC774",
 				BeaconID: "d2d1fc1d-ec6e-4be2-bb0b-9f55956efac0",
 				Trip: &[]TrainTripItem{
 					{
