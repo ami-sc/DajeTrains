@@ -1,3 +1,4 @@
+import "package:DajeTrains/current_trip_page/current_trip_page_onboard.dart";
 import "package:flutter/material.dart";
 import "dart:async";
 import "dart:io" show Platform;
