@@ -1,4 +1,5 @@
 import "package:DajeTrains/current_trip_page/current_trip_page_onboard.dart";
+import "package:DajeTrains/history_page/single_payment_page.dart";
 import "package:flutter/material.dart";
 import "dart:async";
 import "dart:io" show Platform;
@@ -6,6 +7,8 @@ import "dart:io" show Platform;
 import "top_bar.dart";
 import "bottom_bar.dart";
 import "nav_drawer.dart";
+
+import "structures/payment.dart";
 
 /*** Bottom Bar Pages ***/
 import "current_trip_page/current_trip_page.dart";
@@ -77,7 +80,14 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       // Split the payload to get the train ID
       List<String> payloadList = payload.split(',');
       print(payloadList);
-      if (payloadList[1] == "in_train") {
+      if (payloadList[0] == "payment") {
+        // If the got off the train, send him to the payment info
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: ((context) =>
+                    SinglePaymentPage(payment: Payment.fromString(payload)))));
+      } else if (payloadList[1] == "in_train") {
         // If the user is in a train, send him to the single train page
         Navigator.push(
             context,
@@ -201,12 +211,17 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                     {
                       // User is in a train, send him to the trip page
                       globals.ticketValue = value.ticket,
+                      print(globals.ticketValue),
+                      print("Ticket value"),
+                      print(value.ticket),
                       noti.showNotificationWithPayload(
                           id: 0,
                           title: "Train detected",
                           body: "Your are on train ${value.id}",
                           payload: value.toString()),
-                      _isOnboard = true,
+                      setState(() {
+                        _isOnboard = true;
+                      }),
                     }
                   else if (value.payment != null)
                     {
@@ -216,8 +231,11 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                         title: "Station detected",
                         body:
                             "You got of at ${value.id} station click here to see the payment details",
-                        payload: value.toString(),
-                      )
+                        payload: value.payment.toString(),
+                      ),
+                      setState(() {
+                        _isOnboard = false;
+                      }),
                     }
                   else
                     {

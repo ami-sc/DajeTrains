@@ -1,4 +1,5 @@
 import 'station.dart';
+import 'payment.dart';
 
 class Position {
   String status;
@@ -37,7 +38,7 @@ class Position {
   }
 }
 
-class Payment {
+/*class Payment {
   double cost;
   String trainID;
   Station departure;
@@ -58,4 +59,4 @@ class Payment {
       arrival: Station.fromJson(data['to_station']),
     );
   }
-}
+}*/

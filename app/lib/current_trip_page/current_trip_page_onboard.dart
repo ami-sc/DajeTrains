@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import '../globals.dart' as globals;
 
 class CurrentTripPageOnBoard extends StatefulWidget {
   @override
@@ -110,6 +112,7 @@ class QRDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(globals.ticketValue);
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(28.0),
@@ -146,15 +149,17 @@ class QRDialog extends StatelessWidget {
           ),
         ),
       ),
-      content: Container(
-          padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-          child: RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(
-              text: "Add image here",
-              style: TextStyle(color: Colors.black, fontSize: 20),
+      content: Wrap(
+        children: [
+          SizedBox(
+            width: 400,
+            child: QrImageView(
+              data: globals.ticketValue,
+              version: QrVersions.auto,
             ),
-          )),
+          ),
+        ],
+      ),
     );
   }
 }

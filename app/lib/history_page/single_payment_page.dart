@@ -29,13 +29,20 @@ class _SinglePaymentPageState extends State<SinglePaymentPage>
     var scheduleArrivalTime = widget.payment.scheduleArrivalTime;
     var cost = widget.payment.cost;
     // Calculate delay
-    DateTime startDate = DateFormat("hh:mm").parse(widget.payment.arrivalTime);
-    DateTime endDate = DateFormat("hh:mm").parse(scheduleArrivalTime);
 
-    // Get the Duration using the diferrence method
-    Duration diff = startDate.difference(endDate);
+    var dif = "0";
 
-    var dif = diff.inMinutes.toString();
+    // Parse the string to a DateTime object
+    if (widget.payment.arrivalTime != "") {
+      DateTime startDate =
+          DateFormat("hh:mm").parse(widget.payment.arrivalTime);
+      DateTime endDate = DateFormat("hh:mm").parse(scheduleArrivalTime);
+
+      // Get the Duration using the diferrence method
+      Duration diff = startDate.difference(endDate);
+      dif = diff.inMinutes.toString();
+    }
+
     print(dif);
 
     return Scaffold(
@@ -200,7 +207,8 @@ class _SinglePaymentPageState extends State<SinglePaymentPage>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text("€ ${cost.toStringAsFixed(2)}", // TODO Change to real cost
+                      Text(
+                          "€ ${cost.toStringAsFixed(2)}", // TODO Change to real cost
                           style: TextStyle(
                               fontSize: 28, fontWeight: FontWeight.bold)),
                     ],

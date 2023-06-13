@@ -16,6 +16,20 @@ class Station {
       location: Location.fromJson(data['location']),
     );
   }
+
+  @override
+  String toString() {
+    return "$name:$beaconId:$location";
+  }
+
+  factory Station.fromString(String s) {
+    var data = s.split(":");
+    return Station(
+      name: data[0],
+      beaconId: data[1],
+      location: Location.fromString(data[2]),
+    );
+  }
 }
 
 class Location {
@@ -31,6 +45,19 @@ class Location {
     return Location(
       latitude: data["latitude"],
       longitude: data["longitude"],
+    );
+  }
+
+  @override
+  String toString() {
+    return "$latitude;$longitude";
+  }
+
+  factory Location.fromString(String s) {
+    var data = s.split(";");
+    return Location(
+      latitude: double.parse(data[0]),
+      longitude: double.parse(data[1]),
     );
   }
 }
