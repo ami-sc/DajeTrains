@@ -1,7 +1,11 @@
+import 'package:DajeTrains/structures/train_info.dart';
 import 'package:flutter/material.dart';
 
 class SingleTrainTopBar extends StatefulWidget implements PreferredSizeWidget {
+  final TrainInfo trainInfo;
+
   const SingleTrainTopBar({
+    required this.trainInfo,
     super.key,
   });
 
@@ -13,6 +17,7 @@ class SingleTrainTopBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _SingleTrainTopBarState extends State<SingleTrainTopBar> {
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -23,7 +28,7 @@ class _SingleTrainTopBarState extends State<SingleTrainTopBar> {
         child: Container(
             color: Color(0xFFC8F1FF),
             child: Text(
-              "test aivbudbvuesblubevl.uvlaeswblkeubveuekbewiuewuvbhewklvubeuvbewuò",
+              widget.trainInfo.beaconID,
               style: TextStyle(fontSize: 30),
             )),
       ),
