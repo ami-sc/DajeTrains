@@ -13,7 +13,7 @@ class _QRCodeTopBarState extends State<QRCodeTopBar> {
   Widget build(BuildContext context) {
     return AppBar(
         backgroundColor: Color(0xFFA5E6FB),
-        title: Text("DajeTrains"),
+        title: Text("Scanner"),
         centerTitle: true,
         leading: IconButton(
             icon: const Icon(Icons.menu),

@@ -15,7 +15,7 @@ class _HistoryTopBarState extends State<HistoryTopBar> {
   Widget build(BuildContext context) {
     return AppBar(
         backgroundColor: Color(0xFFA5E6FB),
-        title: Text("Daje Trains"),
+        title: Text("History"),
         centerTitle: true,
         leading: IconButton(
             icon: const Icon(Icons.menu),
