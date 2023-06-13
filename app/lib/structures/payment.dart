@@ -36,4 +36,24 @@ class Payment {
       date: data["date"],
     );
   }
+
+  @override
+  String toString() {
+    return "payment,$cost,$trainID,$from,$to,$departureTime,$arrivalTime,$scheduleDepartureTime,$scheduleArrivalTime,$date";
+  }
+
+  factory Payment.fromString(String s) {
+    var data = s.split(",");
+    return Payment(
+      cost: double.parse(data[1]),
+      trainID: data[2],
+      from: Station.fromString(data[3]),
+      to: Station.fromString(data[4]),
+      departureTime: data[5],
+      arrivalTime: data[6],
+      scheduleDepartureTime: data[7],
+      scheduleArrivalTime: data[8],
+      date: data[9],
+    );
+  }
 }
