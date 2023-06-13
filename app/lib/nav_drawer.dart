@@ -76,7 +76,7 @@ class _NavDrawerState extends State<NavDrawer> {
                     Expanded(
                         child: Text(
                       title,
-                      textAlign: TextAlign.center,
+                      textAlign: TextAlign.start,
                       style: TextStyle(color: Colors.black, fontSize: 16),
                     ))
                   ],
