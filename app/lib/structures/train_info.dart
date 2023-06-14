@@ -29,6 +29,8 @@ class TripStation {
   Station station;
   String scheduledArrivalTime;
   String scheduledDepartureTime;
+  String arrivalTime;
+  String departureTime;
   int platform;
   double cost;
 
@@ -36,6 +38,8 @@ class TripStation {
     required this.station,
     required this.scheduledArrivalTime,
     required this.scheduledDepartureTime,
+    required this.arrivalTime,
+    required this.departureTime,
     required this.platform,
     required this.cost
   });
@@ -49,6 +53,8 @@ class TripStation {
       station: Station.fromJson(data["station"]),
       scheduledArrivalTime: data["scheduled_arrival_time"],
       scheduledDepartureTime: data["scheduled_departure_time"],
+      arrivalTime: data["arrival_time"],
+      departureTime: data["departure_time"],
       platform: data["platform"],
       cost: cost
     );
