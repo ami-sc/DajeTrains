@@ -111,7 +111,7 @@ class _SingleTrainTripTopBarState extends State<SingleTrainTripTopBar> {
                 Column(// Delay
                     children: [
                     Padding(
-                      padding: const EdgeInsets.all(15.0),
+                      padding: const EdgeInsets.fromLTRB(15.0, 15.0, 40.0, 15.0),
                       child: delayed
                       ? Container(
                         color: Colors.transparent,
@@ -131,7 +131,6 @@ class _SingleTrainTripTopBarState extends State<SingleTrainTripTopBar> {
                     ),
                   ]
                 ),
-                SizedBox(width: 24,)
               ],
             ),
           ),
