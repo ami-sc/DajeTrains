@@ -83,8 +83,8 @@ class _SingleTrainTripTopBarState extends State<SingleTrainTripTopBar> {
                     ),
                     Row(
                       children: [
-                        Text(
-                          widget.trainInfo.trip[0].departureTime,
+                        Text( // TODO applicare ritardo
+                          widget.trainInfo.trip[0].scheduledDepartureTime,
                           style: TextStyle(fontSize: 14, color: delayed? Colors.red : Color(0xFF49454F), fontWeight: FontWeight.bold)
                         ),
                         Text(
@@ -95,8 +95,8 @@ class _SingleTrainTripTopBarState extends State<SingleTrainTripTopBar> {
                     ),
                     Row(
                       children: [
-                        Text(
-                          widget.trainInfo.trip[widget.trainInfo.trip.length - 1].arrivalTime,
+                        Text( // TODO applicare ritardo
+                          widget.trainInfo.trip[widget.trainInfo.trip.length - 1].scheduledArrivalTime,
                           style: TextStyle(fontSize: 14, color: delayed? Colors.red : Color(0xFF49454F), fontWeight: FontWeight.bold)
                         ),
                         Text(
