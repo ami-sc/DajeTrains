@@ -21,7 +21,7 @@ class _SingleTrainPageState extends State<SingleTrainPage>
   bool _defaultMessage = true;
 
   TripApi api = TripApi();
-  TrainInfo? trainInfo; //TODO make it nullable TrainInfo
+  TrainInfo? trainInfo;
 
 
   @override
@@ -54,8 +54,32 @@ class _SingleTrainPageState extends State<SingleTrainPage>
       body: _defaultMessage
       ? Container(child: Text("empty"),)
       : Container(
-        child: Text(trainInfo!.beaconID),
+        child: ListView.separated(
+          separatorBuilder: (context, index) => Divider(
+                  color: Color.fromARGB(255, 179, 179, 179),
+                  height: 1,
+                ),
+            itemCount: trainInfo!.trip.length,
+            itemBuilder: (BuildContext context, int index) {
+              return _TripStationView(tripStation: trainInfo!.trip[index]);
+            }
+          )
       )
     );
   }
+}
+
+class _TripStationView extends StatelessWidget {
+
+  final TripStation tripStation;
+
+  const _TripStationView({
+    required this.tripStation,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(tripStation.station.name);
+  }
+
 }
