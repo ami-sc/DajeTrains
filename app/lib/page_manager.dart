@@ -1,4 +1,3 @@
-import "package:DajeTrains/current_trip_page/current_trip_page_onboard.dart";
 import "package:DajeTrains/history_page/single_payment_page.dart";
 import "package:flutter/material.dart";
 import "dart:async";
@@ -12,6 +11,7 @@ import "structures/payment.dart";
 
 /*** Bottom Bar Pages ***/
 import "current_trip_page/current_trip_page.dart";
+import "current_trip_page/current_trip_page_onboard.dart";
 import "stations_page/stations_page.dart";
 import "trains_page/trains_page.dart";
 
@@ -57,8 +57,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   int _previousPageIdx = 0;
   bool _topBarState = true;
   bool _bottomBarState = true;
+
+  Widget _activePage = Scaffold();
+
   bool _isOnboard = false;
-  PageController _pageControl = PageController(initialPage: 0);
   String _lastBeaconID = "";
 
   /* Beacon monitoring */
@@ -299,8 +301,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     // Hide the keyboard, if active.
     FocusManager.instance.primaryFocus?.unfocus();
 
-    _pageControl.jumpToPage(_previousPageIdx);
-
     if (_previousPageIdx != 0) {
       _hideTopBar();
     } else {
@@ -328,14 +328,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       // All bottom bar pages need the bottom bar.
       _showBottomBar();
 
-      // Avoid overwritting previousIdx if the user clicks the same page.
-      if (targetIdx != _activePageIdx) {
-        setState(() {
-          _previousPageIdx = _activePageIdx;
-          _activePageIdx = targetIdx;
-        });
-      }
-
       // Update the highlighted button in the drawer.
       _drawerIdx = 0;
     }
@@ -348,16 +340,73 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       _drawerIdx = targetIdx - 2;
     }
 
-    // Change page.
-    _pageControl.jumpToPage(targetIdx);
+    // Change the currently active page.
+    // This avoids overwritting previousIdx if the user clicks the same page.
+    if (targetIdx != _activePageIdx) {
+      setState(() {
+        _previousPageIdx = _activePageIdx;
+        _activePageIdx = targetIdx;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    // Initialize the drawer.
     NavDrawer drawer = NavDrawer(
       indexCallback: _changePage,
       targetIdx: _drawerIdx,
     );
+
+    // Initialize the bottom bar.
+    BottomBar bottomBar = BottomBar(
+      pageCallback: _changePage,
+      activeIdx: _activePageIdx,
+    );
+
+    /*
+     * This will only build the target page we want (as given by the
+     * _activePageIdx value). This way, we do not save the state of any page,
+     * and all the pages are not built at the start, which improves
+     * performance.
+     *
+     * Every time the _activePageIdx value changes, the previously active page
+     * will be destroyed (along with any "subpages"), and a new page will be
+     * built (unless the user clicks the same page, in which case nothing
+     * will change).
+     */
+    switch(_activePageIdx) {
+      /** Page 0 - Current Trip Page **/
+      case 0: _activePage = _isOnboard ?
+        CurrentTripPageOnBoard() : CurrentTripPage();
+      break;
+
+      /** Page 1 - Stations Page **/
+      case 1: _activePage = StationsPage(
+        backButtonCallback: _previousPage,
+      );
+      break;
+
+      /** Page 2 - Trains Page **/
+      case 2: _activePage = TrainsPage();
+      break;
+
+      /** Page 3 - History Page **/
+      case 3: _activePage = HistoryPage(appDrawer: drawer);
+      break;
+
+      /** Page 4 - QR Code Page **/
+      case 4: _activePage = QRCodePage(appDrawer: drawer);
+      break;
+
+      /** Page 5 - Settings Page **/
+      case 5: _activePage = SettingsPage(appDrawer: drawer);
+      break;
+
+      /** Page 6 - Help Page **/
+      case 6: _activePage = HelpPage(appDrawer: drawer);
+      break;
+    }
 
     return Scaffold(
       appBar: _topBarState ? CurrentTripTopBar() : null,
@@ -367,44 +416,21 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
       drawer: drawer,
 
-      body: PageView(
-        controller: _pageControl,
-
-        // Disable scrolling between pages.
-        physics: NeverScrollableScrollPhysics(),
-
-        children: <Widget>[
-          /*** 0: Current Trip Page ***/
-          _isOnboard ? CurrentTripPageOnBoard() : CurrentTripPage(),
-
-          /*** 1: Stations Page ***/
-          StationsPage(
-            backButtonCallback: _previousPage,
-          ),
-
-          /*** 2: Trains Page ***/
-          TrainsPage(),
-
-          /*** 3: History Page ***/
-          HistoryPage(appDrawer: drawer),
-
-          /*** 4: QR Code Page ***/
-          QRCodePage(appDrawer: drawer),
-
-          /*** 5: Settings Page ***/
-          SettingsPage(appDrawer: drawer),
-
-          /*** 6: Help Page ***/
-          HelpPage(appDrawer: drawer),
-        ],
+      /*
+       * Wrap the target page in an independent navigator.
+       *
+       * This prevents new "subpages" from going above the bottom bar and gives
+       * each page complete freedom in handling page routes.
+       */
+      body: Navigator(
+        key: GlobalKey<NavigatorState>(),
+        onGenerateRoute: (settings) {
+          return MaterialPageRoute(builder: (_) => _activePage);
+        }
       ),
 
       bottomNavigationBar: _bottomBarState
-          ? BottomBar(
-              pageCallback: _changePage,
-              activeIdx: _activePageIdx,
-            )
-          : null,
+          ? bottomBar : null,
     );
   }
 }
