@@ -50,20 +50,18 @@ class _SingleTrainPageState extends State<SingleTrainPage>
     return Scaffold(
       appBar: _defaultMessage
       ? null
-      : SingleTrainTopBar(trainInfo: trainInfo!),
+      : SingleTrainTripTopBar(trainInfo: trainInfo!),
       body: _defaultMessage
-      ? Container(child: Text("empty"),)
-      : Container(
-        child: ListView.separated(
-          separatorBuilder: (context, index) => Divider(
-                  color: Color.fromARGB(255, 179, 179, 179),
-                  height: 1,
-                ),
-            itemCount: trainInfo!.trip.length,
-            itemBuilder: (BuildContext context, int index) {
-              return _TripStationView(tripStation: trainInfo!.trip[index]);
-            }
-          )
+      ? null
+      : ListView.separated(
+        separatorBuilder: (context, index) => Divider(
+                color: Color.fromARGB(255, 179, 179, 179),
+                height: 1,
+              ),
+          itemCount: trainInfo!.trip.length,
+          itemBuilder: (BuildContext context, int index) {
+            return _TripStationView(tripStation: trainInfo!.trip[index]);
+          }
       )
     );
   }
