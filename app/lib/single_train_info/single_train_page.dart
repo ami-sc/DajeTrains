@@ -21,7 +21,7 @@ class _SingleTrainPageState extends State<SingleTrainPage>
   bool _defaultMessage = true;
 
   TripApi api = TripApi();
-  List<TrainInfo> trainInfo = [];
+  TrainInfo? trainInfo; //TODO make it nullable TrainInfo
 
 
   @override
@@ -34,10 +34,14 @@ class _SingleTrainPageState extends State<SingleTrainPage>
     List<TrainInfo> l = await api.getTrip(widget.trainID);
     print(l);
     
-    setState(() {
-      trainInfo = l;
-      _defaultMessage = false;
-    });
+    if (l.isNotEmpty) {
+      setState(() {
+        trainInfo = l[0];
+        _defaultMessage = false;
+      });
+    } else {
+      throw Exception("Non valid Train ID");
+    }
 
   }
 
@@ -46,11 +50,11 @@ class _SingleTrainPageState extends State<SingleTrainPage>
     return Scaffold(
       appBar: _defaultMessage
       ? null
-      : SingleTrainTopBar(trainInfo: trainInfo[0]),
+      : SingleTrainTopBar(trainInfo: trainInfo!),
       body: _defaultMessage
       ? Container(child: Text("empty"),)
       : Container(
-        child: Text(trainInfo[0].beaconID),
+        child: Text(trainInfo!.beaconID),
       )
     );
   }
