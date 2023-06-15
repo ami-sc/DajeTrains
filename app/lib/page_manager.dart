@@ -215,6 +215,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                     {
                       // User is in a train, send him to the trip page
                       globals.ticketValue = value.ticket,
+                      globals.trainID = value.id,
                       print(globals.ticketValue),
                       print("Ticket value"),
                       print(value.ticket),
@@ -230,6 +231,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                   else if (value.payment != null)
                     {
                       // User got off the train, send him to the payment info
+                      globals.ticketValue = "",
+                      globals.trainID = "",
                       noti.showNotificationWithPayload(
                         id: 0,
                         title: "Station detected",
@@ -387,42 +390,50 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
      * built (unless the user clicks the same page, in which case nothing
      * will change).
      */
-    switch(_activePageIdx) {
+    switch (_activePageIdx) {
       /** Page 0 - Current Trip Page **/
-      case 0: _activePage = _isOnboard ?
-        CurrentTripPageOnBoard() : CurrentTripPage(
-          findButtonCallback: _findButtonPress,
-          historyButtonCallback: _historyButtonPress,
-        );
-      break;
+      case 0:
+        _activePage = _isOnboard
+            ? CurrentTripPageOnBoard()
+            : CurrentTripPage(
+                findButtonCallback: _findButtonPress,
+                historyButtonCallback: _historyButtonPress,
+              );
+        break;
 
       /** Page 1 - Stations Page **/
-      case 1: _activePage = StationsPage(
-        backButtonCallback: _previousPage,
-      );
-      break;
+      case 1:
+        _activePage = StationsPage(
+          backButtonCallback: _previousPage,
+        );
+        break;
 
       /** Page 2 - Trains Page **/
-      case 2: _activePage = TrainsPage(
-        backButtonCallback: _previousPage,
-      );
-      break;
+      case 2:
+        _activePage = TrainsPage(
+          backButtonCallback: _previousPage,
+        );
+        break;
 
       /** Page 3 - History Page **/
-      case 3: _activePage = HistoryPage(appDrawer: drawer);
-      break;
+      case 3:
+        _activePage = HistoryPage(appDrawer: drawer);
+        break;
 
       /** Page 4 - QR Code Page **/
-      case 4: _activePage = QRCodePage(appDrawer: drawer);
-      break;
+      case 4:
+        _activePage = QRCodePage(appDrawer: drawer);
+        break;
 
       /** Page 5 - Settings Page **/
-      case 5: _activePage = SettingsPage(appDrawer: drawer);
-      break;
+      case 5:
+        _activePage = SettingsPage(appDrawer: drawer);
+        break;
 
       /** Page 6 - Help Page **/
-      case 6: _activePage = HelpPage(appDrawer: drawer);
-      break;
+      case 6:
+        _activePage = HelpPage(appDrawer: drawer);
+        break;
     }
 
     return Scaffold(
@@ -440,14 +451,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
        * each page complete freedom in handling page routes.
        */
       body: Navigator(
-        key: GlobalKey<NavigatorState>(),
-        onGenerateRoute: (settings) {
-          return MaterialPageRoute(builder: (_) => _activePage);
-        }
-      ),
+          key: GlobalKey<NavigatorState>(),
+          onGenerateRoute: (settings) {
+            return MaterialPageRoute(builder: (_) => _activePage);
+          }),
 
-      bottomNavigationBar: _bottomBarState
-          ? bottomBar : null,
+      bottomNavigationBar: _bottomBarState ? bottomBar : null,
     );
   }
 }
