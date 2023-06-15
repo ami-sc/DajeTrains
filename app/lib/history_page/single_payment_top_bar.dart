@@ -74,62 +74,71 @@ class _SingleTrainTopBarState extends State<SingleTrainTopBar> {
             padding: EdgeInsets.fromLTRB(10, 20, 0, 20),
             child: Row(
               children: [
-                Column(// Logo
+                Expanded(
+                  flex: 2,
+                  child: Column(// Logo
                     children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Container(
-                      height: 40.0,
-                      width: 40.0,
-                      color: Colors.transparent,
-                      child: Container(
-                          decoration: BoxDecoration(
-                              color: SingleTrainTopBar.logoColor(widget.payment
-                                  .trainID), //TODO Change color based on train type
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(50.0))),
-                          child: Center(
-                            child: Text(
-                              SingleTrainTopBar.trainAbbrev(widget.payment
-                                  .trainID), // TODO Change to train type
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600),
-                              textAlign: TextAlign.center,
-                            ),
-                          )),
-                    ),
-                  ),
-                ]),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  // Info
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          "Ticket for",
-                          style:
-                              TextStyle(fontSize: 12, color: Color(0xFF49454F)),
-                          textAlign: TextAlign.left,
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Container(
+                          height: 40.0,
+                          width: 40.0,
+                          color: Colors.transparent,
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  color: SingleTrainTopBar.logoColor(widget.payment
+                                      .trainID), //TODO Change color based on train type
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(50.0))),
+                              child: Center(
+                                child: Text(
+                                  SingleTrainTopBar.trainAbbrev(widget.payment
+                                      .trainID), // TODO Change to train type
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600),
+                                  textAlign: TextAlign.center,
+                                ),
+                              )),
                         ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text($info, style: TextStyle(fontSize: 16)),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(widget.payment.date,
-                            style: TextStyle(
-                                fontSize: 14, color: Color(0xFF49454F))),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ]
+                  ),
+                ),
+
+                Expanded(
+                  flex: 8,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    // Info
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "Ticket for",
+                            style:
+                                TextStyle(fontSize: 12, color: Color(0xFF49454F)),
+                            textAlign: TextAlign.left,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text($info, style: TextStyle(fontSize: 16)),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text(widget.payment.date,
+                              style: TextStyle(
+                                  fontSize: 14, color: Color(0xFF49454F))),
+                        ],
+                      ),
+                    ],
+                  )
                 )
+
               ],
             ),
           ),

@@ -158,108 +158,121 @@ class TrainButton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Column(
-            children: [
-              Padding(
-                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                  child: isDelayed(delay)
-                      ?
-                      // If the train is delayed, show the delay.
-                      Column(
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  DateTime(
-                                          DateTime.now().year,
-                                          0,
-                                          0,
-                                          int.parse(time.split(':')[0]),
-                                          int.parse(time.split(':')[1]),
-                                          0,
-                                          0,
-                                          0)
-                                      .add(Duration(minutes: delay))
-                                      .toString()
-                                      .substring(11, 16),
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 201, 41, 41),
-                                    fontSize: 22,
-                                  ),
-                                )
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  "+$delay'",
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 201, 41, 41),
-                                    fontSize: 15,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
-                        )
-                      :
-                      // Otherwise, show the scheduled time.
-                      Text(
-                          time,
+          Expanded(
+            flex: 3,
+            child: Column(
+              children: [
+                isDelayed(delay)
+                ?
+                // If the train is delayed, show the delay.
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          DateTime(
+                                  DateTime.now().year,
+                                  0,
+                                  0,
+                                  int.parse(time.split(':')[0]),
+                                  int.parse(time.split(':')[1]),
+                                  0,
+                                  0,
+                                  0)
+                              .add(Duration(minutes: delay))
+                              .toString()
+                              .substring(11, 16),
                           textAlign: TextAlign.right,
                           style: TextStyle(
-                            color: Color(0xFF0A7D23),
+                            color: Color.fromARGB(255, 201, 41, 41),
                             fontSize: 22,
                           ),
-                        )),
-            ],
-          ),
-          SizedBox(width: 20),
-          Column(
-            // Left align all text.
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                destination,
-                style: TextStyle(
-                  color: Color(0xFF1D1B20),
-                  fontSize: 16,
-                ),
-              ),
-              Text(
-                "$trainType - $id",
-                style: TextStyle(
-                  color: Color(0xFF49454F),
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
-          Spacer(),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Container(
-              height: 50.0,
-              width: 50.0,
-              color: Colors.transparent,
-              child: Container(
-                  decoration: BoxDecoration(
-                      color: Color(0xFFA5E6FB),
-                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                  child: Center(
-                    child: Text(
-                      "$platform",
-                      style: TextStyle(
-                          fontSize: 24,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
+                        )
+                      ],
                     ),
-                  )),
-            ),
+                    Row(
+                      children: [
+                        Text(
+                          "+$delay'",
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 201, 41, 41),
+                            fontSize: 15,
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                )
+
+                :
+                // Otherwise, show the scheduled time.
+                Text(
+                    time,
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      color: Color(0xFF0A7D23),
+                      fontSize: 22,
+                    ),
+                  ),
+              ],
+            )
           ),
+          
+          Expanded(
+            flex: 5,
+            child: Column(
+              // Left align all text.
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  destination,
+                  style: TextStyle(
+                    color: Color(0xFF1D1B20),
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  "$trainType - $id",
+                  style: TextStyle(
+                    color: Color(0xFF49454F),
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            )
+          ),
+
+          Expanded(
+            flex: 3,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Container(
+                    height: 50.0,
+                    width: 50.0,
+                    color: Colors.transparent,
+                    child: Container(
+                        decoration: BoxDecoration(
+                            color: Color(0xFFA5E6FB),
+                            borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                        child: Center(
+                          child: Text(
+                            "$platform",
+                            style: TextStyle(
+                                fontSize: 24,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                          ),
+                        )),
+                  ),
+                )
+              ],
+            ),
+          )
+
         ],
       ),
     );

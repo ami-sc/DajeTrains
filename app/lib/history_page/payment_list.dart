@@ -88,95 +88,107 @@ class PaymentButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Column(children: [
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Container(
-                  height: 40.0,
-                  width: 40.0,
-                  color: Colors.transparent,
-                  child: Container(
-                      decoration: BoxDecoration(
-                          color: SingleTrainTopBar.logoColor(trainId),
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(50.0))),
-                      child: Center(
-                        child: Text(
-                          SingleTrainTopBar.trainAbbrev(trainId),
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600),
-                          textAlign: TextAlign.center,
-                        ),
-                      )),
-                ),
+            Expanded(
+              flex: 2,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Container(
+                      height: 40.0,
+                      width: 40.0,
+                      color: Colors.transparent,
+                      child: Container(
+                          decoration: BoxDecoration(
+                              color: SingleTrainTopBar.logoColor(trainId),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(50.0))),
+                          child: Center(
+                            child: Text(
+                              SingleTrainTopBar.trainAbbrev(trainId),
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600),
+                              textAlign: TextAlign.center,
+                            ),
+                          )),
+                    ),
+                  ),
+                ]
               ),
-            ]),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(children: [
-                  Text(
-                    date,
-                    style: TextStyle(
-                      color: Color(0xFF49454F),
-                      fontSize: 14,
-                    ),
-                  )
-                ]),
-                Row(
-                  children: [
+            ),
+            
+            Expanded(
+              flex: 5,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(children: [
                     Text(
-                      "From: ",
-                      style: TextStyle(fontSize: 16, color: Color(0xFF1D1B20)),
-                    ),
-                    Text(
-                      from,
-                      style: TextStyle(
-                          color: Color(0xFF1D1B20),
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "To: ",
-                      style: TextStyle(fontSize: 16, color: Color(0xFF1D1B20)),
-                    ),
-                    Text(
-                      to,
-                      style: TextStyle(
-                        color: Color(0xFF1D1B20),
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "$trainType - $trainId",
+                      date,
                       style: TextStyle(
                         color: Color(0xFF49454F),
                         fontSize: 14,
                       ),
-                    ),
-                  ],
-                )
-              ],
+                    )
+                  ]),
+                  Row(
+                    children: [
+                      Text(
+                        "From: ",
+                        style: TextStyle(fontSize: 16, color: Color(0xFF1D1B20)),
+                      ),
+                      Text(
+                        from,
+                        style: TextStyle(
+                            color: Color(0xFF1D1B20),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "To: ",
+                        style: TextStyle(fontSize: 16, color: Color(0xFF1D1B20)),
+                      ),
+                      Text(
+                        to,
+                        style: TextStyle(
+                          color: Color(0xFF1D1B20),
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "$trainType - $trainId",
+                        style: TextStyle(
+                          color: Color(0xFF49454F),
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
-            Spacer(),
-            Column(
-              children: [
-                Text(
-                  '€ ${cost.toStringAsFixed(2)}',
-                  textAlign: TextAlign.right,
-                  style: TextStyle(fontSize: 22, color: Colors.black),
-                )
-              ],
+            
+            Expanded(
+              flex: 3,
+              child: Column(
+                children: [
+                  Text(
+                    '€ ${cost.toStringAsFixed(2)}',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(fontSize: 22, color: Colors.black),
+                  )
+                ],
+              ),
             )
           ],
         ));
