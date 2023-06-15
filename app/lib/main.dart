@@ -60,7 +60,6 @@ class _DajeTrainsState extends State<DajeTrains> with WidgetsBindingObserver {
         await Permission.location.isDenied ||
         await Permission.notification.isDenied)) {
       // ignore: unused_local_variable
-
       Map<Permission, PermissionStatus> statuses = await [
         Permission.bluetoothScan,
         Permission.bluetoothConnect,
