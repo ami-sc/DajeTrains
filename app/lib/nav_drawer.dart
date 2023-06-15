@@ -39,13 +39,13 @@ class _NavDrawerState extends State<NavDrawer> {
           child: Container(
         child: Column(children: [
           MyHeaderDrawer(),
-          MyDrawerList(),
+          drawerList(),
         ]),
       )),
     );
   }
 
-  Widget MyDrawerList() {
+  Widget drawerList() {
     currentIdx = widget.targetIdx;
     return Container(
       padding: EdgeInsets.only(top: 15.0, right: 30, left: 30),
@@ -58,6 +58,23 @@ class _NavDrawerState extends State<NavDrawer> {
         menuItem(6, "Need help?", _isSelected(4)),
       ]),
     );
+  }
+
+  IconData _getIcon(String title) {
+    switch (title) {
+      case "Homepage":
+        return Icons.home;
+      case "History":
+        return Icons.history;
+      case "Scan ticket/pass":
+        return Icons.qr_code_scanner;
+      case "Settings":
+        return Icons.settings;
+      case "Need help?":
+        return Icons.help_outline_sharp;
+      default:
+        return Icons.home;
+    }
   }
 
   Widget menuItem(int id, String title, bool selected) {
@@ -74,11 +91,17 @@ class _NavDrawerState extends State<NavDrawer> {
                 child: Row(
                   children: [
                     Expanded(
-                        child: Text(
-                      title,
-                      textAlign: TextAlign.start,
-                      style: TextStyle(color: Colors.black, fontSize: 16),
-                    ))
+                      flex: 2,
+                      child: Icon(_getIcon(title))
+                    ),
+                    Expanded(
+                      flex: 8,
+                      child: Text(
+                        title,
+                        textAlign: TextAlign.start,
+                        style: TextStyle(color: Colors.black, fontSize: 16),
+                      )
+                    )
                   ],
                 ))));
   }
