@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import "single_train_top_bar.dart";
 import 'package:DajeTrains/api/trip_api.dart';
 import 'package:DajeTrains/structures/train_info.dart';
+import 'package:dotted_line/dotted_line.dart';
 
 class SingleTrainPage extends StatefulWidget {
   final String trainID;
@@ -78,20 +79,30 @@ class _TripStationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
           flex: 2,
-          child: Column( // Dots
-            children: [
-              Padding(
-                padding: EdgeInsets.fromLTRB(0,0,16,0),
-                child: Icon(
-                Icons.radio_button_checked,
-                color: Color(0xFFA5E6FB),
-                size: 25,
-              ),
-              )
-            ],
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(0,0,16,0),
+            child:Column( // Dots
+              children: [
+                Icon(
+                  Icons.radio_button_checked,
+                  color: Color(0xFFA5E6FB),
+                  size: 25,
+                ),
+                DottedLine(
+                  dashColor: Color(0xFFA5E6FB),
+                  direction: Axis.vertical,
+                  dashLength: 5,
+                  lineThickness: 5,
+                  dashGapLength: 2,
+                  dashRadius: 80,
+                  lineLength: 60,
+                )
+              ]
+            )
           ),
         ),
         
