@@ -73,31 +73,38 @@ class _StationsPageState extends State<StationsPage> {
         searchCallback: _searchStation,
       ),
 
-      body: _defaultMessage ? Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.search,
-              color: Color.fromARGB(255, 174, 174, 174),
-              size: 60,
-            ),
-            Padding(
-              padding: EdgeInsets.all(15.0),
-              child: Text(
-                "Search for a station to begin",
-                style: TextStyle(
-                  color: Color.fromARGB(255, 174, 174, 174),
-                  fontSize: 22,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ) : StationList(
+      body: _defaultMessage ? DefaultMessage() : StationList(
         stationList: stationList,
         stationCallback: _toggleStationPage,
       )
+    );
+  }
+}
+
+class DefaultMessage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.search,
+            color: Color.fromARGB(255, 174, 174, 174),
+            size: 60,
+          ),
+          Padding(
+            padding: EdgeInsets.all(15.0),
+            child: Text(
+              "Search for a station to begin",
+              style: TextStyle(
+                color: Color.fromARGB(255, 174, 174, 174),
+                fontSize: 22,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
