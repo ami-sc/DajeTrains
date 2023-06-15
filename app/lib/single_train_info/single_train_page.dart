@@ -125,9 +125,9 @@ class _TripStationView extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Departure:"),
+                  Text("Arrival:"),
                   Text(
-                    tripStation.scheduledDepartureTime,
+                    tripStation.scheduledArrivalTime,
                     style: TextStyle(
                       fontWeight: FontWeight.bold
                     ),
@@ -137,15 +137,15 @@ class _TripStationView extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Arrival:"),
+                  Text("Departure:"),
                   Text(
-                    tripStation.scheduledArrivalTime,
+                    tripStation.scheduledDepartureTime,
                     style: TextStyle(
                       fontWeight: FontWeight.bold
                     ),
                   )
                 ],
-              )
+              ),
             ],
           ),
         ),
