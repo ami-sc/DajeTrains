@@ -48,9 +48,10 @@ class _SinglePaymentPageState extends State<SinglePaymentPage>
     return Scaffold(
       appBar: SingleTrainTopBar(payment: widget.payment),
       body: Padding(
-        padding: EdgeInsets.only(top: 100, left: 30),
+        padding: EdgeInsets.all(30),
         child: Column(
           // Info
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Column(
               children: [
@@ -91,6 +92,7 @@ class _SinglePaymentPageState extends State<SinglePaymentPage>
                 ])
               ],
             ),
+
             Padding(
               padding: EdgeInsets.only(top: 35, left: 0),
               child: Column(
@@ -134,8 +136,9 @@ class _SinglePaymentPageState extends State<SinglePaymentPage>
                 ],
               ),
             ),
+
             Padding(
-              padding: EdgeInsets.only(top: 35, right: 30, bottom: 20),
+              padding: EdgeInsets.only(top: 35, bottom: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -181,14 +184,15 @@ class _SinglePaymentPageState extends State<SinglePaymentPage>
                 ],
               ),
             ),
+
             Divider(
               color: Color(0xFF49454F),
               thickness: 1,
               indent: 0,
-              endIndent: 30,
             ),
+
             Padding(
-              padding: EdgeInsets.only(top: 15, right: 30),
+              padding: EdgeInsets.only(top: 15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -208,7 +212,7 @@ class _SinglePaymentPageState extends State<SinglePaymentPage>
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                          "€ ${cost.toStringAsFixed(2)}", // TODO Change to real cost
+                          "€ ${cost.toStringAsFixed(2)}",
                           style: TextStyle(
                               fontSize: 28, fontWeight: FontWeight.bold)),
                     ],
@@ -216,16 +220,17 @@ class _SinglePaymentPageState extends State<SinglePaymentPage>
                 ],
               ),
             ),
+
             Padding(
-              padding: EdgeInsets.only(top: 100, right: 30),
+              padding: EdgeInsets.only(top: 100),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.only(right: 15),
-                    child:
-                        // Add two buttons
-                        ElevatedButton.icon(
+                  Expanded(flex: 2, child: SizedBox.shrink()),
+
+                  Expanded(
+                    flex: 4,
+                    child: ElevatedButton.icon(
                       onPressed: () {},
                       icon: Icon(Icons.flag, color: Colors.white),
                       style: ButtonStyle(
@@ -236,18 +241,25 @@ class _SinglePaymentPageState extends State<SinglePaymentPage>
                           style: TextStyle(color: Colors.white, fontSize: 14)),
                     ),
                   ),
-                  OutlinedButton.icon(
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: Color(0xFFA5E6FB)),
-                    ),
-                    onPressed: () {},
-                    icon: Icon(Icons.receipt_long, color: Color(0xFFA5E6FB)),
-                    label: Text("Receipt",
-                        style: TextStyle(fontSize: 14, color: Colors.black)),
+                  
+                  SizedBox(width: 15,),
+                  
+                  Expanded(
+                    flex: 4,
+                    child: OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(color: Color(0xFFA5E6FB)),
+                      ),
+                      onPressed: () {},
+                      icon: Icon(Icons.receipt_long, color: Color(0xFFA5E6FB)),
+                      label: Text("Receipt",
+                          style: TextStyle(fontSize: 14, color: Colors.black)),
+                    )
                   )
                 ],
               ),
             ),
+
           ],
         ),
       ),
