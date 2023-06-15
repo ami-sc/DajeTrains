@@ -50,6 +50,57 @@ class _SingleStationPageState extends State<SingleStationPage>
     super.initState();
   }
 
+  Padding _listHeader() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 3,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Time",
+                  style: TextStyle(fontSize: 14, color: Color(0xFF616161)),
+                )
+              ],
+            )
+          ),
+          Expanded(
+            flex: 4,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "Train",
+                  style: TextStyle(fontSize: 14, color: Color(0xFF616161)),
+                )
+              ],
+            )
+          ),
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding: EdgeInsets.only(left: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Platform",
+                    style:
+                        TextStyle(fontSize: 14, color: Color(0xFF616161)),
+                  ),
+                ],
+              ),
+            )
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,24 +124,7 @@ class _SingleStationPageState extends State<SingleStationPage>
             itemCount: departuresList.length + 1,
             itemBuilder: (BuildContext context, int index) {
               if (index == 0) {
-                return Padding(
-                  padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Time",
-                        style:
-                            TextStyle(fontSize: 14, color: Color(0xFF616161)),
-                      ),
-                      Text(
-                        "Platform",
-                        style:
-                            TextStyle(fontSize: 14, color: Color(0xFF616161)),
-                      ),
-                    ],
-                  ),
-                );
+                return _listHeader();
               }
               return TrainButton(
                   destination: departuresList[index - 1].lastStation,
@@ -114,24 +148,7 @@ class _SingleStationPageState extends State<SingleStationPage>
             itemCount: arrivalsList.length + 1,
             itemBuilder: (BuildContext context, int index) {
               if (index == 0) {
-                return Padding(
-                  padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Time",
-                        style:
-                            TextStyle(fontSize: 14, color: Color(0xFF616161)),
-                      ),
-                      Text(
-                        "Platform",
-                        style:
-                            TextStyle(fontSize: 14, color: Color(0xFF616161)),
-                      ),
-                    ],
-                  ),
-                );
+                return _listHeader();
               }
 
               return TrainButton(
@@ -270,7 +287,7 @@ class TrainButton extends StatelessWidget {
                 ],
               )),
           Expanded(
-              flex: 5,
+              flex: 4,
               child: Column(
                 // Left align all text.
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -294,9 +311,10 @@ class TrainButton extends StatelessWidget {
           Expanded(
             flex: 3,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(15.0),
+                  padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                   child: Container(
                     height: 50.0,
                     width: 50.0,
