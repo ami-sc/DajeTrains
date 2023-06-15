@@ -23,7 +23,7 @@ class _SingleTrainTripTopBarState extends State<SingleTrainTripTopBar> {
 
   @override
   void initState() {
-    delayed = (widget.trainInfo.lastDelay > 0) ? true : true;
+    delayed = (widget.trainInfo.lastDelay > 0) ? true : false;
     super.initState();
   }
 
