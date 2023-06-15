@@ -388,7 +388,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       break;
 
       /** Page 2 - Trains Page **/
-      case 2: _activePage = TrainsPage();
+      case 2: _activePage = TrainsPage(
+        backButtonCallback: _previousPage,
+      );
       break;
 
       /** Page 3 - History Page **/
