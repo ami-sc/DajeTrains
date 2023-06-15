@@ -54,11 +54,31 @@ class _SingleTrainPageState extends State<SingleTrainPage>
             : Padding(
                 padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
                 child: ListView.builder(
-                    itemCount: trainInfo!.trip.length,
+                    itemCount: trainInfo!.trip.length + 1,
                     itemBuilder: (BuildContext context, int index) {
+                      if (index == 0) {
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(100, 0, 20, 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Stops",
+                                style: TextStyle(
+                                    fontSize: 14, color: Color(0xFF616161)),
+                              ),
+                              Text(
+                                "Platform",
+                                style: TextStyle(
+                                    fontSize: 14, color: Color(0xFF616161)),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                       return _TripStationView(
-                          tripStation: trainInfo!.trip[index],
-                          notLast: index < trainInfo!.trip.length - 1);
+                          tripStation: trainInfo!.trip[index - 1],
+                          notLast: index - 1 < trainInfo!.trip.length - 1);
                     }),
               ));
   }
