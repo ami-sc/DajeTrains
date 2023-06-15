@@ -2,7 +2,8 @@ import 'package:DajeTrains/structures/train_info.dart';
 import 'package:DajeTrains/history_page/single_payment_top_bar.dart';
 import 'package:flutter/material.dart';
 
-class SingleTrainTripTopBar extends StatefulWidget implements PreferredSizeWidget {
+class SingleTrainTripTopBar extends StatefulWidget
+    implements PreferredSizeWidget {
   final TrainInfo trainInfo;
 
   const SingleTrainTripTopBar({
@@ -14,16 +15,15 @@ class SingleTrainTripTopBar extends StatefulWidget implements PreferredSizeWidge
   State<SingleTrainTripTopBar> createState() => _SingleTrainTripTopBarState();
 
   @override
-  Size get preferredSize => Size.fromHeight(190);
+  Size get preferredSize => Size.fromHeight(165);
 }
 
 class _SingleTrainTripTopBarState extends State<SingleTrainTripTopBar> {
-
   bool delayed = false;
 
   @override
   void initState() {
-    delayed = (widget.trainInfo.lastDelay > 0)? true : false;
+    delayed = (widget.trainInfo.lastDelay > 0) ? true : false;
     super.initState();
   }
 
@@ -56,12 +56,14 @@ class _SingleTrainTripTopBarState extends State<SingleTrainTripTopBar> {
                       color: Colors.transparent,
                       child: Container(
                           decoration: BoxDecoration(
-                              color: SingleTrainTopBar.logoColor(widget.trainInfo.ID),
+                              color: SingleTrainTopBar.logoColor(
+                                  widget.trainInfo.ID),
                               borderRadius:
                                   BorderRadius.all(Radius.circular(50.0))),
                           child: Center(
                             child: Text(
-                              SingleTrainTopBar.trainAbbrev(widget.trainInfo.ID),
+                              SingleTrainTopBar.trainAbbrev(
+                                  widget.trainInfo.ID),
                               style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.white,
@@ -78,31 +80,40 @@ class _SingleTrainTripTopBarState extends State<SingleTrainTripTopBar> {
                   children: [
                     Row(
                       children: [
-                        Text(widget.trainInfo.ID, style: TextStyle(fontSize: 16)),
+                        Text(widget.trainInfo.ID,
+                            style: TextStyle(fontSize: 16)),
                       ],
                     ),
                     Row(
                       children: [
-                        Text( // TODO applicare ritardo
-                          widget.trainInfo.trip[0].scheduledDepartureTime,
-                          style: TextStyle(fontSize: 14, color: delayed? Colors.red : Color(0xFF49454F), fontWeight: FontWeight.bold)
-                        ),
                         Text(
-                           " ${widget.trainInfo.trip[0].station.name}",
-                          style: TextStyle(fontSize: 14, color: Color(0xFF49454F))
-                        )
+                            // TODO applicare ritardo
+                            widget.trainInfo.trip[0].scheduledDepartureTime,
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: delayed ? Colors.red : Color(0xFF49454F),
+                                fontWeight: FontWeight.bold)),
+                        Text(" ${widget.trainInfo.trip[0].station.name}",
+                            style: TextStyle(
+                                fontSize: 14, color: Color(0xFF49454F)))
                       ],
                     ),
                     Row(
                       children: [
-                        Text( // TODO applicare ritardo
-                          widget.trainInfo.trip[widget.trainInfo.trip.length - 1].scheduledArrivalTime,
-                          style: TextStyle(fontSize: 14, color: delayed? Colors.red : Color(0xFF49454F), fontWeight: FontWeight.bold)
-                        ),
                         Text(
-                           " ${widget.trainInfo.trip[widget.trainInfo.trip.length - 1].station.name}",
-                          style: TextStyle(fontSize: 14, color: Color(0xFF49454F))
-                        )
+                            // TODO applicare ritardo
+                            widget
+                                .trainInfo
+                                .trip[widget.trainInfo.trip.length - 1]
+                                .scheduledArrivalTime,
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: delayed ? Colors.red : Color(0xFF49454F),
+                                fontWeight: FontWeight.bold)),
+                        Text(
+                            " ${widget.trainInfo.trip[widget.trainInfo.trip.length - 1].station.name}",
+                            style: TextStyle(
+                                fontSize: 14, color: Color(0xFF49454F)))
                       ],
                     ),
                   ],
@@ -110,27 +121,25 @@ class _SingleTrainTripTopBarState extends State<SingleTrainTripTopBar> {
                 Spacer(),
                 Column(// Delay
                     children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(15.0, 15.0, 40.0, 15.0),
+                  Padding(
+                      padding:
+                          const EdgeInsets.fromLTRB(15.0, 15.0, 40.0, 15.0),
                       child: delayed
-                      ? Container(
-                        color: Colors.transparent,
-                        child: Center(
-                          child: Text(
-                            "+${widget.trainInfo.lastDelay}'", 
-                            style: TextStyle(
-                                fontSize: 25,
-                                color: Colors.red,
-                                fontWeight: FontWeight.w600
+                          ? Container(
+                              color: Colors.transparent,
+                              child: Center(
+                                child: Text(
+                                  "+${widget.trainInfo.lastDelay}'",
+                                  style: TextStyle(
+                                      fontSize: 25,
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.w600),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      )
-                      : null
-                    ),
-                  ]
-                ),
+                            )
+                          : null),
+                ]),
               ],
             ),
           ),
