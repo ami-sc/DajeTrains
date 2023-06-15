@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 
 class CurrentTripPage extends StatefulWidget {
+  final Function() findButtonCallback;
+  final Function() historyButtonCallback;
+
+  const CurrentTripPage({
+    required this.findButtonCallback,
+    required this.historyButtonCallback,
+    super.key,
+  });
+
   @override
   State<CurrentTripPage> createState() => _CurrentTripPageState();
 }
@@ -23,11 +32,15 @@ class _CurrentTripPageState extends State<CurrentTripPage> {
             ),
             Padding(
               padding: EdgeInsets.only(bottom: 10.0),
-              child: FindButton(),
+              child: FindButton(
+                findButtonCallback: widget.findButtonCallback,
+              ),
             ),
             Padding(
               padding: EdgeInsets.only(bottom: 50.0),
-              child: HistoryButton(),
+              child: HistoryButton(
+                historyButtonCallback: widget.historyButtonCallback,
+              ),
             ),
           ],
         ),
@@ -68,6 +81,13 @@ class MainText extends StatelessWidget {
 }
 
 class FindButton extends StatelessWidget {
+  final Function() findButtonCallback;
+
+  const FindButton({
+    required this.findButtonCallback,
+    super.key,
+  });
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -88,21 +108,24 @@ class FindButton extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
         ),
-        onPressed: () {
-          print("CurrentTrip::FindButton::onPressed");
-        },
+        onPressed: findButtonCallback,
       ),
     );
   }
 }
 
 class HistoryButton extends StatelessWidget {
+  final Function() historyButtonCallback;
+
+  const HistoryButton({
+    required this.historyButtonCallback,
+    super.key,
+  });
+
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () {
-        print("CurrentTrip::HistoryButton::onPressed");
-      },
+      onPressed: historyButtonCallback,
       style: ButtonStyle(
         overlayColor: MaterialStateProperty.all(Color(0xFFB5D7FF)),
       ),
