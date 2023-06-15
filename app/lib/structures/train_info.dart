@@ -60,4 +60,8 @@ class TripStation {
     );
   }
 
+  bool isPassed() {
+    return arrivalTime != "";
+  }
+
 }

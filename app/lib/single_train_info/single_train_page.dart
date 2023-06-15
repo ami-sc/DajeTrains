@@ -59,7 +59,10 @@ class _SingleTrainPageState extends State<SingleTrainPage>
         child: ListView.builder(
             itemCount: trainInfo!.trip.length,
             itemBuilder: (BuildContext context, int index) {
-              return _TripStationView(tripStation: trainInfo!.trip[index]);
+              return _TripStationView(
+                tripStation: trainInfo!.trip[index], 
+                notLast: index < trainInfo!.trip.length - 1
+              );
             }
         ),
       ) 
@@ -70,9 +73,12 @@ class _SingleTrainPageState extends State<SingleTrainPage>
 class _TripStationView extends StatelessWidget {
 
   final TripStation tripStation;
+  final bool notLast;
+
 
   const _TripStationView({
     required this.tripStation,
+    required this.notLast
   });
 
   @override
@@ -88,12 +94,12 @@ class _TripStationView extends StatelessWidget {
             child:Column( // Dots
               children: [
                 Icon(
-                  Icons.radio_button_checked,
-                  color: Color(0xFFA5E6FB),
+                  tripStation.isPassed() ? Icons.radio_button_checked : Icons.radio_button_off,
+                  color: tripStation.isPassed() ? Color(0xFFA5E6FB) : Colors.grey,
                   size: 25,
                 ),
-                DottedLine(
-                  dashColor: Color(0xFFA5E6FB),
+                notLast ? DottedLine(
+                  dashColor: tripStation.isPassed() ? Color(0xFFA5E6FB) : Colors.grey,
                   direction: Axis.vertical,
                   dashLength: 5,
                   lineThickness: 5,
@@ -101,6 +107,7 @@ class _TripStationView extends StatelessWidget {
                   dashRadius: 80,
                   lineLength: 60,
                 )
+                : SizedBox.shrink(),
               ]
             )
           ),
