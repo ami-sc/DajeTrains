@@ -128,7 +128,7 @@ class QRDialog extends StatelessWidget {
         borderRadius: BorderRadius.circular(28.0),
       ),
       titlePadding: const EdgeInsets.all(0),
-      backgroundColor: Color(0xFFE1F8FF),
+      backgroundColor: Colors.white,
       title: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
