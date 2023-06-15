@@ -52,26 +52,42 @@ class _SingleTrainPageState extends State<SingleTrainPage>
         body: _defaultMessage
             ? null
             : Padding(
-                padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
                 child: ListView.builder(
                     itemCount: trainInfo!.trip.length + 1,
                     itemBuilder: (BuildContext context, int index) {
                       if (index == 0) {
                         return Padding(
-                          padding: const EdgeInsets.fromLTRB(100, 0, 20, 20),
+                          padding: EdgeInsets.only(bottom: 10),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                "Stops",
-                                style: TextStyle(
-                                    fontSize: 14, color: Color(0xFF616161)),
+
+                              Expanded(flex: 2, child: SizedBox.shrink()),
+
+                              Expanded(
+                                flex: 5,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [ Text(
+                                    "Stops",
+                                    style: TextStyle(
+                                        fontSize: 14, color: Color(0xFF616161)),
+                                  )],
+                                )
                               ),
-                              Text(
-                                "Platform",
-                                style: TextStyle(
-                                    fontSize: 14, color: Color(0xFF616161)),
-                              ),
+                              
+                              Expanded(
+                                flex: 3,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [ Text(
+                                    "Platform",
+                                    style: TextStyle(
+                                        fontSize: 14, color: Color(0xFF616161)),
+                                  )],
+                                )
+                              )
                             ],
                           ),
                         );
