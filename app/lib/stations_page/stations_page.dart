@@ -1,3 +1,4 @@
+import "package:DajeTrains/nav_drawer.dart";
 import 'package:flutter/material.dart';
 
 import "stations_top_bar.dart";
@@ -8,10 +9,10 @@ import "../structures/station.dart";
 import "../api/stations_api.dart";
 
 class StationsPage extends StatefulWidget {
-  final Function() backButtonCallback;
+  final NavDrawer appDrawer;
 
   const StationsPage({
-    required this.backButtonCallback,
+    required this.appDrawer,
     super.key,
   });
 
@@ -68,8 +69,8 @@ class _StationsPageState extends State<StationsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: widget.appDrawer,
       appBar: StationsTopBar(
-        backButtonCallback: widget.backButtonCallback,
         searchCallback: _searchStation,
       ),
 

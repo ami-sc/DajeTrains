@@ -62,7 +62,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
   Widget _activePage = Scaffold();
 
-  bool _isOnboard = false;
+  bool _isOnboard = true; // TODO CHANGE THIS FOR DEBUGGING (WITHOUT BEACONS)
   String _lastBeaconID = "";
 
   /* Beacon monitoring */
@@ -404,14 +404,14 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       /** Page 1 - Stations Page **/
       case 1:
         _activePage = StationsPage(
-          backButtonCallback: _previousPage,
+          appDrawer: drawer,
         );
         break;
 
       /** Page 2 - Trains Page **/
       case 2:
         _activePage = TrainsPage(
-          backButtonCallback: _previousPage,
+          appDrawer: drawer,
         );
         break;
 

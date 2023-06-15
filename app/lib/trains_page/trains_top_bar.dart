@@ -1,11 +1,9 @@
 import "package:flutter/material.dart";
 
 class TrainsTopBar extends StatefulWidget implements PreferredSizeWidget {
-  final Function() backButtonCallback;
   final Function(String) searchCallback;
 
   const TrainsTopBar({
-    required this.backButtonCallback,
     required this.searchCallback,
     super.key,
   });
@@ -19,11 +17,6 @@ class TrainsTopBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _TrainsTopBarState extends State<TrainsTopBar> {
   final TextEditingController _searchController = TextEditingController();
-
-  void _onBackButtonTap() {
-    // Notify that the back button was pressed.
-    widget.backButtonCallback();
-  }
 
   void _doSearch() {
     // Send the query (in lower case) to the callback.
@@ -46,9 +39,6 @@ class _TrainsTopBarState extends State<TrainsTopBar> {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Color(0xFFA5E6FB),
-      leading: BackButton(
-        onPressed: _onBackButtonTap,
-      ),
       title: TextField(
         controller: _searchController,
         decoration: InputDecoration(

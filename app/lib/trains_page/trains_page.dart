@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:DajeTrains/nav_drawer.dart";
 
 import "trains_top_bar.dart";
 import "train_list.dart";
@@ -7,10 +8,10 @@ import "../api/trains_api.dart";
 import "../single_train_info/single_train_page.dart";
 
 class TrainsPage extends StatefulWidget {
-  final Function() backButtonCallback;
+  final NavDrawer appDrawer;
 
   const TrainsPage({
-    required this.backButtonCallback,
+    required this.appDrawer,
     super.key,
   });
 
@@ -69,10 +70,9 @@ class _TrainsPageState extends State<TrainsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TrainsTopBar(
-        backButtonCallback: widget.backButtonCallback,
         searchCallback: _searchTrain,
       ),
-
+      drawer: widget.appDrawer,
       body: _defaultMessage ? DefaultMessage() : TrainList(
         trainList: trainList,
         trainCallback: _toggleTrainPage,
