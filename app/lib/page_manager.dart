@@ -59,7 +59,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
   Widget _activePage = Scaffold();
 
-  bool _isOnboard = true; // TODO CHANGE THIS FOR DEBUGGING (WITHOUT BEACONS)
+  bool _isOnboard = false; // TODO CHANGE THIS FOR DEBUGGING (WITHOUT BEACONS)
   String _lastBeaconID = "";
 
   /* Beacon monitoring */
