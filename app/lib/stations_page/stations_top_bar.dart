@@ -45,6 +45,10 @@ class _StationsTopBarState extends State<StationsTopBar> {
         decoration: InputDecoration(
           hintText: "Enter a station name",
           prefixIcon: Icon(Icons.search),
+          suffixIcon: IconButton(
+            icon: Icon(Icons.clear),
+            onPressed: _searchController.clear,
+          )
         )
       ),
     );

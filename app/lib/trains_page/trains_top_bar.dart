@@ -44,6 +44,10 @@ class _TrainsTopBarState extends State<TrainsTopBar> {
         decoration: InputDecoration(
           hintText: "Enter a train code",
           prefixIcon: Icon(Icons.search),
+          suffixIcon: IconButton(
+            icon: Icon(Icons.clear),
+            onPressed: _searchController.clear,
+          )
         )
       ),
     );
