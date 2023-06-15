@@ -16,20 +16,26 @@ class _CurrentTripPageOnBoardState extends State<CurrentTripPageOnBoard> {
     unFollowUser: true,
   ));
 
+  bool showFab = true;
+
   @override
   Widget build(BuildContext context) {
-    bool showFab = true;
-
     return Scaffold(
       body: SlidingUpPanel(
         onPanelOpened: () => {
-          showFab = false,
+          print("Panel opened"),
+          setState(() {
+            showFab = false;
+          })
         },
         onPanelClosed: () => {
-          showFab = true,
+          print("Panel closed"),
+          setState(() {
+            showFab = true;
+          })
         },
         minHeight: 180,
-        maxHeight: 765,
+        maxHeight: 750,
         color: Color(0xFFDAF2FF),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(28.0),
@@ -74,33 +80,37 @@ class _CurrentTripPageOnBoardState extends State<CurrentTripPageOnBoard> {
           )),
         ),
       ),
-      floatingActionButton: showFab
-          ? Padding(
-              padding: EdgeInsets.only(bottom: 185),
-              child: SizedBox(
-                height: 65.0,
-                width: 65.0,
-                child: FittedBox(
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      print("Floating action button pressed");
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return QRDialog("12345");
-                        },
-                      );
-                    },
-                    backgroundColor: Color(0xFFB5D7FF),
-                    child: Icon(
-                      Icons.qr_code_2,
-                      size: 44,
-                    ),
+      floatingActionButton: AnimatedOpacity(
+          // If the widget is visible, animate to 0.0 (invisible).
+          // If the widget is hidden, animate to 1.0 (fully visible).
+          opacity: showFab ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 150),
+          // The fab must be a child of the AnimatedOpacity widget.
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 185),
+            child: SizedBox(
+              height: 65.0,
+              width: 65.0,
+              child: FittedBox(
+                child: FloatingActionButton(
+                  onPressed: () {
+                    print("Floating action button pressed");
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return QRDialog("12345");
+                      },
+                    );
+                  },
+                  backgroundColor: Color(0xFFB5D7FF),
+                  child: Icon(
+                    Icons.qr_code_2,
+                    size: 44,
                   ),
                 ),
               ),
-            )
-          : null,
+            ),
+          )),
     );
   }
 }
