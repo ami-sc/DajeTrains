@@ -1,7 +1,7 @@
 import "package:DajeTrains/history_page/single_payment_page.dart";
 import "package:flutter/material.dart";
 import "dart:async";
-import "dart:io" show Platform, sleep;
+import "dart:io" show Platform;
 
 import "top_bar.dart";
 import "bottom_bar.dart";
@@ -35,9 +35,6 @@ import 'notifications/noti.dart';
 import 'api/user_location.dart';
 import 'structures/position.dart';
 
-/*** Single train page ***/
-import 'single_train_info/single_train_page.dart';
-
 /*** Station  ***/
 import 'structures/station.dart';
 import 'stations_page/single_station_page.dart';
@@ -62,7 +59,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
   Widget _activePage = Scaffold();
 
-  bool _isOnboard = false; // TODO CHANGE THIS FOR DEBUGGING (WITHOUT BEACONS)
+  bool _isOnboard = true; // TODO CHANGE THIS FOR DEBUGGING (WITHOUT BEACONS)
   String _lastBeaconID = "";
 
   /* Beacon monitoring */
@@ -199,6 +196,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           if (data.isNotEmpty && isRunning) {
             // We hypothesize that there is only one beacon in the area at a time (for now) so we can just take the first one
             setState(() {
+              // ignore: unused_local_variable
               Beacon beacon = Beacon.fromString(data);
               // Check if the beacon belongs to one of the stations or to a train and then do the appropriate action
             });
