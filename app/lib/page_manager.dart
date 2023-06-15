@@ -1,13 +1,15 @@
 import "package:DajeTrains/history_page/single_payment_page.dart";
 import "package:flutter/material.dart";
 import "dart:async";
-import "dart:io" show Platform;
+import "dart:io" show Platform, sleep;
 
 import "top_bar.dart";
 import "bottom_bar.dart";
 import "nav_drawer.dart";
 
 import "structures/payment.dart";
+
+import "single_train_info/single_train_page.dart";
 
 /*** Bottom Bar Pages ***/
 import "current_trip_page/current_trip_page.dart";
@@ -297,6 +299,16 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     });
   }
 
+  void _findButtonPress() {
+    // Jump directly to the Trains Page.
+    _changePage(2);
+  }
+
+  void _historyButtonPress() {
+    // Jump directly to the History Page.
+    _changePage(3);
+  }
+
   void _previousPage() {
     // Hide the keyboard, if active.
     FocusManager.instance.primaryFocus?.unfocus();
@@ -378,7 +390,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     switch(_activePageIdx) {
       /** Page 0 - Current Trip Page **/
       case 0: _activePage = _isOnboard ?
-        CurrentTripPageOnBoard() : CurrentTripPage();
+        CurrentTripPageOnBoard() : CurrentTripPage(
+          findButtonCallback: _findButtonPress,
+          historyButtonCallback: _historyButtonPress,
+        );
       break;
 
       /** Page 1 - Stations Page **/
