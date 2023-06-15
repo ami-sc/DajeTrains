@@ -60,33 +60,86 @@ class _SingleStationPageState extends State<SingleStationPage>
       body: TabBarView(controller: _tabController, children: [
         ListView.separated(
             // Needed to have a line dividing each result.
-            separatorBuilder: (context, index) => Divider(
-                  color: Color.fromARGB(255, 179, 179, 179),
-                  height: 1,
-                ),
-            itemCount: departuresList.length,
+            separatorBuilder: (context, index) {
+              if (index == 0) {
+                return SizedBox
+                    .shrink(); // Return an empty SizedBox for the first item
+              }
+              return Divider(
+                color: Color.fromARGB(255, 201, 201, 201),
+                height: 1,
+              );
+            },
+            itemCount: departuresList.length + 1,
             itemBuilder: (BuildContext context, int index) {
+              if (index == 0) {
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Time",
+                        style:
+                            TextStyle(fontSize: 14, color: Color(0xFF616161)),
+                      ),
+                      Text(
+                        "Platform",
+                        style:
+                            TextStyle(fontSize: 14, color: Color(0xFF616161)),
+                      ),
+                    ],
+                  ),
+                );
+              }
               return TrainButton(
-                  destination: departuresList[index].lastStation,
-                  id: departuresList[index].id,
-                  platform: departuresList[index].platform,
-                  time: departuresList[index].scheduledDepartureTime,
-                  delay: departuresList[index].lastDelay,
+                  destination: departuresList[index - 1].lastStation,
+                  id: departuresList[index - 1].id,
+                  platform: departuresList[index - 1].platform,
+                  time: departuresList[index - 1].scheduledDepartureTime,
+                  delay: departuresList[index - 1].lastDelay,
                   buttonCallback: _toggleStationPage);
             }),
         ListView.separated(
-            separatorBuilder: (context, index) => Divider(
-                  color: Color.fromARGB(255, 201, 201, 201),
-                  height: 1,
-                ),
-            itemCount: arrivalsList.length,
+            separatorBuilder: (context, index) {
+              if (index == 0) {
+                return SizedBox
+                    .shrink(); // Return an empty SizedBox for the first item
+              }
+              return Divider(
+                color: Color.fromARGB(255, 201, 201, 201),
+                height: 1,
+              );
+            },
+            itemCount: arrivalsList.length + 1,
             itemBuilder: (BuildContext context, int index) {
+              if (index == 0) {
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Time",
+                        style:
+                            TextStyle(fontSize: 14, color: Color(0xFF616161)),
+                      ),
+                      Text(
+                        "Platform",
+                        style:
+                            TextStyle(fontSize: 14, color: Color(0xFF616161)),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
               return TrainButton(
-                  destination: arrivalsList[index].lastStation,
-                  id: arrivalsList[index].id,
-                  platform: arrivalsList[index].platform,
-                  time: arrivalsList[index].scheduledArrivalTime,
-                  delay: arrivalsList[index].lastDelay,
+                  destination: arrivalsList[index - 1].lastStation,
+                  id: arrivalsList[index - 1].id,
+                  platform: arrivalsList[index - 1].platform,
+                  time: arrivalsList[index - 1].scheduledArrivalTime,
+                  delay: arrivalsList[index - 1].lastDelay,
                   buttonCallback: _toggleStationPage);
             }),
       ]),
@@ -159,90 +212,85 @@ class TrainButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Expanded(
-            flex: 3,
-            child: Column(
-              children: [
-                isDelayed(delay)
-                ?
-                // If the train is delayed, show the delay.
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          DateTime(
-                                  DateTime.now().year,
-                                  0,
-                                  0,
-                                  int.parse(time.split(':')[0]),
-                                  int.parse(time.split(':')[1]),
-                                  0,
-                                  0,
-                                  0)
-                              .add(Duration(minutes: delay))
-                              .toString()
-                              .substring(11, 16),
+              flex: 3,
+              child: Column(
+                children: [
+                  isDelayed(delay)
+                      ?
+                      // If the train is delayed, show the delay.
+                      Column(
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  DateTime(
+                                          DateTime.now().year,
+                                          0,
+                                          0,
+                                          int.parse(time.split(':')[0]),
+                                          int.parse(time.split(':')[1]),
+                                          0,
+                                          0,
+                                          0)
+                                      .add(Duration(minutes: delay))
+                                      .toString()
+                                      .substring(11, 16),
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 201, 41, 41),
+                                    fontSize: 22,
+                                  ),
+                                )
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "+$delay'",
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 201, 41, 41),
+                                    fontSize: 15,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        )
+                      :
+                      // Otherwise, show the scheduled time.
+                      Text(
+                          time,
                           textAlign: TextAlign.right,
                           style: TextStyle(
-                            color: Color.fromARGB(255, 201, 41, 41),
+                            color: Color(0xFF0A7D23),
                             fontSize: 22,
                           ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "+$delay'",
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 201, 41, 41),
-                            fontSize: 15,
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                )
-
-                :
-                // Otherwise, show the scheduled time.
-                Text(
-                    time,
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      color: Color(0xFF0A7D23),
-                      fontSize: 22,
-                    ),
-                  ),
-              ],
-            )
-          ),
-          
+                        ),
+                ],
+              )),
           Expanded(
-            flex: 5,
-            child: Column(
-              // Left align all text.
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  destination,
-                  style: TextStyle(
-                    color: Color(0xFF1D1B20),
-                    fontSize: 16,
+              flex: 5,
+              child: Column(
+                // Left align all text.
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    destination,
+                    style: TextStyle(
+                      color: Color(0xFF1D1B20),
+                      fontSize: 16,
+                    ),
                   ),
-                ),
-                Text(
-                  "$trainType - $id",
-                  style: TextStyle(
-                    color: Color(0xFF49454F),
-                    fontSize: 14,
+                  Text(
+                    "$trainType - $id",
+                    style: TextStyle(
+                      color: Color(0xFF49454F),
+                      fontSize: 14,
+                    ),
                   ),
-                ),
-              ],
-            )
-          ),
-
+                ],
+              )),
           Expanded(
             flex: 3,
             child: Column(
@@ -256,7 +304,8 @@ class TrainButton extends StatelessWidget {
                     child: Container(
                         decoration: BoxDecoration(
                             color: Color(0xFFA5E6FB),
-                            borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Center(
                           child: Text(
                             "$platform",
@@ -272,7 +321,6 @@ class TrainButton extends StatelessWidget {
               ],
             ),
           )
-
         ],
       ),
     );
