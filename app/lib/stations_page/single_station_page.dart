@@ -109,6 +109,9 @@ class _SingleStationPageState extends State<SingleStationPage>
         tabController: _tabController,
       ),
       body: TabBarView(controller: _tabController, children: [
+
+        // TODO check if there are no trains and display a default message
+        
         ListView.separated(
             // Needed to have a line dividing each result.
             separatorBuilder: (context, index) {

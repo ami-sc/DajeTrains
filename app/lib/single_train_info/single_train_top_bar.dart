@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 class SingleTrainTripTopBar extends StatefulWidget
     implements PreferredSizeWidget {
   final TrainInfo trainInfo;
+  final bool delayed;
 
   const SingleTrainTripTopBar({
     required this.trainInfo,
+    required this.delayed,
     super.key,
   });
 
@@ -19,13 +21,6 @@ class SingleTrainTripTopBar extends StatefulWidget
 }
 
 class _SingleTrainTripTopBarState extends State<SingleTrainTripTopBar> {
-  bool delayed = false;
-
-  @override
-  void initState() {
-    delayed = (widget.trainInfo.lastDelay > 0) ? true : false;
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +94,7 @@ class _SingleTrainTripTopBarState extends State<SingleTrainTripTopBar> {
                               widget.trainInfo.trip[0].scheduledDepartureTime,
                               style: TextStyle(
                                   fontSize: 14,
-                                  color: delayed ? Colors.red : Color(0xFF49454F),
+                                  color: (widget.delayed && !widget.trainInfo.trip[0].hasDeparted())? Colors.red : Color(0xFF49454F),
                                   fontWeight: FontWeight.bold)),
                           Text(" ${widget.trainInfo.trip[0].station.name}",
                               style: TextStyle(
@@ -116,7 +111,7 @@ class _SingleTrainTripTopBarState extends State<SingleTrainTripTopBar> {
                                   .scheduledArrivalTime,
                               style: TextStyle(
                                   fontSize: 14,
-                                  color: delayed ? Colors.red : Color(0xFF49454F),
+                                  color: widget.delayed ? Colors.red : Color(0xFF49454F),
                                   fontWeight: FontWeight.bold)),
                           Text(
                               " ${widget.trainInfo.trip[widget.trainInfo.trip.length - 1].station.name}",
@@ -135,7 +130,7 @@ class _SingleTrainTripTopBarState extends State<SingleTrainTripTopBar> {
                       Padding(
                         padding:
                             const EdgeInsets.all(15.0),
-                        child: delayed
+                        child: widget.delayed
                         ? Container(
                             color: Colors.transparent,
                             child: Center(

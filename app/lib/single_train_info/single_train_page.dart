@@ -19,6 +19,7 @@ class SingleTrainPage extends StatefulWidget {
 class _SingleTrainPageState extends State<SingleTrainPage>
     with TickerProviderStateMixin {
   bool _defaultMessage = true;
+  bool _delayed = false;
 
   TripApi api = TripApi();
   TrainInfo? trainInfo;
@@ -37,6 +38,7 @@ class _SingleTrainPageState extends State<SingleTrainPage>
       setState(() {
         trainInfo = l[0];
         _defaultMessage = false;
+        _delayed = (trainInfo!.lastDelay > 0) ? true : false; // CHANGE FOR DEBBUGGING
       });
     } else {
       throw Exception("Non valid Train ID");
@@ -48,7 +50,7 @@ class _SingleTrainPageState extends State<SingleTrainPage>
     return Scaffold(
         appBar: _defaultMessage
             ? null
-            : SingleTrainTripTopBar(trainInfo: trainInfo!),
+            : SingleTrainTripTopBar(trainInfo: trainInfo!, delayed: _delayed,),
         body: _defaultMessage
             ? null
             : Padding(
@@ -94,7 +96,9 @@ class _SingleTrainPageState extends State<SingleTrainPage>
                       }
                       return _TripStationView(
                           tripStation: trainInfo!.trip[index - 1],
-                          notLast: index - 1 < trainInfo!.trip.length - 1);
+                          notLast: index - 1 < trainInfo!.trip.length - 1,
+                          notFirst: index -1 > 0
+                          );
                     }),
               ));
   }
@@ -103,8 +107,9 @@ class _SingleTrainPageState extends State<SingleTrainPage>
 class _TripStationView extends StatelessWidget {
   final TripStation tripStation;
   final bool notLast;
+  final bool notFirst;
 
-  const _TripStationView({required this.tripStation, required this.notLast});
+  const _TripStationView({required this.tripStation, required this.notLast, required this.notFirst});
 
   @override
   Widget build(BuildContext context) {
@@ -152,6 +157,7 @@ class _TripStationView extends StatelessWidget {
                 tripStation.station.name,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
+              notFirst ?
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -163,7 +169,9 @@ class _TripStationView extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   )
                 ],
-              ),
+              ) 
+              : Row(),
+              notLast ? 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -175,7 +183,8 @@ class _TripStationView extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   )
                 ],
-              ),
+              )
+              : Row(),
             ],
           ),
         ),
