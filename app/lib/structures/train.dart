@@ -28,4 +28,20 @@ class Train {
       platform: data["platform"],
     );
   }
+
+  static String addDelay(String time, int minutes) {
+    return DateTime(
+      DateTime.now().year,
+      0,
+      0,
+      int.parse(time.split(':')[0]),
+      int.parse(time.split(':')[1]),
+      0,
+      0,
+      0
+    )
+    .add(Duration(minutes: minutes))
+    .toString()
+    .substring(11, 16);
+  }
 }

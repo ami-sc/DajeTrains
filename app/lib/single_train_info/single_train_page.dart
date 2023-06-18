@@ -1,3 +1,4 @@
+import 'package:DajeTrains/structures/train.dart';
 import 'package:flutter/material.dart';
 import "single_train_top_bar.dart";
 import 'package:DajeTrains/api/trip_api.dart';
@@ -98,7 +99,8 @@ class _SingleTrainPageState extends State<SingleTrainPage>
                           tripStation: trainInfo!.trip[index - 1],
                           notLast: index - 1 < trainInfo!.trip.length - 1,
                           notFirst: index -1 > 0,
-                          delayed: _delayed
+                          delayed: _delayed,
+                          delay: trainInfo!.lastDelay,
                           );
                     }),
               ));
@@ -107,11 +109,12 @@ class _SingleTrainPageState extends State<SingleTrainPage>
 
 class _TripStationView extends StatelessWidget {
   final TripStation tripStation;
+  final int delay;
   final bool notLast;
   final bool notFirst;
   final bool delayed;
 
-  const _TripStationView({required this.tripStation, required this.notLast, required this.notFirst, required this.delayed});
+  const _TripStationView({required this.tripStation, required this.notLast, required this.notFirst, required this.delayed, required this.delay});
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +176,10 @@ class _TripStationView extends StatelessWidget {
                         style: TextStyle(fontWeight: FontWeight.bold),
                       )
                     : Text(
-                        tripStation.scheduledArrivalTime,
+                        Train.addDelay(
+                          tripStation.scheduledArrivalTime,
+                          delay
+                        ),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: delayed? Colors.red : Color(0xFF49454F)
@@ -197,7 +203,10 @@ class _TripStationView extends StatelessWidget {
                         style: TextStyle(fontWeight: FontWeight.bold),
                       )
                       : Text(
-                        tripStation.scheduledDepartureTime,
+                        Train.addDelay(
+                          tripStation.scheduledDepartureTime,
+                          delay
+                        ),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: delayed? Colors.red : Color(0xFF49454F)

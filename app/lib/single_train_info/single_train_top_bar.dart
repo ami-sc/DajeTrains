@@ -1,3 +1,4 @@
+import 'package:DajeTrains/structures/train.dart';
 import 'package:DajeTrains/structures/train_info.dart';
 import 'package:DajeTrains/history_page/single_payment_top_bar.dart';
 import 'package:flutter/material.dart';
@@ -100,7 +101,7 @@ class _SingleTrainTripTopBarState extends State<SingleTrainTripTopBar> {
                           :
                           Text(
                               // non partito
-                              widget.trainInfo.trip[0].scheduledDepartureTime,
+                              Train.addDelay(widget.trainInfo.trip[0].scheduledDepartureTime , widget.trainInfo.lastDelay),
                               style: TextStyle(
                                   fontSize: 14,
                                   color: widget.delayed? Colors.red : Color(0xFF49454F),
@@ -128,14 +129,17 @@ class _SingleTrainTripTopBarState extends State<SingleTrainTripTopBar> {
                           :
                           Text(
                             // non arrivato
+                            Train.addDelay( 
                               widget
                                   .trainInfo
                                   .trip[widget.trainInfo.trip.length - 1]
-                                  .scheduledArrivalTime,
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  color: widget.delayed? Colors.red : Color(0xFF49454F),
-                                  fontWeight: FontWeight.bold)),
+                                  .scheduledArrivalTime, 
+                              widget.trainInfo.lastDelay
+                            ),
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: widget.delayed? Colors.red : Color(0xFF49454F),
+                                fontWeight: FontWeight.bold)),
                           
                           Text(
                               " ${widget.trainInfo.trip[widget.trainInfo.trip.length - 1].station.name}",

@@ -289,7 +289,7 @@ class TrainButton extends StatelessWidget {
                 Column(
 
                   children: [
-                    Row(
+                    Row(  //TODO fix alignment
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
