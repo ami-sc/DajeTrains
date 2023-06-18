@@ -97,7 +97,8 @@ class _SingleTrainPageState extends State<SingleTrainPage>
                       return _TripStationView(
                           tripStation: trainInfo!.trip[index - 1],
                           notLast: index - 1 < trainInfo!.trip.length - 1,
-                          notFirst: index -1 > 0
+                          notFirst: index -1 > 0,
+                          delayed: _delayed
                           );
                     }),
               ));
@@ -108,8 +109,9 @@ class _TripStationView extends StatelessWidget {
   final TripStation tripStation;
   final bool notLast;
   final bool notFirst;
+  final bool delayed;
 
-  const _TripStationView({required this.tripStation, required this.notLast, required this.notFirst});
+  const _TripStationView({required this.tripStation, required this.notLast, required this.notFirst, required this.delayed});
 
   @override
   Widget build(BuildContext context) {
@@ -164,13 +166,23 @@ class _TripStationView extends StatelessWidget {
                   tripStation.hasArrived()
                       ? Text("Arrival:")
                       : Text("Expected arrival:"),
-                  Text(
-                    tripStation.scheduledArrivalTime,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  )
+                  
+                  tripStation.hasArrived()
+                      ? Text(
+                        tripStation.arrivalTime,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      )
+                    : Text(
+                        tripStation.scheduledArrivalTime,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: delayed? Colors.red : Color(0xFF49454F)
+                        ),
+                      )
                 ],
               ) 
               : Row(),
+
               notLast ? 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -178,10 +190,19 @@ class _TripStationView extends StatelessWidget {
                   tripStation.hasDeparted()
                       ? Text("Departure:")
                       : Text("Expected departure:"),
-                  Text(
-                    tripStation.scheduledDepartureTime,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  )
+
+                  tripStation.hasDeparted()
+                      ? Text(
+                        tripStation.departureTime,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      )
+                      : Text(
+                        tripStation.scheduledDepartureTime,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: delayed? Colors.red : Color(0xFF49454F)
+                        ),
+                      ) 
                 ],
               )
               : Row(),

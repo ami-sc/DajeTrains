@@ -89,13 +89,24 @@ class _SingleTrainTripTopBarState extends State<SingleTrainTripTopBar> {
                       ),
                       Row(
                         children: [
+                          widget.trainInfo.trip[0].hasDeparted()?
                           Text(
-                              // TODO applicare ritardo
+                              // partito
+                              widget.trainInfo.trip[0].departureTime,
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xFF49454F),
+                                  fontWeight: FontWeight.bold))
+                          :
+                          Text(
+                              // non partito
                               widget.trainInfo.trip[0].scheduledDepartureTime,
                               style: TextStyle(
                                   fontSize: 14,
-                                  color: (widget.delayed && !widget.trainInfo.trip[0].hasDeparted())? Colors.red : Color(0xFF49454F),
-                                  fontWeight: FontWeight.bold)),
+                                  color: widget.delayed? Colors.red : Color(0xFF49454F),
+                                  fontWeight: FontWeight.bold)
+                          ),
+
                           Text(" ${widget.trainInfo.trip[0].station.name}",
                               style: TextStyle(
                                   fontSize: 14, color: Color(0xFF49454F)))
@@ -103,16 +114,29 @@ class _SingleTrainTripTopBarState extends State<SingleTrainTripTopBar> {
                       ),
                       Row(
                         children: [
+                          widget.trainInfo.trip[widget.trainInfo.trip.length - 1].hasArrived() ?
                           Text(
-                              // TODO applicare ritardo
+                              // arrivato
+                              widget
+                                  .trainInfo
+                                  .trip[widget.trainInfo.trip.length - 1]
+                                  .arrivalTime,
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xFF49454F),
+                                  fontWeight: FontWeight.bold))
+                          :
+                          Text(
+                            // non arrivato
                               widget
                                   .trainInfo
                                   .trip[widget.trainInfo.trip.length - 1]
                                   .scheduledArrivalTime,
                               style: TextStyle(
                                   fontSize: 14,
-                                  color: widget.delayed ? Colors.red : Color(0xFF49454F),
+                                  color: widget.delayed? Colors.red : Color(0xFF49454F),
                                   fontWeight: FontWeight.bold)),
+                          
                           Text(
                               " ${widget.trainInfo.trip[widget.trainInfo.trip.length - 1].station.name}",
                               style: TextStyle(
