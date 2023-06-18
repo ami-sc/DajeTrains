@@ -110,8 +110,31 @@ class _SingleStationPageState extends State<SingleStationPage>
       ),
       body: TabBarView(controller: _tabController, children: [
 
-        // TODO check if there are no trains and display a default message
-        
+        departuresList.isEmpty
+        ?
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.train,
+                color: Color.fromARGB(255, 174, 174, 174),
+                size: 60,
+              ),
+              Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Text(
+                  "No trains departing",
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 174, 174, 174),
+                    fontSize: 22,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )
+        :
         ListView.separated(
             // Needed to have a line dividing each result.
             separatorBuilder: (context, index) {
@@ -137,6 +160,32 @@ class _SingleStationPageState extends State<SingleStationPage>
                   delay: departuresList[index - 1].lastDelay,
                   buttonCallback: _toggleStationPage);
             }),
+
+        arrivalsList.isEmpty?
+
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.train,
+                color: Color.fromARGB(255, 174, 174, 174),
+                size: 60,
+              ),
+              Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Text(
+                  "No trains arriving",
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 174, 174, 174),
+                    fontSize: 22,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )
+        :
         ListView.separated(
             separatorBuilder: (context, index) {
               if (index == 0) {
@@ -231,64 +280,68 @@ class TrainButton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+
           Expanded(
-              flex: 3,
-              child: Column(
-                children: [
-                  isDelayed(delay)
-                      ?
-                      // If the train is delayed, show the delay.
-                      Column(
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  DateTime(
-                                          DateTime.now().year,
-                                          0,
-                                          0,
-                                          int.parse(time.split(':')[0]),
-                                          int.parse(time.split(':')[1]),
-                                          0,
-                                          0,
-                                          0)
-                                      .add(Duration(minutes: delay))
-                                      .toString()
-                                      .substring(11, 16),
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 201, 41, 41),
-                                    fontSize: 22,
-                                  ),
-                                )
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  "+$delay'",
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 201, 41, 41),
-                                    fontSize: 15,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
-                        )
-                      :
-                      // Otherwise, show the scheduled time.
-                      Text(
-                          time,
-                          textAlign: TextAlign.right,
+            flex: 3,
+            child: 
+                isDelayed(delay)?
+                // If the train is delayed, show the delay.
+                Column(
+
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          DateTime(
+                                  DateTime.now().year,
+                                  0,
+                                  0,
+                                  int.parse(time.split(':')[0]),
+                                  int.parse(time.split(':')[1]),
+                                  0,
+                                  0,
+                                  0)
+                              .add(Duration(minutes: delay))
+                              .toString()
+                              .substring(11, 16),
                           style: TextStyle(
-                            color: Color(0xFF0A7D23),
+                            color: Color.fromARGB(255, 201, 41, 41),
                             fontSize: 22,
                           ),
-                        ),
-                ],
-              )),
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "+$delay'",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 201, 41, 41),
+                            fontSize: 15,
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                )
+                :
+                // Otherwise, show the scheduled time.
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      time,
+                      style: TextStyle(
+                        color: Color(0xFF0A7D23),
+                        fontSize: 22,
+                      ),
+                    ),
+                  ],
+                )
+          ),
+
           Expanded(
               flex: 4,
               child: Column(
