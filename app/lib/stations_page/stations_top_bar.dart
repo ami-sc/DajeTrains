@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 class StationsTopBar extends StatefulWidget implements PreferredSizeWidget {
   final Function(String) searchCallback;
+  final GlobalKey<ScaffoldState> drawerId;
 
   const StationsTopBar({
     required this.searchCallback,
+    required this.drawerId,
     super.key,
   });
 
@@ -40,6 +42,13 @@ class _StationsTopBarState extends State<StationsTopBar> {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Color(0xFFA5E6FB),
+
+      leading: IconButton(
+        icon: const Icon(Icons.menu),
+        onPressed: () {
+          widget.drawerId.currentState?.openDrawer();
+      }),
+
       title: TextField(
         controller: _searchController,
         decoration: InputDecoration(

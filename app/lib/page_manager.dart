@@ -53,11 +53,13 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with WidgetsBindingObserver {
   int _drawerIdx = 0;
   int _activePageIdx = 0;
-  int _previousPageIdx = 0;
   bool _topBarState = true;
   bool _bottomBarState = true;
 
   Widget _activePage = Scaffold();
+
+  // Required for properly identifying the drawer in sub-pages.
+  GlobalKey<ScaffoldState> _drawerId = GlobalKey<ScaffoldState>();
 
   bool _isOnboard = false; // TODO CHANGE THIS FOR DEBUGGING (WITHOUT BEACONS)
   String _lastBeaconID = "";
@@ -310,21 +312,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     _changePage(3);
   }
 
-  void _previousPage() {
-    // Hide the keyboard, if active.
-    FocusManager.instance.primaryFocus?.unfocus();
-
-    if (_previousPageIdx != 0) {
-      _hideTopBar();
-    } else {
-      _showTopBar();
-    }
-
-    setState(() {
-      _activePageIdx = _previousPageIdx;
-    });
-  }
-
   void _changePage(int targetIdx) {
     // Hide the keyboard, if active.
     FocusManager.instance.primaryFocus?.unfocus();
@@ -353,14 +340,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       _drawerIdx = targetIdx - 2;
     }
 
-    // Change the currently active page.
-    // This avoids overwritting previousIdx if the user clicks the same page.
-    if (targetIdx != _activePageIdx) {
-      setState(() {
-        _previousPageIdx = _activePageIdx;
-        _activePageIdx = targetIdx;
-      });
-    }
+    // Trigger a change of the currently active page.
+    setState(() {
+      _activePageIdx = targetIdx;
+    });
   }
 
   @override
@@ -402,14 +385,14 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       /** Page 1 - Stations Page **/
       case 1:
         _activePage = StationsPage(
-          appDrawer: drawer,
+          drawerId: _drawerId,
         );
         break;
 
       /** Page 2 - Trains Page **/
       case 2:
         _activePage = TrainsPage(
-          appDrawer: drawer,
+          drawerId: _drawerId,
         );
         break;
 
@@ -441,6 +424,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       extendBody: true,
 
       drawer: drawer,
+      key: _drawerId,
 
       /*
        * Wrap the target page in an independent navigator.
