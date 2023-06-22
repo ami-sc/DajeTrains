@@ -1,4 +1,6 @@
 import 'station.dart';
+import 'package:quiver/core.dart';
+import 'package:collection/collection.dart';
 
 class TrainInfo {
   String ID;
@@ -20,6 +22,23 @@ class TrainInfo {
         trip: List<TripStation>.from(
             data["trip"].map((trainTrip) => TripStation.fromJson(trainTrip))));
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (other is TrainInfo) {
+      Function eq = const ListEquality().equals;
+      if (ID == other.ID &&
+          beaconID == other.beaconID &&
+          lastDelay == other.lastDelay &&
+          eq(trip, other.trip)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @override
+  int get hashCode => hash4(ID, beaconID, lastDelay, trip);
 }
 
 class TripStation {
@@ -62,4 +81,31 @@ class TripStation {
   bool hasDeparted() {
     return departureTime != "";
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (other is TripStation) {
+      if (station == other.station &&
+          scheduledArrivalTime == other.scheduledArrivalTime &&
+          scheduledDepartureTime == other.scheduledDepartureTime &&
+          arrivalTime == other.arrivalTime &&
+          departureTime == other.departureTime &&
+          platform == other.platform &&
+          cost == other.cost) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @override
+  int get hashCode => hashObjects([
+        station,
+        scheduledArrivalTime,
+        scheduledDepartureTime,
+        arrivalTime,
+        departureTime,
+        platform,
+        cost
+      ]);
 }
