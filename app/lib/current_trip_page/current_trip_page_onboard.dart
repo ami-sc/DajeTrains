@@ -187,7 +187,8 @@ class _CurrentTripPageOnBoardState extends State<CurrentTripPageOnBoard> {
                       color: Color.fromARGB(255, 201, 201, 201),
                       height: 1,
                     ),
-                    SingleTrainPage.trainRoute(trainInfo!, _delayed)
+                    SizedBox(height: 10),
+                    SingleTrainPage.trainRoute(trainInfo!, _delayed, trainInfo!.lastArrivedStation())
                   ],
                 ),// TODO Put Current Trip Info Here,
               ],

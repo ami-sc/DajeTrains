@@ -16,54 +16,88 @@ class SingleTrainPage extends StatefulWidget {
   @override
   State<SingleTrainPage> createState() => _SingleTrainPageState();
 
-  static Widget trainRoute(TrainInfo trainInfo, bool delayed) {
+  static Widget trainRoute(TrainInfo trainInfo, bool delayed, [int first=0]) {
     return Padding(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
       child: ListView.builder(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
-          itemCount: trainInfo.trip.length + 1,
+          itemCount: trainInfo.trip.length - first + 1,
           itemBuilder: (BuildContext context, int index) {
             if (index == 0) {
-              return Padding(
-                padding: EdgeInsets.only(bottom: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+              return Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
 
-                    Expanded(flex: 2, child: SizedBox.shrink()),
+                        Expanded(flex: 2, child: SizedBox.shrink()),
 
-                    Expanded(
-                      flex: 5,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [ Text(
-                          "Stops",
-                          style: TextStyle(
-                              fontSize: 14, color: Color(0xFF616161)),
-                        )],
-                      )
-                    ),
-                    
-                    Expanded(
-                      flex: 3,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [ Text(
-                          "Platform",
-                          style: TextStyle(
-                              fontSize: 14, color: Color(0xFF616161)),
-                        )],
-                      )
+                        Expanded(
+                          flex: 5,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [ Text(
+                              "Stops",
+                              style: TextStyle(
+                                  fontSize: 14, color: Color(0xFF616161)),
+                            )],
+                          )
+                        ),
+                        
+                        Expanded(
+                          flex: 3,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [ Text(
+                              "Platform",
+                              style: TextStyle(
+                                  fontSize: 14, color: Color(0xFF616161)),
+                            )],
+                          )
+                        )
+                      ],
                     )
-                  ],
-                ),
+                  ),
+
+                  (first > 0)? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        flex: 2, 
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 16, 0),
+                          child:Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              DottedLine(
+                                dashColor: Color(0xFFA5E6FB),
+                                direction: Axis.vertical,
+                                dashLength: 5,
+                                lineThickness: 5,
+                                dashGapLength: 2,
+                                dashRadius: 80,
+                                lineLength: 30,
+                              )
+                            ],
+                          )
+                        )
+                      ),
+
+                      Expanded(flex: 5, child: SizedBox.shrink()),
+                      
+                      Expanded(flex: 3, child: SizedBox.shrink())
+                    ],
+                  ) : Row(),
+                ],
               );
             }
             return _TripStationView(
-                tripStation: trainInfo!.trip[index - 1],
-                notLast: index - 1 < trainInfo!.trip.length - 1,
-                notFirst: index -1 > 0,
+                tripStation: trainInfo.trip[first + index - 1],
+                notLast: first + index - 1 < trainInfo.trip.length - 1,
+                notFirst: first + index -1 > 0,
                 delayed: delayed,
                 delay: trainInfo.lastDelay,
                 );
@@ -239,7 +273,7 @@ class _TripStationView extends StatelessWidget {
                         decoration: BoxDecoration(
                             color: tripStation.hasArrived()
                                 ? Color(0xFFA5E6FB)
-                                : Color.fromARGB(255, 204, 204, 204),
+                                : Color(0xFF757575),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(10.0))),
                         child: Center(
@@ -247,7 +281,9 @@ class _TripStationView extends StatelessWidget {
                             "${tripStation.platform}",
                             style: TextStyle(
                                 fontSize: 24,
-                                color: Colors.black,
+                                color: tripStation.hasArrived()
+                                ? Colors.black
+                                : Colors.white,
                                 fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                           ),

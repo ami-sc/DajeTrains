@@ -39,6 +39,13 @@ class TrainInfo {
 
   @override
   int get hashCode => hash4(ID, beaconID, lastDelay, trip);
+
+  int lastArrivedStation() {
+    for (var i = trip.length - 1; i >=0 ; i--) {
+      if (trip[i].hasArrived()) return i;
+    }
+    return 0;
+  }
 }
 
 class TripStation {
