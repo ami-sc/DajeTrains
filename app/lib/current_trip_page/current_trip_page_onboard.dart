@@ -1,3 +1,7 @@
+import 'package:DajeTrains/api/trip_api.dart';
+import 'package:DajeTrains/single_train_info/single_train_page.dart';
+import 'package:DajeTrains/single_train_info/single_train_top_bar.dart';
+import 'package:DajeTrains/structures/train_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
@@ -22,6 +26,12 @@ class _CurrentTripPageOnBoardState extends State<CurrentTripPageOnBoard> {
 
   ///The controller of sliding up panel
   SlidingUpPanelController panelController = SlidingUpPanelController();
+  
+  bool _delayed = false;
+  bool _default = true;
+
+  TripApi api = TripApi();
+  TrainInfo? trainInfo;
 
   @override
   void initState() {
@@ -36,8 +46,25 @@ class _CurrentTripPageOnBoardState extends State<CurrentTripPageOnBoard> {
         panelController.anchor();
       } else {}
     });
+    _getTrainInfo();
     super.initState();
   }
+
+  void _getTrainInfo() async {
+    List<TrainInfo> l = await api.getTrip(globals.trainID);
+    print(l);
+
+    if (l.isNotEmpty) {
+      setState(() {
+        trainInfo = l[0];
+        _default = false;
+        _delayed = (trainInfo!.lastDelay > 0) ? true : false; // CHANGE FOR DEBBUGGING
+      });
+    } else {
+      throw Exception("Non valid Train ID");
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +115,7 @@ class _CurrentTripPageOnBoardState extends State<CurrentTripPageOnBoard> {
           floatingActionButton: Padding(
             padding: EdgeInsets.only(
                 bottom:
-                    200), // Change this to change the position of the button
+                    160), // Change this to change the position of the button
             child: SizedBox(
               height: 65.0,
               width: 65.0,
@@ -115,7 +142,7 @@ class _CurrentTripPageOnBoardState extends State<CurrentTripPageOnBoard> {
         ),
         SlidingUpPanelWidget(
           controlHeight:
-              220.0, // Change this to change the visible part of the panel
+              180.0, // Change this to change the visible part of the panel
           anchor: 1,
           panelController: panelController,
           onTap: () {
@@ -126,7 +153,7 @@ class _CurrentTripPageOnBoardState extends State<CurrentTripPageOnBoard> {
               panelController.expand();
             }
           },
-          enableOnTap: true, //Enable the onTap callback for control bar.
+          enableOnTap: false, //Enable the onTap callback for control bar.
           child: Container(
             decoration: ShapeDecoration(
               color: Color(0xFFDAF2FF),
@@ -141,23 +168,28 @@ class _CurrentTripPageOnBoardState extends State<CurrentTripPageOnBoard> {
               children: <Widget>[
                 Container(
                   alignment: Alignment.center,
-                  height: 40.0,
+                  height: 20.0,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Icon(
-                        Icons.keyboard_arrow_up,
+                        Icons.horizontal_rule_rounded,
                         color: Color(0xFFA5E6FB),
                         size: 45,
-                      ),
+                      )
                     ],
                   ),
                 ),
-                Flexible(
-                  child: Container(
-                    child: Text("This is the sliding Widget"),
-                  ), // TODO Put Current Trip Info Here
-                ),
+                _default? Column() : Column(
+                  children: [
+                    SingleTrainTripTopBar.trainHeader(trainInfo!, _delayed),
+                    Divider(
+                      color: Color.fromARGB(255, 201, 201, 201),
+                      height: 1,
+                    ),
+                    SingleTrainPage.trainRoute(trainInfo!, _delayed)
+                  ],
+                ),// TODO Put Current Trip Info Here,
               ],
             ),
           ),

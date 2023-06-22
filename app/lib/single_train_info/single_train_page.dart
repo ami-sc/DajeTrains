@@ -15,6 +15,61 @@ class SingleTrainPage extends StatefulWidget {
 
   @override
   State<SingleTrainPage> createState() => _SingleTrainPageState();
+
+  static Widget trainRoute(TrainInfo trainInfo, bool delayed) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
+      child: ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+          itemCount: trainInfo.trip.length + 1,
+          itemBuilder: (BuildContext context, int index) {
+            if (index == 0) {
+              return Padding(
+                padding: EdgeInsets.only(bottom: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+
+                    Expanded(flex: 2, child: SizedBox.shrink()),
+
+                    Expanded(
+                      flex: 5,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [ Text(
+                          "Stops",
+                          style: TextStyle(
+                              fontSize: 14, color: Color(0xFF616161)),
+                        )],
+                      )
+                    ),
+                    
+                    Expanded(
+                      flex: 3,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [ Text(
+                          "Platform",
+                          style: TextStyle(
+                              fontSize: 14, color: Color(0xFF616161)),
+                        )],
+                      )
+                    )
+                  ],
+                ),
+              );
+            }
+            return _TripStationView(
+                tripStation: trainInfo!.trip[index - 1],
+                notLast: index - 1 < trainInfo!.trip.length - 1,
+                notFirst: index -1 > 0,
+                delayed: delayed,
+                delay: trainInfo.lastDelay,
+                );
+          }),
+    );
+  }
 }
 
 class _SingleTrainPageState extends State<SingleTrainPage>
@@ -54,56 +109,7 @@ class _SingleTrainPageState extends State<SingleTrainPage>
             : SingleTrainTripTopBar(trainInfo: trainInfo!, delayed: _delayed,),
         body: _defaultMessage
             ? null
-            : Padding(
-                padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
-                child: ListView.builder(
-                    itemCount: trainInfo!.trip.length + 1,
-                    itemBuilder: (BuildContext context, int index) {
-                      if (index == 0) {
-                        return Padding(
-                          padding: EdgeInsets.only(bottom: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-
-                              Expanded(flex: 2, child: SizedBox.shrink()),
-
-                              Expanded(
-                                flex: 5,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [ Text(
-                                    "Stops",
-                                    style: TextStyle(
-                                        fontSize: 14, color: Color(0xFF616161)),
-                                  )],
-                                )
-                              ),
-                              
-                              Expanded(
-                                flex: 3,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [ Text(
-                                    "Platform",
-                                    style: TextStyle(
-                                        fontSize: 14, color: Color(0xFF616161)),
-                                  )],
-                                )
-                              )
-                            ],
-                          ),
-                        );
-                      }
-                      return _TripStationView(
-                          tripStation: trainInfo!.trip[index - 1],
-                          notLast: index - 1 < trainInfo!.trip.length - 1,
-                          notFirst: index -1 > 0,
-                          delayed: _delayed,
-                          delay: trainInfo!.lastDelay,
-                          );
-                    }),
-              ));
+            : SingleTrainPage.trainRoute(trainInfo!, _delayed));
   }
 }
 
