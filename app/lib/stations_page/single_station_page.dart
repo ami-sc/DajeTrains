@@ -57,45 +57,44 @@ class _SingleStationPageState extends State<SingleStationPage>
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Expanded(
-            flex: 3,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Time",
-                  style: TextStyle(fontSize: 14, color: Color(0xFF616161)),
-                )
-              ],
-            )
-          ),
-          Expanded(
-            flex: 4,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Train",
-                  style: TextStyle(fontSize: 14, color: Color(0xFF616161)),
-                )
-              ],
-            )
-          ),
-          Expanded(
-            flex: 3,
-            child: Padding(
-              padding: EdgeInsets.only(left: 15),
+              flex: 3,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    "Platform",
-                    style:
-                        TextStyle(fontSize: 14, color: Color(0xFF616161)),
+                  Padding(
+                    padding: EdgeInsets.only(left: 0),
+                    child: Text(
+                      "Time",
+                      style: TextStyle(fontSize: 14, color: Color(0xFF616161)),
+                    ),
                   ),
                 ],
-              ),
-            )
-          )
+              )),
+          Expanded(
+              flex: 4,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Train",
+                    style: TextStyle(fontSize: 14, color: Color(0xFF616161)),
+                  )
+                ],
+              )),
+          Expanded(
+              flex: 3,
+              child: Padding(
+                padding: EdgeInsets.only(left: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Platform",
+                      style: TextStyle(fontSize: 14, color: Color(0xFF616161)),
+                    ),
+                  ],
+                ),
+              ))
         ],
       ),
     );
@@ -109,108 +108,102 @@ class _SingleStationPageState extends State<SingleStationPage>
         tabController: _tabController,
       ),
       body: TabBarView(controller: _tabController, children: [
-
         departuresList.isEmpty
-        ?
-        Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.train,
-                color: Color.fromARGB(255, 174, 174, 174),
-                size: 60,
-              ),
-              Padding(
-                padding: EdgeInsets.all(15.0),
-                child: Text(
-                  "No trains departing",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 174, 174, 174),
-                    fontSize: 22,
-                  ),
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.train,
+                      color: Color.fromARGB(255, 174, 174, 174),
+                      size: 60,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(15.0),
+                      child: Text(
+                        "No trains departing",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 174, 174, 174),
+                          fontSize: 22,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-        )
-        :
-        ListView.separated(
-            // Needed to have a line dividing each result.
-            separatorBuilder: (context, index) {
-              if (index == 0) {
-                return SizedBox
-                    .shrink(); // Return an empty SizedBox for the first item
-              }
-              return Divider(
-                color: Color.fromARGB(255, 201, 201, 201),
-                height: 1,
-              );
-            },
-            itemCount: departuresList.length + 1,
-            itemBuilder: (BuildContext context, int index) {
-              if (index == 0) {
-                return _listHeader();
-              }
-              return TrainButton(
-                  destination: departuresList[index - 1].lastStation,
-                  id: departuresList[index - 1].id,
-                  platform: departuresList[index - 1].platform,
-                  time: departuresList[index - 1].scheduledDepartureTime,
-                  delay: departuresList[index - 1].lastDelay,
-                  buttonCallback: _toggleStationPage);
-            }),
-
-        arrivalsList.isEmpty?
-
-        Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.train,
-                color: Color.fromARGB(255, 174, 174, 174),
-                size: 60,
-              ),
-              Padding(
-                padding: EdgeInsets.all(15.0),
-                child: Text(
-                  "No trains arriving",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 174, 174, 174),
-                    fontSize: 22,
-                  ),
+              )
+            : ListView.separated(
+                // Needed to have a line dividing each result.
+                separatorBuilder: (context, index) {
+                  if (index == 0) {
+                    return SizedBox
+                        .shrink(); // Return an empty SizedBox for the first item
+                  }
+                  return Divider(
+                    color: Color.fromARGB(255, 201, 201, 201),
+                    height: 1,
+                  );
+                },
+                itemCount: departuresList.length + 1,
+                itemBuilder: (BuildContext context, int index) {
+                  if (index == 0) {
+                    return _listHeader();
+                  }
+                  return TrainButton(
+                      destination: departuresList[index - 1].lastStation,
+                      id: departuresList[index - 1].id,
+                      platform: departuresList[index - 1].platform,
+                      time: departuresList[index - 1].scheduledDepartureTime,
+                      delay: departuresList[index - 1].lastDelay,
+                      buttonCallback: _toggleStationPage);
+                }),
+        arrivalsList.isEmpty
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.train,
+                      color: Color.fromARGB(255, 174, 174, 174),
+                      size: 60,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(15.0),
+                      child: Text(
+                        "No trains arriving",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 174, 174, 174),
+                          fontSize: 22,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-        )
-        :
-        ListView.separated(
-            separatorBuilder: (context, index) {
-              if (index == 0) {
-                return SizedBox
-                    .shrink(); // Return an empty SizedBox for the first item
-              }
-              return Divider(
-                color: Color.fromARGB(255, 201, 201, 201),
-                height: 1,
-              );
-            },
-            itemCount: arrivalsList.length + 1,
-            itemBuilder: (BuildContext context, int index) {
-              if (index == 0) {
-                return _listHeader();
-              }
+              )
+            : ListView.separated(
+                separatorBuilder: (context, index) {
+                  if (index == 0) {
+                    return SizedBox
+                        .shrink(); // Return an empty SizedBox for the first item
+                  }
+                  return Divider(
+                    color: Color.fromARGB(255, 201, 201, 201),
+                    height: 1,
+                  );
+                },
+                itemCount: arrivalsList.length + 1,
+                itemBuilder: (BuildContext context, int index) {
+                  if (index == 0) {
+                    return _listHeader();
+                  }
 
-              return TrainButton(
-                  destination: arrivalsList[index - 1].lastStation,
-                  id: arrivalsList[index - 1].id,
-                  platform: arrivalsList[index - 1].platform,
-                  time: arrivalsList[index - 1].scheduledArrivalTime,
-                  delay: arrivalsList[index - 1].lastDelay,
-                  buttonCallback: _toggleStationPage);
-            }),
+                  return TrainButton(
+                      destination: arrivalsList[index - 1].lastStation,
+                      id: arrivalsList[index - 1].id,
+                      platform: arrivalsList[index - 1].platform,
+                      time: arrivalsList[index - 1].scheduledArrivalTime,
+                      delay: arrivalsList[index - 1].lastDelay,
+                      buttonCallback: _toggleStationPage);
+                }),
       ]),
     );
   }
@@ -280,68 +273,74 @@ class TrainButton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-
           Expanded(
-            flex: 3,
-            child: 
-                isDelayed(delay)?
-                // If the train is delayed, show the delay.
-                Column(
-
-                  children: [
-                    Row(  //TODO fix alignment
-                      mainAxisAlignment: MainAxisAlignment.center,
+              flex: 3,
+              child: isDelayed(delay)
+                  ?
+                  // If the train is delayed, show the delay.
+                  Column(
                       children: [
-                        Text(
-                          DateTime(
-                                  DateTime.now().year,
-                                  0,
-                                  0,
-                                  int.parse(time.split(':')[0]),
-                                  int.parse(time.split(':')[1]),
-                                  0,
-                                  0,
-                                  0)
-                              .add(Duration(minutes: delay))
-                              .toString()
-                              .substring(11, 16),
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 201, 41, 41),
-                            fontSize: 22,
-                          ),
-                        )
+                        Row(
+                          //TODO fix alignment
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 18),
+                              child: Text(
+                                DateTime(
+                                        DateTime.now().year,
+                                        0,
+                                        0,
+                                        int.parse(time.split(':')[0]),
+                                        int.parse(time.split(':')[1]),
+                                        0,
+                                        0,
+                                        0)
+                                    .add(Duration(minutes: delay))
+                                    .toString()
+                                    .substring(11, 16),
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 201, 41, 41),
+                                  fontSize: 22,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 37),
+                              child: Text(
+                                "+$delay'",
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 201, 41, 41),
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    )
+                  :
+                  // Otherwise, show the scheduled time.
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(
-                          "+$delay'",
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 201, 41, 41),
-                            fontSize: 15,
+                        Padding(
+                          padding: EdgeInsets.only(left: 18),
+                          child: Text(
+                            time,
+                            style: TextStyle(
+                              color: Color(0xFF0A7D23),
+                              fontSize: 22,
+                            ),
                           ),
-                        )
+                        ),
                       ],
-                    ),
-                  ],
-                )
-                :
-                // Otherwise, show the scheduled time.
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      time,
-                      style: TextStyle(
-                        color: Color(0xFF0A7D23),
-                        fontSize: 22,
-                      ),
-                    ),
-                  ],
-                )
-          ),
-
+                    )),
           Expanded(
               flex: 4,
               child: Column(
