@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:DajeTrains/api/trip_api.dart';
 import 'package:DajeTrains/single_train_info/single_train_page.dart';
 import 'package:DajeTrains/single_train_info/single_train_top_bar.dart';
@@ -33,6 +35,8 @@ class _CurrentTripPageOnBoardState extends State<CurrentTripPageOnBoard> {
   TripApi api = TripApi();
   TrainInfo? trainInfo;
 
+  Timer? timer;
+
   @override
   void initState() {
     scrollController.addListener(() {
@@ -47,7 +51,14 @@ class _CurrentTripPageOnBoardState extends State<CurrentTripPageOnBoard> {
       } else {}
     });
     _getTrainInfo();
+    timer = Timer.periodic(Duration(seconds: 30), (Timer t) => _getTrainInfo()); // TODO periodically request
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
 
   void _getTrainInfo() async {
