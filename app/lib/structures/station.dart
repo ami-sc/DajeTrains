@@ -1,3 +1,5 @@
+import 'package:quiver/core.dart';
+
 class Station {
   String name;
   String beaconId;
@@ -30,6 +32,21 @@ class Station {
       location: Location.fromString(data[2]),
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (other is Station) {
+      if (name == other.name &&
+          beaconId == other.beaconId &&
+          location == other.location) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @override
+  int get hashCode => hash3(name, beaconId, location);
 }
 
 class Location {
@@ -60,4 +77,17 @@ class Location {
       longitude: double.parse(data[1]),
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (other is Location) {
+      if (latitude == other.latitude && longitude == other.longitude) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @override
+  int get hashCode => hash2(latitude, longitude);
 }

@@ -1,3 +1,5 @@
+import "package:DajeTrains/api/trains_api.dart";
+import "package:DajeTrains/api/trip_api.dart";
 import "package:DajeTrains/history_page/single_payment_page.dart";
 import "package:flutter/material.dart";
 import "dart:async";
@@ -33,6 +35,7 @@ import 'notifications/noti.dart';
 
 /*** User location ***/
 import 'api/user_location.dart';
+import 'api/trains_api.dart';
 import 'structures/position.dart';
 
 /*** Station  ***/
@@ -93,10 +96,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       } else if (payloadList[1] == "in_train") {
         // If the user is in a train, send him to the single train page
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: ((context) =>
-                    SingleTrainPage(trainID: payloadList[0]))));
+            context, MaterialPageRoute(builder: ((context) => Home())));
+        //SingleTrainPage(trainID: payloadList[0]))));
       } else if (payloadList[1] == "in_station") {
         // Build a station object from the payload
         Station station = Station(
@@ -257,6 +258,35 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                     }
                 },
               );
+            } else {
+              print("Same beacon");
+              // Check if it is a train or a station
+              PositionApi userPosition = PositionApi(beaconID: beacon.uuid);
+              Future<Position> posizione = userPosition.updatePosition();
+              TripApi trip = TripApi();
+              posizione.then((value) => {
+                    if (value.status == "in_train")
+                      {
+                        trip.getTrip(value.id).then((tripValue) => {
+                              print("Got train info"),
+                              if (globals.trainInfo == tripValue[0])
+                                {
+                                  print("Train info not changed"),
+                                }
+                              else
+                                {
+                                  print("Train info changed"),
+                                  globals.trainInfo = tripValue[0],
+                                  noti.showNotificationWithPayload(
+                                      id: 0,
+                                      title: "Train updates",
+                                      body:
+                                          "There are updates on your train, click here to see them",
+                                      payload: value.toString()),
+                                }
+                            }),
+                      },
+                  });
             }
 
             if (!_isInForeground) {
