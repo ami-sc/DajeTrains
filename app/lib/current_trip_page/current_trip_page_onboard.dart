@@ -24,14 +24,6 @@ class _CurrentTripPageOnBoardState extends State<CurrentTripPageOnBoard> {
 
   bool showFab = true;
 
-  ScrollController scrollController = ScrollController();
-
-  ///The controller of sliding up panel
-  SlidingUpPanelController panelController = SlidingUpPanelController();
-  
-  bool _delayed = false;
-  bool _default = true;
-
   TripApi api = TripApi();
   TrainInfo? trainInfo;
 
@@ -39,43 +31,8 @@ class _CurrentTripPageOnBoardState extends State<CurrentTripPageOnBoard> {
 
   @override
   void initState() {
-    scrollController.addListener(() {
-      if (scrollController.offset >=
-              scrollController.position.maxScrollExtent &&
-          !scrollController.position.outOfRange) {
-        panelController.expand();
-      } else if (scrollController.offset <=
-              scrollController.position.minScrollExtent &&
-          !scrollController.position.outOfRange) {
-        panelController.anchor();
-      } else {}
-    });
-    _getTrainInfo();
-    timer = Timer.periodic(Duration(seconds: 30), (Timer t) => _getTrainInfo()); // TODO periodically request
     super.initState();
   }
-
-  @override
-  void dispose() {
-    timer?.cancel();
-    super.dispose();
-  }
-
-  void _getTrainInfo() async {
-    List<TrainInfo> l = await api.getTrip(globals.trainID);
-    print(l);
-
-    if (l.isNotEmpty) {
-      setState(() {
-        trainInfo = l[0];
-        _default = false;
-        _delayed = (trainInfo!.lastDelay > 0) ? true : false; // CHANGE FOR DEBBUGGING
-      });
-    } else {
-      throw Exception("Non valid Train ID");
-    }
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -151,61 +108,7 @@ class _CurrentTripPageOnBoardState extends State<CurrentTripPageOnBoard> {
             ),
           ),
         ),
-        SlidingUpPanelWidget(
-          controlHeight:
-              180.0, // Change this to change the visible part of the panel
-          anchor: 1,
-          panelController: panelController,
-          onTap: () {
-            ///Customize the processing logic
-            if (SlidingUpPanelStatus.expanded == panelController.status) {
-              panelController.collapse();
-            } else {
-              panelController.expand();
-            }
-          },
-          enableOnTap: false, //Enable the onTap callback for control bar.
-          child: Container(
-            decoration: ShapeDecoration(
-              color: Color(0xFFDAF2FF),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(28.0),
-                  topRight: Radius.circular(28.0),
-                ),
-              ),
-            ),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  alignment: Alignment.center,
-                  height: 20.0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.horizontal_rule_rounded,
-                        color: Color(0xFFA5E6FB),
-                        size: 45,
-                      )
-                    ],
-                  ),
-                ),
-                _default? Column() : Column(
-                  children: [
-                    SingleTrainTripTopBar.trainHeader(trainInfo!, _delayed),
-                    Divider(
-                      color: Color.fromARGB(255, 201, 201, 201),
-                      height: 1,
-                    ),
-                    SizedBox(height: 10),
-                    SingleTrainPage.trainRoute(trainInfo!, _delayed, trainInfo!.lastArrivedStation())
-                  ],
-                ),// TODO Put Current Trip Info Here,
-              ],
-            ),
-          ),
-        ),
+        SlidePanel(),
       ],
     );
   }
@@ -265,6 +168,129 @@ class QRDialog extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class SlidePanel extends StatefulWidget {
+  @override
+  State<SlidePanel> createState() => _SlidePanelState();
+}
+
+class _SlidePanelState extends State<SlidePanel> {
+  ScrollController scrollController = ScrollController();
+  SlidingUpPanelController panelController = SlidingUpPanelController();
+
+  TripApi api = TripApi();
+  TrainInfo? trainInfo;
+
+  Timer? timer;
+
+  bool _delayed = false;
+  bool _default = true;
+
+  void _getTrainInfo() async {
+    List<TrainInfo> l = await api.getTrip(globals.trainID);
+    print(l);
+
+    if (l.isNotEmpty) {
+      setState(() {
+        trainInfo = l[0];
+        _default = false;
+        _delayed =
+            (trainInfo!.lastDelay > 0) ? true : false; // CHANGE FOR DEBBUGGING
+      });
+    } else {
+      throw Exception("Non valid Train ID");
+    }
+  }
+
+  @override
+  void dispose() {
+    print("CurrentTripPageOnBoard dispose");
+    timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    print("CurrentTripPageOnBoard init");
+    scrollController.addListener(() {
+      if (scrollController.offset >=
+              scrollController.position.maxScrollExtent &&
+          !scrollController.position.outOfRange) {
+        panelController.expand();
+      } else if (scrollController.offset <=
+              scrollController.position.minScrollExtent &&
+          !scrollController.position.outOfRange) {
+        panelController.anchor();
+      } else {}
+    });
+    _getTrainInfo();
+    timer = Timer.periodic(Duration(seconds: 3),
+        (Timer t) => _getTrainInfo()); // TODO periodically request
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SlidingUpPanelWidget(
+      controlHeight:
+          180.0, // Change this to change the visible part of the panel
+      anchor: 1,
+      panelController: panelController,
+      onTap: () {
+        ///Customize the processing logic
+        if (SlidingUpPanelStatus.expanded == panelController.status) {
+          panelController.collapse();
+        } else {
+          panelController.expand();
+        }
+      },
+      enableOnTap: false, //Enable the onTap callback for control bar.
+      child: Container(
+        decoration: ShapeDecoration(
+          color: Color(0xFFDAF2FF),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(28.0),
+              topRight: Radius.circular(28.0),
+            ),
+          ),
+        ),
+        child: Column(
+          children: <Widget>[
+            Container(
+              alignment: Alignment.center,
+              height: 20.0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                    Icons.horizontal_rule_rounded,
+                    color: Color(0xFFA5E6FB),
+                    size: 45,
+                  )
+                ],
+              ),
+            ),
+            _default
+                ? Column()
+                : Column(
+                    children: [
+                      SingleTrainTripTopBar.trainHeader(trainInfo!, _delayed),
+                      Divider(
+                        color: Color.fromARGB(255, 201, 201, 201),
+                        height: 1,
+                      ),
+                      SizedBox(height: 10),
+                      SingleTrainPage.trainRoute(
+                          trainInfo!, _delayed, trainInfo!.lastArrivedStation())
+                    ],
+                  ), // TODO Put Current Trip Info Here,
+          ],
+        ),
       ),
     );
   }
