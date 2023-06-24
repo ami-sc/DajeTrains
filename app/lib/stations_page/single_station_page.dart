@@ -37,6 +37,9 @@ class _SingleStationPageState extends State<SingleStationPage>
     setState(() {
       arrivalsList = arrivalsApi;
       departuresList = departuresApi;
+
+      arrivalsList.sort((a, b) => a.scheduledArrivalTime.compareTo(b.scheduledArrivalTime));
+      departuresList.sort((a, b) => a.scheduledDepartureTime.compareTo(b.scheduledDepartureTime));
     });
   }
 
@@ -270,132 +273,135 @@ class TrainButton extends StatelessWidget {
         print("SingleStationPage::Train::onPressed");
         buttonCallback(id);
       },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Expanded(
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+                flex: 3,
+                child: isDelayed(delay)
+                    ?
+                    // If the train is delayed, show the delay.
+                    Column(
+                        children: [
+                          Row(
+                            //TODO fix alignment
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(left: 18),
+                                child: Text(
+                                  DateTime(
+                                          DateTime.now().year,
+                                          0,
+                                          0,
+                                          int.parse(time.split(':')[0]),
+                                          int.parse(time.split(':')[1]),
+                                          0,
+                                          0,
+                                          0)
+                                      .add(Duration(minutes: delay))
+                                      .toString()
+                                      .substring(11, 16),
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 201, 41, 41),
+                                    fontSize: 22,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(left: 37),
+                                child: Text(
+                                  "+$delay'",
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 201, 41, 41),
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
+                    :
+                    // Otherwise, show the scheduled time.
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 18),
+                            child: Text(
+                              time,
+                              style: TextStyle(
+                                color: Color(0xFF0A7D23),
+                                fontSize: 22,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
+            Expanded(
+                flex: 4,
+                child: Column(
+                  // Left align all text.
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      destination,
+                      style: TextStyle(
+                        color: Color(0xFF1D1B20),
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      "$trainType - $id",
+                      style: TextStyle(
+                        color: Color(0xFF49454F),
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                )),
+            Expanded(
               flex: 3,
-              child: isDelayed(delay)
-                  ?
-                  // If the train is delayed, show the delay.
-                  Column(
-                      children: [
-                        Row(
-                          //TODO fix alignment
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 18),
-                              child: Text(
-                                DateTime(
-                                        DateTime.now().year,
-                                        0,
-                                        0,
-                                        int.parse(time.split(':')[0]),
-                                        int.parse(time.split(':')[1]),
-                                        0,
-                                        0,
-                                        0)
-                                    .add(Duration(minutes: delay))
-                                    .toString()
-                                    .substring(11, 16),
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 201, 41, 41),
-                                  fontSize: 22,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 37),
-                              child: Text(
-                                "+$delay'",
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 201, 41, 41),
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
-                  :
-                  // Otherwise, show the scheduled time.
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 18),
-                          child: Text(
-                            time,
-                            style: TextStyle(
-                              color: Color(0xFF0A7D23),
-                              fontSize: 22,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )),
-          Expanded(
-              flex: 4,
               child: Column(
-                // Left align all text.
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(
-                    destination,
-                    style: TextStyle(
-                      color: Color(0xFF1D1B20),
-                      fontSize: 16,
-                    ),
-                  ),
-                  Text(
-                    "$trainType - $id",
-                    style: TextStyle(
-                      color: Color(0xFF49454F),
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              )),
-          Expanded(
-            flex: 3,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                  child: Container(
-                    height: 50.0,
-                    width: 50.0,
-                    color: Colors.transparent,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                     child: Container(
-                        decoration: BoxDecoration(
-                            color: Color(0xFFA5E6FB),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0))),
-                        child: Center(
-                          child: Text(
-                            "$platform",
-                            style: TextStyle(
-                                fontSize: 24,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          ),
-                        )),
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
+                      height: 50.0,
+                      width: 50.0,
+                      color: Colors.transparent,
+                      child: Container(
+                          decoration: BoxDecoration(
+                              color: Color(0xFFA5E6FB),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0))),
+                          child: Center(
+                            child: Text(
+                              "$platform",
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                          )),
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      )
     );
   }
 }
