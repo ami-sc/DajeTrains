@@ -104,7 +104,7 @@ class _CurrentTripPageOnBoardState extends State<CurrentTripPageOnBoard> {
           floatingActionButton: Padding(
             padding: EdgeInsets.only(
                 bottom:
-                    170), // Change this to change the position of the button
+                    175), // Change this to change the position of the button
             child: SizedBox(
               height: 65.0,
               width: 65.0,
