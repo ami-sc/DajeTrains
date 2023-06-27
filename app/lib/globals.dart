@@ -2,7 +2,7 @@ library globals;
 
 import 'structures/train_info.dart';
 
-String username = "Casamonica";
+String username = "Luca";
 String ticketValue = "";
 String trainID = "";
 

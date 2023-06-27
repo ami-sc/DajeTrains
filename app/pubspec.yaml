@@ -21,7 +21,6 @@ dependencies:
   intl: ^0.18.1
   flutter_local_notifications: ^14.1.1
   permission_handler: ^10.2.0
-  restart_app: ^1.2.1
   rxdart: ^0.27.7
   url_launcher: ^6.1.11
   flutter_osm_plugin: ^0.55.1+1
