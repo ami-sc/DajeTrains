@@ -1,3 +1,6 @@
+# This file may be modified to suit your needs.
+# It's used for the CI/CD pipeline to build the docker image automatically and deploy the backend on a server when changes are pushed to the repository.
+
 version: '3.0'
 services:
   app:
