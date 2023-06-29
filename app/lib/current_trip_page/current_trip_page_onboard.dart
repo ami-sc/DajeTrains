@@ -333,7 +333,7 @@ class _SlidePanel2State extends State<SlidePanel2> {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      maxChildSize: 0.95,
+      maxChildSize: 0.70,
       initialChildSize: 0.235,
       minChildSize: 0.235,
       snap: true,
@@ -359,7 +359,15 @@ class _SlidePanel2State extends State<SlidePanel2> {
                           scrollController = scrollController),
                       IgnorePointer(
                         child: Container(
-                          color: Color(0xFFDAF2FF),
+                          decoration: ShapeDecoration(
+                            color: Color(0xFFDAF2FF),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(28.0),
+                                topRight: Radius.circular(28.0),
+                              ),
+                            ),
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
