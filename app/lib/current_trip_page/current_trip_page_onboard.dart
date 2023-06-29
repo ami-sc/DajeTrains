@@ -204,109 +204,83 @@ class SlidePanel2 extends StatefulWidget {
         controller: scrollController,
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
-        itemCount: trainInfo.trip.length - first + 4,
+        itemCount: trainInfo.trip.length - first + 1,
         itemBuilder: (BuildContext context, int index) {
           if (index == 0) {
-            return Container(
-              alignment: Alignment.center,
-              height: 20.0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Icon(
-                    Icons.horizontal_rule_rounded,
-                    color: Color(0xFFA5E6FB),
-                    size: 45,
-                  )
-                ],
-              ),
-            );
-          }
-
-          if (index == 1) {
-            return SingleTrainTripTopBar.trainHeader(trainInfo!, delayed);
-          }
-          if (index == 2) {
-            // Print a divider
             return Padding(
-              padding: EdgeInsets.only(bottom: 10),
-              child: Divider(
-                color: Color.fromARGB(255, 201, 201, 201),
-                height: 1,
-              ),
-            );
-          }
-          if (index == 3) {
-            return Column(
-              children: [
-                Padding(
-                    padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(flex: 2, child: SizedBox.shrink()),
-                        Expanded(
-                            flex: 5,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Stops",
-                                  style: TextStyle(
-                                      fontSize: 14, color: Color(0xFF616161)),
-                                )
-                              ],
-                            )),
-                        Expanded(
-                            flex: 3,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Platform",
-                                  style: TextStyle(
-                                      fontSize: 14, color: Color(0xFF616161)),
-                                )
-                              ],
-                            ))
-                      ],
-                    )),
-                (first > 0)
-                    ? Row(
+              padding: EdgeInsets.only(bottom: 10, top: 135),
+              child: Column(
+                children: [
+                  Padding(
+                      padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          Expanded(flex: 2, child: SizedBox.shrink()),
                           Expanded(
-                              flex: 2,
-                              child: Padding(
-                                  padding: EdgeInsets.fromLTRB(35, 0, 20, 0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      DottedLine(
-                                        dashColor: Color(0xFFA5E6FB),
-                                        direction: Axis.vertical,
-                                        dashLength: 5,
-                                        lineThickness: 5,
-                                        dashGapLength: 2,
-                                        dashRadius: 80,
-                                        lineLength: 30,
-                                      )
-                                    ],
-                                  ))),
-                          Expanded(flex: 5, child: SizedBox.shrink()),
-                          Expanded(flex: 3, child: SizedBox.shrink())
+                              flex: 5,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Stops",
+                                    style: TextStyle(
+                                        fontSize: 14, color: Color(0xFF616161)),
+                                  )
+                                ],
+                              )),
+                          Expanded(
+                              flex: 3,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Platform",
+                                    style: TextStyle(
+                                        fontSize: 14, color: Color(0xFF616161)),
+                                  )
+                                ],
+                              ))
                         ],
-                      )
-                    : Row(),
-              ],
+                      )),
+                  (first > 0)
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                                flex: 2,
+                                child: Padding(
+                                    padding: EdgeInsets.fromLTRB(35, 0, 20, 0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        DottedLine(
+                                          dashColor: Color(0xFFA5E6FB),
+                                          direction: Axis.vertical,
+                                          dashLength: 5,
+                                          lineThickness: 5,
+                                          dashGapLength: 2,
+                                          dashRadius: 80,
+                                          lineLength: 30,
+                                        )
+                                      ],
+                                    ))),
+                            Expanded(flex: 5, child: SizedBox.shrink()),
+                            Expanded(flex: 3, child: SizedBox.shrink())
+                          ],
+                        )
+                      : Row(),
+                ],
+              ),
             );
           }
           return Padding(
             padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
             child: TripStationView(
-              tripStation: trainInfo.trip[first + index - 4],
-              notLast: first + index - 4 < trainInfo.trip.length - 1,
-              notFirst: first + index - 4 > 0,
+              tripStation: trainInfo.trip[first + index - 1],
+              notLast: first + index - 1 < trainInfo.trip.length - 1,
+              notFirst: first + index - 1 > 0,
               delayed: delayed,
               delay: trainInfo.lastDelay,
             ),
@@ -376,11 +350,55 @@ class _SlidePanel2State extends State<SlidePanel2> {
             ),
             child: _default
                 ? Column()
-                : SlidePanel2.trainRoute(
-                    trainInfo!,
-                    _delayed,
-                    trainInfo!.lastArrivedStation(),
-                    scrollController = scrollController));
+                : Stack(
+                    children: [
+                      SlidePanel2.trainRoute(
+                          trainInfo!,
+                          _delayed,
+                          trainInfo!.lastArrivedStation(),
+                          scrollController = scrollController),
+                      IgnorePointer(
+                        child: Container(
+                          color: Color(0xFFDAF2FF),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: SizedBox(
+                                    height: 135.0,
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          alignment: Alignment.center,
+                                          height: 20.0,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Icon(
+                                                Icons.horizontal_rule_rounded,
+                                                color: Color(0xFFA5E6FB),
+                                                size: 45,
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        SingleTrainTripTopBar.trainHeader(
+                                            trainInfo!, _delayed),
+                                        Divider(
+                                          color: Color.fromARGB(
+                                              255, 201, 201, 201),
+                                          height: 1,
+                                        ),
+                                      ],
+                                    )),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ));
       },
     );
   }
