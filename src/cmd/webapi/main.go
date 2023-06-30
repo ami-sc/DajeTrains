@@ -84,7 +84,7 @@ func run() error {
 	db, err := database.Load(cfg.DB.Filename)
 
 	if err != nil {
-		logger.WithError(err).Error("error opening SQLite DB, we will create a new one")
+		logger.WithError(err).Error("error opening the json file, creating a new one with default values...")
 		db = database.NewDatabase(cfg.DB.Filename)
 	}
 
