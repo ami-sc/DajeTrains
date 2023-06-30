@@ -158,6 +158,7 @@ class PaymentButton extends StatelessWidget {
                         style: TextStyle(
                           color: Color(0xFF1D1B20),
                           fontSize: 15,
+                          fontWeight: FontWeight.bold
                         ),
                       ),
                     ],
