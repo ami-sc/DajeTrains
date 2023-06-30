@@ -117,7 +117,7 @@ class PaymentButton extends StatelessWidget {
               ]),
             ),
             Expanded(
-              flex: 5,
+              flex: 6,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -135,13 +135,13 @@ class PaymentButton extends StatelessWidget {
                       Text(
                         "From: ",
                         style:
-                            TextStyle(fontSize: 16, color: Color(0xFF1D1B20)),
+                            TextStyle(fontSize: 15, color: Color(0xFF1D1B20)),
                       ),
                       Text(
                         from,
                         style: TextStyle(
                             color: Color(0xFF1D1B20),
-                            fontSize: 16,
+                            fontSize: 15,
                             fontWeight: FontWeight.bold),
                       ),
                     ],
@@ -151,13 +151,13 @@ class PaymentButton extends StatelessWidget {
                       Text(
                         "To: ",
                         style:
-                            TextStyle(fontSize: 14, color: Color(0xFF1D1B20)),
+                            TextStyle(fontSize: 15, color: Color(0xFF1D1B20)),
                       ),
                       Text(
                         to,
                         style: TextStyle(
                           color: Color(0xFF1D1B20),
-                          fontSize: 14,
+                          fontSize: 15,
                         ),
                       ),
                     ],
@@ -177,7 +177,7 @@ class PaymentButton extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 3,
+              flex: 2,
               child: Column(
                 children: [
                   Text(

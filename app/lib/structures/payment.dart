@@ -23,9 +23,18 @@ class Payment {
     required this.date,
   });
 
+  static bool isInteger(num value) =>
+      value is int || value == value.roundToDouble();
+
   factory Payment.fromJson(Map<String, dynamic> data) {
+    double val = 0.0;
+    if (isInteger(data["cost"])) {
+      val = data["cost"].toDouble();
+    } else {
+      val = data["cost"];
+    }
     return Payment(
-      cost: data["cost"],
+      cost: val,
       trainID: data["train_id"],
       from: Station.fromJson(data['from_station']),
       to: Station.fromJson(data['to_station']),
