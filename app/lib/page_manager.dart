@@ -174,6 +174,17 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
     BeaconsPlugin.listenToBeacons(beaconEventsController);
 
+    List<String> beacon_IDs = [
+      "61d09100-f9a2-43aa-b727-9d1a6f7a2bc2", // Termini
+      "aae16383-257d-4a16-8eab-734c28084801", // Padova
+      "c29ce823-e67a-4e71-bff2-abaa32e77a98", // FR9422
+      "c7ed8863-f368-4810-bb06-998ec4316987", // Napoli Centrale
+      "a8a23bfb-ca7a-4a3c-a8dd-90d56e6f74e9", // Campoleone
+      "6db1ca6e-7d0e-47a5-84e2-687eb085ee7b", // Formia
+      "0a31fec3-37ed-452d-bbe7-e79327ad2a7b", // R12655
+      "f9233e49-dd1c-44b0-9c31-c67b98d808dd", // Pomezia-Santa Palomba
+    ];
+
     await BeaconsPlugin.addRegion(
         "Termini", "61d09100-f9a2-43aa-b727-9d1a6f7a2bc2");
     await BeaconsPlugin.addRegion(
@@ -182,6 +193,14 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         "FR9422", "c29ce823-e67a-4e71-bff2-abaa32e77a98");
     await BeaconsPlugin.addRegion(
         "Napoli Centrale", "c7ed8863-f368-4810-bb06-998ec4316987");
+    await BeaconsPlugin.addRegion(
+        "Campoleone", "a8a23bfb-ca7a-4a3c-a8dd-90d56e6f74e9");
+    await BeaconsPlugin.addRegion(
+        "Formia", "6db1ca6e-7d0e-47a5-84e2-687eb085ee7b");
+    await BeaconsPlugin.addRegion(
+        "R12655", "0a31fec3-37ed-452d-bbe7-e79327ad2a7b");
+    await BeaconsPlugin.addRegion(
+        "Pomezia-Santa Palomba", "f9233e49-dd1c-44b0-9c31-c67b98d808dd");
 
     BeaconsPlugin.addBeaconLayoutForAndroid(
         "m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
@@ -198,13 +217,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         (data) {
           if (data.isNotEmpty && isRunning) {
             // We hypothesize that there is only one beacon in the area at a time (for now) so we can just take the first one
-            setState(() {
-              // ignore: unused_local_variable
-              Beacon beacon = Beacon.fromString(data);
-              // Check if the beacon belongs to one of the stations or to a train and then do the appropriate action
-            });
             Beacon beacon = Beacon.fromString(data);
-            if (_lastBeaconID != beacon.uuid) {
+            if (_lastBeaconID != beacon.uuid &&
+                beacon_IDs.contains(beacon.uuid)) {
               _lastBeaconID = beacon.uuid;
 
               PositionApi userPosition = PositionApi(beaconID: beacon.uuid);
