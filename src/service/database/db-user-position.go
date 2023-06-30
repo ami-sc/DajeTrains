@@ -76,13 +76,13 @@ func (db *appdbimpl) UpdateUserPosition(userID string, beaconID string) (*Update
 				// error generating ticket
 				return nil, err
 			}
-		}
 
-		// update the database
-		db.UserStates[userID] = &UserState{
-			Station: last_train_station,
-			Train:   train,
-			Status:  InTrain,
+			// update the database
+			db.UserStates[userID] = &UserState{
+				Station: last_train_station,
+				Train:   train,
+				Status:  InTrain,
+			}
 		}
 
 		// update the database
